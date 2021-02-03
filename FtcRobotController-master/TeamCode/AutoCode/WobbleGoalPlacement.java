@@ -16,12 +16,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor backRightMotor;
 
 
-    public void MoveForward(long time){
+    public void MoveForward(){
         frontLeftMotor.setPower(0.5);
         frontRightMotor.setPower(0.5);
         backLeftMotor.setPower(0.5);
         backRightMotor.setPower(0.5);
-        sleep(time);
+        //sleep(time);
     }
     public void TurnRight(long time){
         frontLeftMotor.setPower(1.0);
@@ -65,9 +65,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
             telemetry.addData("Green:", CSensor.green());
             telemetry.update();
 
-            MoveForward(1000);
-            Stop();
+            MoveForward();
             if(CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()){
+                Stop();
                 telemetry.addData(">", "I am at Target Zone!");
                 telemetry.update();
                 break;
