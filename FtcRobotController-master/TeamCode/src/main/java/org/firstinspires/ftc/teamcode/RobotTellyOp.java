@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  */
 @TeleOp(name = "BasicDriveV2.1", group = "Robot")
 public class  RobotTellyOp extends LinearOpMode {
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
+    static final double INCREMENT   = 1;     // amount to slew servo each CYCLE_MS cycle
+    static final int    SLEEP    =   50;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
 
@@ -93,7 +93,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             // Set the servo to the new position and pause
             s1.setPosition(position);
-            sleep(CYCLE_MS);
+            sleep(SLEEP);
             idle();
         }
         m1.setPower(0.0);//Stopping the motors: Start.
