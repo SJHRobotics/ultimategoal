@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
  * This is if we use all the motors
  */
-@TeleOp(name = "BasicDriveV2.1", group = "Robot")
+@TeleOp(name ="RobotTellyOp", group = "Telly-Op")
 public class  RobotTellyOp extends LinearOpMode {
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
+    static final double INCREMENT   = 0.9;     // amount to slew servo each SLEEP cycle
+    static final int    SLEEP    =   1;     // period of each cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
 
@@ -27,7 +28,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m4 = hardwareMap.dcMotor.get("br");
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
-        Servo s1 = hardwareMap.servo.get("servo");
+        Servo s1 = hardwareMap.servo.get("LinearServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -76,7 +77,7 @@ public class  RobotTellyOp extends LinearOpMode {
                     position = MAX_POS;
                     rampUp = !rampUp;   // Switch ramp direction
                 }
-            } else if(!rampUp && gampad1.dpad_down) {
+            } else if(!rampUp && gamepad1.dpad_down) {
                 // Keep stepping down until we hit the min value.
                 position -= INCREMENT;
                 if (position <= MIN_POS || position > 0) {
@@ -93,7 +94,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             // Set the servo to the new position and pause
             s1.setPosition(position);
-            sleep(CYCLE_MS);
+            sleep(SLEEP);
             idle();
         }
         m1.setPower(0.0);//Stopping the motors: Start.
