@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
 
-public class WobbleGoalPlacement extends LinearOpMode implements Runnable{
+public class WobbleGoalPlacement extends LinearOpMode{
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
@@ -36,14 +36,15 @@ public class WobbleGoalPlacement extends LinearOpMode implements Runnable{
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
     }
-
+/*
     WobbleGoalPlacement obj = new WobbleGoalPlacement();
     Thread thread = new Thread(obj);
-    //thread.start();
+    thread.start();
 
     public void run(){
 
     }
+    (*/
     @Override
     public void runOpMode(){
         CSensor = hardwareMap.get(ColorSensor.class, "color_sensor");
@@ -57,11 +58,8 @@ public class WobbleGoalPlacement extends LinearOpMode implements Runnable{
         waitForStart();
 
         boolean condition = true;
-        TurnRight(850);
-
+        //TurnRight(850);
         while (condition) {
-
-
             telemetry.addData("Blue:", CSensor.blue());
             telemetry.addData("Red:", CSensor.red());
             telemetry.addData("Green:", CSensor.green());
