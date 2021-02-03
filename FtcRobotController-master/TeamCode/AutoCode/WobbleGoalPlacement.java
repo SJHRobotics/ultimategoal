@@ -47,11 +47,11 @@ public class WobbleGoalPlacement extends LinearOpMode{
     (*/
     @Override
     public void runOpMode(){
-        CSensor = hardwareMap.get(ColorSensor.class, "color_sensor");
-        backRightMotor = hardwareMap.get(DcMotor.class, "back_right_motor");
-        backLeftMotor = hardwareMap.get(DcMotor.class, "back_left_motor");
-        frontRightMotor = hardwareMap.get(DcMotor.class, "front_right_motor");
-        frontLeftMotor = hardwareMap.get(DcMotor.class, "front_left_motor");
+        CSensor = hardwareMap.get(ColorSensor.class, "CS1");
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
