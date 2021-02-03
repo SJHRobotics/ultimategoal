@@ -72,14 +72,15 @@ public class  RobotTellyOp extends LinearOpMode {
             if (rampUp && gamepad1.dpad_up) {
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT;
-                if (position >= MAX_POS) {
+                if (position >= MAX_POS || position < 1) {
                     position = MAX_POS;
                     rampUp = !rampUp;   // Switch ramp direction
                 }
             } else if(!rampUp && gampad1.dpad_down) {
                 // Keep stepping down until we hit the min value.
                 position -= INCREMENT;
-                if (position <= MIN_POS) {
+                if (position <= MIN_POS || position > 0) {
+
                     position = MIN_POS;
                     rampUp = !rampUp;  // Switch ramp direction
                 }
@@ -90,17 +91,17 @@ public class  RobotTellyOp extends LinearOpMode {
             telemetry.addData(">", "Press Stop to end test.");
             telemetry.update();
 
-            // Set the servo to the new position and pause;
+            // Set the servo to the new position and pause
             s1.setPosition(position);
             sleep(CYCLE_MS);
             idle();
         }
-        m1.setPower(0.0);
+        m1.setPower(0.0);//Stopping the motors: Start.
         m2.setPower(0.0);
         m3.setPower(0.0);
-        m4.setPower(0.0);
-        telemetry.addData(">", "Done");
-        telemetry.update();
+        m4.setPower(0.0);//Stopping the motors: End.
+        telemetry.addData(">", "Done");//Showing the task done on DS.
+        telemetry.update();// Updates the console.
     }
 }
 
