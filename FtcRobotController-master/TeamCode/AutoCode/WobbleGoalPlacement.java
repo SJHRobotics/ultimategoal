@@ -66,7 +66,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             telemetry.update();
 
             MoveForward();
-            if(CSensor.red() > CSensor.blue() && CSensor.red() > CSensor.green()){
+            if(CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()){
                 Stop();
                 telemetry.addData(">", "I am at Target Zone!");
                 telemetry.update();
