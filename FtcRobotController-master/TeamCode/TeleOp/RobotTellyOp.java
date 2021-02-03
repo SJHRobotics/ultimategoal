@@ -69,11 +69,11 @@ public class  RobotTellyOp extends LinearOpMode {
             else{
                 m5.setPower(0.0);
                 m6.setPower(0.0);
-            }
-            if (rampUp && gamepad1.dpad_up) {
+            }x
+            if (rampUp && gamepad1.dpad_up || position > .01) {
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT;
-                if (position >= MAX_POS ) {
+                if (position >= MAX_POS || position < .99) {
                     position = MAX_POS;
                     rampUp = !rampUp;   // Switch ramp direction
                 }
