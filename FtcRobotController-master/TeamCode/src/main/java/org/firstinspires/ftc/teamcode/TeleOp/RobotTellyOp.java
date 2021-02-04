@@ -29,7 +29,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m4 = hardwareMap.dcMotor.get("br");
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
-        Servo s1 = hardwareMap.servo.get("servo");
+        servo = hardwareMap.get(Servo.class, "LinearServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -44,6 +44,10 @@ public class  RobotTellyOp extends LinearOpMode {
         position = 0;
         waitForStart();
         while (opModeIsActive()) {
+            // Display the current value
+            telemetry.addData("Servo Position", "%5.2f", position);
+            telemetry.addData(">", "Press Stop to end test.");
+            telemetry.update();
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
             double pa = (gamepad1.left_trigger - gamepad1.right_trigger);
@@ -76,30 +80,27 @@ public class  RobotTellyOp extends LinearOpMode {
                 m5.setPower(0.0);
                 m6.setPower(0.0);
             }
-            if (rampUp && gamepad1.dpad_up || position > .01) {
+            // slew the servo, according to the rampUp (direction) variable.
+            if (rampUp && gamepad1.dpad_up) {
                 // Keep stepping up until we hit the max value.
-                position += INCREMENT;
-                if (position >= MAX_POS || position < .99) {
+                position += INCREMENT ;
+                if (position >= MAX_POS ) {
                     position = MAX_POS;
                     rampUp = !rampUp;   // Switch ramp direction
                 }
-            } else if(!rampUp && gamepad1.dpad_down) {
+            }
+            else if(!rampUp && gamepad1.dpad_down) {
                 // Keep stepping down until we hit the min value.
-                position -= INCREMENT;
-                if (position <= MIN_POS) {
-
+                position -= INCREMENT ;
+                if (position <= MIN_POS ) {
                     position = MIN_POS;
                     rampUp = !rampUp;  // Switch ramp direction
                 }
             }
 
-            // Display the current value
-            telemetry.addData("Servo Position", "%5.2f", position);
-            telemetry.addData(">", "Press Stop to end test.");
-            telemetry.update();
 
             // Set the servo to the new position and pause
-            s1.setPosition(position);
+            servo.setPosition(position);
             sleep(CYCLE_MS);
             idle();
         }
