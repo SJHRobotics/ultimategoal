@@ -44,7 +44,6 @@ public class  RobotTellyOp extends LinearOpMode {
         position = 0;
         waitForStart();
         while (opModeIsActive()) {
-            position = 0;
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
             double pa = (gamepad1.left_trigger - gamepad1.right_trigger);
