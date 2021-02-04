@@ -86,7 +86,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         In the future, I will modify it so the robot drives up to the line automatically.
          */
 
-        char targetZone = 'A';
+        char targetZone = 'B';
 
 
 
