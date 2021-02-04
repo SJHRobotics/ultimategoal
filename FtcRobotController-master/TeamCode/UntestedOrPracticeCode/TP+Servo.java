@@ -41,7 +41,9 @@ public class  RobotTellyOp extends LinearOpMode {
         m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        s1.setPosition(0);
+        s1.setPosition(0)
+        s2.setPosition(0);
+
         waitForStart();
         while (opModeIsActive()) {
             double px = gamepad1.left_stick_x;
@@ -103,7 +105,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             // Set the servo to the new position and pause
             s1.setPosition(position);
-            sleep(CYCLE_MS);
+            //sleep(CYCLE_MS);
             idle();
         }
         m1.setPower(0.0);//Stopping the motors: Start.
