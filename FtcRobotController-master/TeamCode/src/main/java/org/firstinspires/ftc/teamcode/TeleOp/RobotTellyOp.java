@@ -30,7 +30,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
         Servo s1 = hardwareMap.servo.get("LinearServo");
-        //Servo s2 = hardwareMap.servo.get("FLickerServo");
+        //Servo s2 = hardwareMap.servo.get("FlickerServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
