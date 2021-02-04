@@ -22,6 +22,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
 
     public void runOpMode() {
+
         DcMotor m1 = hardwareMap.dcMotor.get("bl");
         DcMotor m2 = hardwareMap.dcMotor.get("fl");
         DcMotor m3 = hardwareMap.dcMotor.get("fr");
@@ -29,6 +30,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
         Servo s1 = hardwareMap.servo.get("LinearServo");
+        Servo s2 = hardwareMap.servo.get("FLickerServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -58,10 +60,14 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
-            m1.setPower(p1);
-            m2.setPower(p2);
-            m3.setPower(p3);
-            m4.setPower(p4);
+            double p11 = p1/2;
+            double p22 = p2/2;
+            double p33 = p3/2;
+            double p44 = p4/2;
+            m1.setPower(p11);
+            m2.setPower(p22);
+            m3.setPower(p33);
+            m4.setPower(p44);
             if(gamepad1.b) {
                 m5.setPower(1.0);
                 m6.setPower(1.0);
@@ -69,7 +75,7 @@ public class  RobotTellyOp extends LinearOpMode {
             else{
                 m5.setPower(0.0);
                 m6.setPower(0.0);
-            }x
+            }
             if (rampUp && gamepad1.dpad_up || position > .01) {
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT;
