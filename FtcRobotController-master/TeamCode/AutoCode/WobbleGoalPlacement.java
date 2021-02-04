@@ -30,6 +30,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backRightMotor.setPower(-1.0);
         sleep(time);
     }
+    public void TurnLeft(long time){
+        frontLeftMotor.setPower(-1.0);
+        frontRightMotor.setPower(1.0);
+        backLeftMotor.setPower(-1.0);
+        backRightMotor.setPower(1.0);
+    }
     public void Stop(){
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
@@ -57,26 +63,57 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         waitForStart();
 
-        boolean condition = true;
-        //TurnRight(850);
-        while (condition) {
+        /*
+        NOTE: Before running this program, robot must be positioned at Launch Line
+        In the future, I will modify it so the robot drives up to the line automatically.
+         */
+
+        char targetZone = 'A';
+        while (true) {
+
+            //Print rgb values on telemetry(for testing purposes only)
             telemetry.addData("Blue:", CSensor.blue());
             telemetry.addData("Red:", CSensor.red());
             telemetry.addData("Green:", CSensor.green());
             telemetry.update();
 
-            MoveForward();
-            if(CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()){
-                Stop();
-                telemetry.addData(">", "I am at Target Zone!");
-                telemetry.update();
+            //Target Zone A
+            if(targetZone == 'A'){
+                //Adjust as needed
+                TurnLeft(500);
+                while(true){
+                    MoveForward();
+                    if(CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()){
+                        Stop();
+                        telemetry.addData(">", "I am at Target Zone A!");
+                        telemetry.update();
+                        sleep(3000);
+                        break;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+                //Arm Servo code goes here
+
                 break;
             }
-            else{
-                continue;
+
+            //Target Zone B
+            if(targetZone == 'B'){
+
             }
 
+            //Target Zone C
+            if(targetZone == 'C'){
+
+            }
+
+
+
         }
+
+
 
 
     }
