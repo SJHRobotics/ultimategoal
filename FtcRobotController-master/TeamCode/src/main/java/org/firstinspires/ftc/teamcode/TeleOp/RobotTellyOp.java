@@ -60,10 +60,10 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
-            p11 = p1/2;
-            p22 = p2/2;
-            p33 = p3/2;
-            p44 = p4/2
+            double p11 = p1/2;
+            double p22 = p2/2;
+            double p33 = p3/2;
+            double p44 = p4/2;
             m1.setPower(p11);
             m2.setPower(p22);
             m3.setPower(p33);
@@ -75,7 +75,7 @@ public class  RobotTellyOp extends LinearOpMode {
             else{
                 m5.setPower(0.0);
                 m6.setPower(0.0);
-            }x
+            }
             if (rampUp && gamepad1.dpad_up || position > .01) {
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT;
