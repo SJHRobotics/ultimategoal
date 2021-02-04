@@ -30,7 +30,6 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
         Servo s1 = hardwareMap.servo.get("LinearServo");
-        //Servo s2 = hardwareMap.servo.get("FlickerServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -42,8 +41,6 @@ public class  RobotTellyOp extends LinearOpMode {
         m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        s1.setPosition(0);
-        //s2.setPosition(0);
         waitForStart();
         while (opModeIsActive()) {
             double px = gamepad1.left_stick_x;
@@ -66,10 +63,10 @@ public class  RobotTellyOp extends LinearOpMode {
             double p22 = p2/2;
             double p33 = p3/2;
             double p44 = p4/2;
-            m1.setPower(p11);
-            m2.setPower(p22);
-            m3.setPower(p33);
-            m4.setPower(p44);
+            m1.setPower(p1);
+            m2.setPower(p2);
+            m3.setPower(p3);
+            m4.setPower(p4);
             if(gamepad1.b) {
                 m5.setPower(1.0);
                 m6.setPower(1.0);
