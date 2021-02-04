@@ -68,7 +68,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         In the future, I will modify it so the robot drives up to the line automatically.
          */
 
-        char targetZone = 'A';
+        final char targetZone = 'A';
 
 
 
@@ -90,28 +90,29 @@ public class WobbleGoalPlacement extends LinearOpMode{
                     telemetry.update();
                     sleep(3000);
                     break;
-                } else {
+                }
+                else {
                     continue;
                 }
 
-            }
+            } // end Zone A loop
             //Arm Servo code goes here
 
-        }
-        
+        } // end Target Zone A
+
         //Target Zone B
         if(targetZone == 'B'){
 
-        }
+        } // end Target Zone B
 
         //Target Zone C
         if(targetZone == 'C'){
 
-        }
+        } // end Target Zone C
 
 
-    }
+    } // end runOpMode()
 
 
-}
+} //end class
 
