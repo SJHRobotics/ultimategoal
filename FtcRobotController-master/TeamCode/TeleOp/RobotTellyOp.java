@@ -22,24 +22,23 @@ public class  RobotTellyOp extends LinearOpMode {
 
 
     public void runOpMode() {
-        DcMotor m1 = hardwareMap.dcMotor.get("bl");
-        DcMotor m2 = hardwareMap.dcMotor.get("fl");
-        DcMotor m3 = hardwareMap.dcMotor.get("fr");
-        DcMotor m4 = hardwareMap.dcMotor.get("br");
-        DcMotor m5 = hardwareMap.dcMotor.get("sl");
-        DcMotor m6 = hardwareMap.dcMotor.get("sr");
-        Servo s1 = hardwareMap.servo.get("LinearServo");
-        m1.setDirection(DcMotor.Direction.REVERSE);
-        m2.setDirection(DcMotor.Direction.REVERSE);
-        m5.setDirection(DcMotor.Direction.REVERSE);
-        m1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
+        shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
+        shooterRightMotor = hardwareMap.get(Servo.class, "LinearServo");
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
         while (opModeIsActive()) {
             double px = gamepad1.left_stick_x;
@@ -58,17 +57,17 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
-            m1.setPower(p1);
-            m2.setPower(p2);
-            m3.setPower(p3);
-            m4.setPower(p4);
+            backLeftMotor.setPower(p1);
+            frontLeftMotor.setPower(p2);
+            frontRightMotor.setPower(p3);
+            backRightMotor.setPower(p4);
             if(gamepad1.b) {
-                m5.setPower(1.0);
-                m6.setPower(1.0);
+                shooterLeftMotor.setPower(1.0);
+                shooterRightMotor.setPower(1.0);
             }
             else{
-                m5.setPower(0.0);
-                m6.setPower(0.0);
+                shooterLeftMotor.setPower(0.0);
+                shooterRightMotor.setPower(0.0);
             }x
             if (rampUp && gamepad1.dpad_up || position > .01) {
                 // Keep stepping up until we hit the max value.
@@ -97,10 +96,10 @@ public class  RobotTellyOp extends LinearOpMode {
             sleep(CYCLE_MS);
             idle();
         }
-        m1.setPower(0.0);//Stopping the motors: Start.
-        m2.setPower(0.0);
-        m3.setPower(0.0);
-        m4.setPower(0.0);//Stopping the motors: End.
+        backLeftMotor.setPower(0.0);//Stopping the motors: Start.
+        frontLeftMotor.setPower(0.0);
+        frontRightMotor.setPower(0.0);
+        backRightMotor.setPower(0.0);//Stopping the motors: End.
         telemetry.addData(">", "Done");//Showing the task done on DS.
         telemetry.update();// Updates the console.
     }
