@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 @Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
 
 public class WobbleGoalPlacement extends LinearOpMode{
@@ -42,6 +41,30 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
     }
+
+    //This method will be called whenever robot needs to move forward and stop once it detects blue
+    //Will modify this later for all colors
+    public void SenseBlueColor(){
+        while (true) {
+            //Print rgb values on telemetry(for testing purposes only)
+            telemetry.addData("Blue:", CSensor.blue());
+            telemetry.addData("Red:", CSensor.red());
+            telemetry.addData("Green:", CSensor.green());
+            telemetry.update();
+
+            MoveForward();
+            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                Stop();
+                telemetry.addData(">", "I am at Target Zone!");
+                telemetry.update();
+                sleep(3000);
+                break;
+            }
+            else {
+                continue;
+            }
+        }
+    }
 /*
     WobbleGoalPlacement obj = new WobbleGoalPlacement();
     Thread thread = new Thread(obj);
@@ -76,39 +99,21 @@ public class WobbleGoalPlacement extends LinearOpMode{
         if(targetZone == 'A') {
             //Turn left to align with target zone - adjust as needed
             TurnLeft(500);
-            while (true) {
-                //Print rgb values on telemetry(for testing purposes only)
-                telemetry.addData("Blue:", CSensor.blue());
-                telemetry.addData("Red:", CSensor.red());
-                telemetry.addData("Green:", CSensor.green());
-                telemetry.update();
+            SenseBlueColor();
 
-                MoveForward();
-                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                    Stop();
-                    telemetry.addData(">", "I am at Target Zone A!");
-                    telemetry.update();
-                    sleep(3000);
-                    break;
-                }
-                else {
-                    continue;
-                }
-
-            } // end Zone A loop
             //Arm Servo code goes here
 
-        } // end Target Zone A
+        }
 
         //Target Zone B
         if(targetZone == 'B'){
-
-        } // end Target Zone B
+            SenseBlueColor();
+        }
 
         //Target Zone C
         if(targetZone == 'C'){
 
-        } // end Target Zone C
+        }
 
 
     } // end runOpMode()
