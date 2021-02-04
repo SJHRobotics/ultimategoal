@@ -29,7 +29,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m4 = hardwareMap.dcMotor.get("br");
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
-        servo = hardwareMap.get(Servo.class, "LinearServo");
+        Servo s1 = hardwareMap.servo.get("LinearServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -100,7 +100,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
 
             // Set the servo to the new position and pause
-            servo.setPosition(position);
+            s1.setPosition(position);
             sleep(CYCLE_MS);
             idle();
         }
