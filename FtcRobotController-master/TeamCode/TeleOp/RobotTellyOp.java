@@ -57,10 +57,14 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
-            backLeftMotor.setPower(p1);
-            frontLeftMotor.setPower(p2);
-            frontRightMotor.setPower(p3);
-            backRightMotor.setPower(p4);
+            p11 = p1/2;
+            p22 = p2/2;
+            p33 = p3/2;
+            p44 = p4/2
+            backLeftMotor.setPower(p11);
+            frontLeftMotor.setPower(p22);
+            frontRightMotor.setPower(p33);
+            backRightMotor.setPower(p44);
             if(gamepad1.b) {
                 shooterLeftMotor.setPower(1.0);
                 shooterRightMotor.setPower(1.0);
