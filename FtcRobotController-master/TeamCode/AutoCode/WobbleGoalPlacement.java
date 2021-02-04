@@ -69,51 +69,45 @@ public class WobbleGoalPlacement extends LinearOpMode{
          */
 
         char targetZone = 'A';
-        while (true) {
 
-            //Print rgb values on telemetry(for testing purposes only)
-            telemetry.addData("Blue:", CSensor.blue());
-            telemetry.addData("Red:", CSensor.red());
-            telemetry.addData("Green:", CSensor.green());
-            telemetry.update();
 
-            //Target Zone A
-            if(targetZone == 'A'){
-                //Adjust as needed
-                TurnLeft(500);
-                while(true){
-                    MoveForward();
-                    if(CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()){
-                        Stop();
-                        telemetry.addData(">", "I am at Target Zone A!");
-                        telemetry.update();
-                        sleep(3000);
-                        break;
-                    }
-                    else{
-                        continue;
-                    }
+
+        //Target Zone A
+        if(targetZone == 'A') {
+            //Turn left to align with target zone - adjust as needed
+            TurnLeft(500);
+            while (true) {
+                //Print rgb values on telemetry(for testing purposes only)
+                telemetry.addData("Blue:", CSensor.blue());
+                telemetry.addData("Red:", CSensor.red());
+                telemetry.addData("Green:", CSensor.green());
+                telemetry.update();
+
+                MoveForward();
+                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                    Stop();
+                    telemetry.addData(">", "I am at Target Zone A!");
+                    telemetry.update();
+                    sleep(3000);
+                    break;
+                } else {
+                    continue;
                 }
-                //Arm Servo code goes here
-
-                break;
-            }
-
-            //Target Zone B
-            if(targetZone == 'B'){
 
             }
+            //Arm Servo code goes here
 
-            //Target Zone C
-            if(targetZone == 'C'){
-
-            }
-
-
+        }
+        
+        //Target Zone B
+        if(targetZone == 'B'){
 
         }
 
+        //Target Zone C
+        if(targetZone == 'C'){
 
+        }
 
 
     }
