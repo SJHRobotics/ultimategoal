@@ -29,6 +29,7 @@ public class  RobotTellyOp extends LinearOpMode {
         DcMotor m5 = hardwareMap.dcMotor.get("sl");
         DcMotor m6 = hardwareMap.dcMotor.get("sr");
         Servo s1 = hardwareMap.servo.get("LinearServo");
+        Servo s2 = hardwareMap.servo.get("FLickerServo");
         m1.setDirection(DcMotor.Direction.REVERSE);
         m2.setDirection(DcMotor.Direction.REVERSE);
         m5.setDirection(DcMotor.Direction.REVERSE);
@@ -40,6 +41,9 @@ public class  RobotTellyOp extends LinearOpMode {
         m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        s1.setPosition(0)
+        s2.setPosition(0);
+
         waitForStart();
         while (opModeIsActive()) {
             double px = gamepad1.left_stick_x;
@@ -69,7 +73,14 @@ public class  RobotTellyOp extends LinearOpMode {
             else{
                 m5.setPower(0.0);
                 m6.setPower(0.0);
-            }x
+            }
+            if(gamepad1.x) {
+                s2.setPosition(180);
+            }
+            else{
+                s2.setPosition(0);
+            }
+
             if (rampUp && gamepad1.dpad_up || position > .01) {
                 // Keep stepping up until we hit the max value.
                 position += INCREMENT;
@@ -94,7 +105,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             // Set the servo to the new position and pause
             s1.setPosition(position);
-            sleep(CYCLE_MS);
+            //sleep(CYCLE_MS);
             idle();
         }
         m1.setPower(0.0);//Stopping the motors: Start.
