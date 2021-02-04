@@ -16,10 +16,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
 
     public void MoveForward(){
-        frontLeftMotor.setPower(0.3);
-        frontRightMotor.setPower(0.3);
-        backLeftMotor.setPower(0.3);
-        backRightMotor.setPower(0.3);
+        frontLeftMotor.setPower(0.2);
+        frontRightMotor.setPower(0.2);
+        backLeftMotor.setPower(0.2);
+        backRightMotor.setPower(0.2);
     }
     public void TurnRight(long time){
         frontLeftMotor.setPower(1.0);
