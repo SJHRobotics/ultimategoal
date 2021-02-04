@@ -108,17 +108,21 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         //Target Zone C
         if(targetZone == 'C'){
-            SenseBlueColor();
-            sleep(1500);
-            MoveForward();
-            sleep(500);
+            for(int i = 1; i <= 2; i++){
+                SenseBlueColor();
+                MoveForward();
+                sleep(1000);
+            }
+
+            TurnLeft(500);
             SenseBlueColor();
 
+/*
             MoveForward();
             sleep(1000);
             TurnLeft(500);
             SenseBlueColor();
-
+*/
         }
 
 
