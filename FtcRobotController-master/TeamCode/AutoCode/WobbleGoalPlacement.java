@@ -20,7 +20,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
         backRightMotor.setPower(0.3);
-        //sleep(time);
     }
     public void TurnRight(long time){
         frontLeftMotor.setPower(1.0);
@@ -34,6 +33,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         frontRightMotor.setPower(1.0);
         backLeftMotor.setPower(-1.0);
         backRightMotor.setPower(1.0);
+        sleep(time);
     }
     public void Stop(){
         frontLeftMotor.setPower(0);
@@ -60,20 +60,15 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 sleep(3000);
                 break;
             }
+            
             else {
                 continue;
             }
         }
     }
-/*
-    WobbleGoalPlacement obj = new WobbleGoalPlacement();
-    Thread thread = new Thread(obj);
-    thread.start();
-
-    public void run(){
-
-    }
-    (*/
+    
+    
+    
     @Override
     public void runOpMode(){
         CSensor = hardwareMap.get(ColorSensor.class, "CS1");
