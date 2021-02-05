@@ -6,48 +6,49 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
- * This is if we use all the motors
+ * This is the final robot
  */
 @TeleOp(name ="RobotTellyOp", group = "Telly-Op")
 public class  RobotTellyOp extends LinearOpMode {
-    static final double INCREMENT   = .01;     // amount to slew servo each CYCLE_MS cycle
-    static final int    CYCLE_MS    =   50;     // period of each cycle
-    static final double MAX_POS     =  1.0;     // Maximum rotational position
-    static final double MIN_POS     =  0.0;     // Minimum rotational position
+    /*static final double INCREMENT   = .01;      amount to slew servo each CYCLE_MS cycle
+    static final int    CYCLE_MS    =   50;      period of each cycle
+    static final double MAX_POS     =  1.0;      Maximum rotational position
+    static final double MIN_POS     =  0.0;      Minimum rotational position
 
     // Define class members
 
     double  position = (MAX_POS - MIN_POS)/2; // Start at halfway position
-    boolean rampUp = true;
+    boolean rampUp = true;*/
+    private DcMotor frontLeftMotor;
+    private DcMotor frontRightMotor;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
 
 
     public void runOpMode() {
 
-        DcMotor m1 = hardwareMap.dcMotor.get("bl");
-        DcMotor m2 = hardwareMap.dcMotor.get("fl");
-        DcMotor m3 = hardwareMap.dcMotor.get("fr");
-        DcMotor m4 = hardwareMap.dcMotor.get("br");
-        DcMotor m5 = hardwareMap.dcMotor.get("sl");
-        DcMotor m6 = hardwareMap.dcMotor.get("sr");
-        Servo s1 = hardwareMap.servo.get("LinearServo");
-        m1.setDirection(DcMotor.Direction.REVERSE);
-        m2.setDirection(DcMotor.Direction.REVERSE);
-        m5.setDirection(DcMotor.Direction.REVERSE);
-        m1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        position = 0;
+
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
+        shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         waitForStart();
         while (opModeIsActive()) {
-            // Display the current value
-            telemetry.addData("Servo Position", "%5.2f", position);
-            telemetry.addData(">", "Press Stop to end test.");
-            telemetry.update();
+
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
             double pa = (gamepad1.left_trigger - gamepad1.right_trigger);
@@ -64,52 +65,58 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
+            // Display the current value of the motor speedz
+            telemetry.addData("backLeftMotor_speed:", "%5.2f", p1);
+            telemetry.addData("frontLeftMotor_speed:", "%5.2f", p2);
+            telemetry.addData("frontRightMotor_speed:", "%5.2f", p3);
+            telemetry.addData("backRightMotor_speed:", "%5.2f", p4);
+            telemetry.update();
             double p11 = p1/2;
             double p22 = p2/2;
             double p33 = p3/2;
             double p44 = p4/2;
-            m1.setPower(p1);
-            m2.setPower(p2);
-            m3.setPower(p3);
-            m4.setPower(p4);
+            backLeftMotor.setPower(p1);
+            frontLeftMotor.setPower(p2);
+            frontRightMotor.setPower(p3);
+            backRightMotor.setPower(p4);
             if(gamepad1.b) {
-                m5.setPower(1.0);
-                m6.setPower(1.0);
-            }
+                shooterRightMotor.setPower(1.0);
+                shooterLeftMotor.setPower(1.0);
+            }// turning the shooting motors on
             else{
-                m5.setPower(0.0);
-                m6.setPower(0.0);
-            }
-            // slew the servo, according to the rampUp (direction) variable.
+                shooterRightMotor.setPower(0.0);
+                shooterLeftMotor.setPower(0.0);
+            }//turning the shooting motors off
+            /* slew the servo, according to the rampUp (direction) variable.
             if (rampUp && gamepad1.dpad_up) {
-                // Keep stepping up until we hit the max value.
+                 Keep stepping up until we hit the max value.
                 position += INCREMENT ;
                 if (position >= MAX_POS ) {
                     position = MAX_POS;
-                    rampUp = !rampUp;   // Switch ramp direction
+                    rampUp = !rampUp;    Switch ramp direction
                 }
             }
             else if(!rampUp && gamepad1.dpad_down) {
-                // Keep stepping down until we hit the min value.
+                 Keep stepping down until we hit the min value.
                 position -= INCREMENT ;
                 if (position <= MIN_POS ) {
                     position = MIN_POS;
-                    rampUp = !rampUp;  // Switch ramp direction
+                    rampUp = !rampUp;   Switch ramp direction
                 }
             }
 
 
-            // Set the servo to the new position and pause
-            s1.setPosition(position);
+             Set the servo to the new position and pause
+          s1.setPosition(position);
             sleep(CYCLE_MS);
-            idle();
+            idle();*/
         }
-        m1.setPower(0.0);//Stopping the motors: Start.
-        m2.setPower(0.0);
-        m3.setPower(0.0);
-        m4.setPower(0.0);//Stopping the motors: End.
-        telemetry.addData(">", "Done");//Showing the task done on DS.
-        telemetry.update();// Updates the console.
+        backLeftMotor.setPower(0.0);//Stoping the motors: Start.
+        frontLeftMotor.setPower(0.0);
+        frontRightMotor.setPower(0.0);
+        backRightMotor.setPower(0.0);//Stopping the motors: End.
+        /*telemetry.addData(">", "Done");//Showing the task done on DS.
+        telemetry.update();// Updates the console.*/
     }
 }
 
