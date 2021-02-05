@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-@Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
+@Autonomous(name = "WBPDummyCode", group = "WobbleGoal")
 
 public class WobbleGoalPlacement extends LinearOpMode{
     private ColorSensor CSensor;
