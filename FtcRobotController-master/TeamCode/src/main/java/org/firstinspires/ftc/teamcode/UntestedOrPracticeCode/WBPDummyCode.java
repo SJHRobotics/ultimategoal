@@ -154,7 +154,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnLeft(500);
             SenseBlueColor();
 */
-        }
+        }   
 
         TurnLeft(1);
 
