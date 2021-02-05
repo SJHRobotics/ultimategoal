@@ -13,6 +13,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
+    private Servo bottomServo;
+    private Servo pickingServo;
 
 
     public void MoveForward(){
