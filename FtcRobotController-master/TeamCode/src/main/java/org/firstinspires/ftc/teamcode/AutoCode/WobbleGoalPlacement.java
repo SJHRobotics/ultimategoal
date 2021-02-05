@@ -123,6 +123,15 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnLeft(500);
             SenseBlueColor();
 
+            //Go back to Launch Line
+            MoveBackward();
+            sleep(500);
+            TurnLeft(500);
+            for(int j = 1; j <= 2; j++){
+                SenseBlueColor();
+                MoveForward();
+                sleep(1000);
+            }
 /*
             MoveForward();
             sleep(1000);
