@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
 
 public class WobbleGoalPlacement extends LinearOpMode{
@@ -14,7 +13,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
 
-
+    //Movement methods
     public void MoveForward(){
         frontLeftMotor.setPower(0.2);
         frontRightMotor.setPower(0.2);
@@ -50,7 +49,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
-    public void SenseBlueColor(){
+    public void SenseColor(char color){
         while (true) {
             //Print rgb values on telemetry(for testing purposes only)
             telemetry.addData("Blue:", CSensor.blue());
@@ -59,19 +58,34 @@ public class WobbleGoalPlacement extends LinearOpMode{
             telemetry.update();
 
             MoveForward();
-            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                Stop();
-                telemetry.addData(">", "I am at Target Zone!");
-                telemetry.update();
-                sleep(3000);
-                break;
+            if(color == 'B'){
+                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                    Stop();
+                    telemetry.addData(">", "I am at Target Zone!");
+                    telemetry.update();
+                    sleep(3000);
+                    break;
+                }
+                else {
+                    continue;
+                }
             }
+            /*
+            if(color == 'W'){
+               if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                    Stop();
+                    telemetry.addData(">", "I am at Target Zone!");
+                    telemetry.update();
+                    sleep(3000);
+                    break;
+            }
+            */
             
-            else {
-                continue;
-            }
+
         }
     }
+    
+    
     
     
     
@@ -101,7 +115,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Turn left to align with target zone - adjust as needed
             TurnLeft(500);
             SenseBlueColor();
-
+            MoveBackward();
+            sleep(1000);
+            TurnRight(500);
+            MoveBackward();
+            sleep(500);
+            
 
             //Arm Servo code goes here
 
@@ -110,6 +129,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone B
         if(targetZone == 'B'){
             SenseBlueColor();
+            MoveBackward();
+            sleep(1000);
+           
         }
 
         //Target Zone C
@@ -132,12 +154,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 MoveForward();
                 sleep(1000);
             }
-/*
-            MoveForward();
-            sleep(1000);
-            TurnLeft(500);
-            SenseBlueColor();
-*/
+            
         }
 
 
