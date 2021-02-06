@@ -49,7 +49,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
-    public void SenseColor(char color){
+    public void SenseBlueColor(){
         while (true) {
             //Print rgb values on telemetry(for testing purposes only)
             telemetry.addData("Blue:", CSensor.blue());
@@ -58,37 +58,28 @@ public class WobbleGoalPlacement extends LinearOpMode{
             telemetry.update();
 
             MoveForward();
-            if(color == 'B'){
-                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                    Stop();
-                    telemetry.addData(">", "I am at Target Zone!");
-                    telemetry.update();
-                    sleep(3000);
-                    break;
-                }
-                else {
-                    continue;
-                }
+
+            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                Stop();
+                telemetry.addData(">", "I am at Target Zone!");
+                telemetry.update();
+                sleep(3000);
+                break;
             }
-            /*
-            if(color == 'W'){
-               if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                    Stop();
-                    telemetry.addData(">", "I am at Target Zone!");
-                    telemetry.update();
-                    sleep(3000);
-                    break;
+            else {
+                continue;
             }
-            */
-            
+
+
+
 
         }
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     @Override
     public void runOpMode(){
         CSensor = hardwareMap.get(ColorSensor.class, "CS1");
@@ -106,7 +97,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         In the future, I will modify it so the robot drives up to the line automatically.
          */
 
-        char targetZone = 'C';
+        char targetZone = 'A';
 
 
 
@@ -120,7 +111,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnRight(500);
             MoveBackward();
             sleep(500);
-            
+
 
             //Arm Servo code goes here
 
@@ -131,7 +122,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseBlueColor();
             MoveBackward();
             sleep(1000);
-           
+
         }
 
         //Target Zone C
@@ -154,7 +145,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 MoveForward();
                 sleep(1000);
             }
-            
+
         }
 
 
