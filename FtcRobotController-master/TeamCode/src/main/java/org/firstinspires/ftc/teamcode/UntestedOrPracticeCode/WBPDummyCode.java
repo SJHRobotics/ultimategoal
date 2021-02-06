@@ -68,8 +68,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
         while (true) {
 
 
-            MoveForward();
-            if (CSensor.blue() == CSensor.red() && CSensor.blue() == CSensor.green() && CSensor.green() == CSensor.red() ) {
+                MoveForward();
+            if(CSensor.blue() = 255 && CSensor.red() = 255 && CSensor.green() = 255){
                 Stop();
                 telemetry.addData(">", "I am at the launch line!");
                 telemetry.update();
