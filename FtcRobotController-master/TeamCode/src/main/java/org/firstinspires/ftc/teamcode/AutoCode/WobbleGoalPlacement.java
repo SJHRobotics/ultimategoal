@@ -114,31 +114,59 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
-    public void SenseBlueColor(){
-        while (true) {
-            //Print rgb values on telemetry(for testing purposes only)
-            telemetry.addData("Blue:", CSensor.blue());
-            telemetry.addData("Red:", CSensor.red());
-            telemetry.addData("Green:", CSensor.green());
-            telemetry.update();
-
-            MoveForward();
-
-            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                Stop();
-                telemetry.addData(">", "I am at Target Zone!");
+    public void SenseColor(char color){
+        //Sense blue color(for Target Zones)
+        if(color == 'B'){
+            while (true) {
+                //Print rgb values on telemetry(for testing purposes only)
+                telemetry.addData("Blue:", CSensor.blue());
+                telemetry.addData("Red:", CSensor.red());
+                telemetry.addData("Green:", CSensor.green());
                 telemetry.update();
-                sleep(3000);
-                break;
+
+                MoveForward();
+
+                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                    Stop();
+                    telemetry.addData(">", "I am at Target Zone!");
+                    telemetry.update();
+                    sleep(3000);
+                    break;
+                }
+                else {
+                    continue;
+                }
             }
-            else {
-                continue;
-            }
-
-
-
-
         }
+        //Sense white color(for Launch Line)
+        if(color == 'W'){
+            while (true) {
+                //Print rgb values on telemetry(for testing purposes only)
+                telemetry.addData("Blue:", CSensor.blue());
+                telemetry.addData("Red:", CSensor.red());
+                telemetry.addData("Green:", CSensor.green());
+                telemetry.update();
+
+                MoveForward();
+                //According to our tests, CSensor will detect more of green than other colors when it sees white
+                if (CSensor.green() > CSensor.blue() && CSensor.green() > CSensor.red()) {
+                    Stop();
+                    telemetry.addData(">", "I am at Target Zone!");
+                    telemetry.update();
+                    sleep(3000);
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+
+
+
+
+
+
     }
 
 
