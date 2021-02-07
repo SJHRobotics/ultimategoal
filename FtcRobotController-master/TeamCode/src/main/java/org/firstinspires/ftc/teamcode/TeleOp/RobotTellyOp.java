@@ -23,10 +23,10 @@ public class  RobotTellyOp extends LinearOpMode {
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private Servo bottomArmServo;
-    private Servo topArmServo
-    private boolean canMove = false;
-    private boolean canOpen = false;
+    private DcMotor shooterLeftMotor;
+    private DcMotor shooterRightMotor;
+    private Servo Flicker;
+    public boolean moveBack = false;
 
     public void runOpMode() {
 
@@ -37,8 +37,7 @@ public class  RobotTellyOp extends LinearOpMode {
         backRightMotor = hardwareMap.get(DcMotor.class, "br");
         shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
         shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
-        bottomArmServo = hardwareMap.get(Servo.class, "bottomArmServo");
-        TopArmServo = hardwareMap.get(Servo.class, "TopArmServo");
+        Flicker = hardwareMap.get(Servo.class, "Flicker");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -50,8 +49,7 @@ public class  RobotTellyOp extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bottomArmServo.setPosition(130);
-        topArmServo.setPositionO(0);
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -94,14 +92,14 @@ public class  RobotTellyOp extends LinearOpMode {
                 shooterLeftMotor.setPower(0.0);
 
 
-                if(gamepad1.y && !canMove ) {
-                    bottomArmServo.setPosition(0);
-                    !canMove = canMove;
-                    if(gamepad1.y && canMove) {
-                        topArmServo.setPosition(50);
-
-                    } else if(gamepad1.y && )
+                if(gamepad1.y && !moveBack) {
+                    Flicker.setPosition(90);
+                    moveBack = true;
+                } else if(gamepad1.y && moveBack) {
+                    Flicker.setPosition(0);
+                    moveBack = false;
                 }
+
             }//turning the shooting motors off
             /* slew the servo, according to the rampUp (direction) variable.
             if (rampUp && gamepad1.dpad_up) {
