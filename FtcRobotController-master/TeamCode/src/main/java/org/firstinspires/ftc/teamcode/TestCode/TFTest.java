@@ -1,5 +1,3 @@
-
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -34,13 +32,14 @@ public class TFTest1 extends LinearOpMode {
     public void runOpMode() {
         
         initVuforia();
-
+        initTfod();
+        /*
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
-
+*/
         
         if (tfod != null) {
             tfod.activate();
