@@ -1,6 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import java.util.List;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -75,7 +83,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
     //This method will use TFOD and Vuforia to return how many rings there are in stack
     public void DetectRings(){
         initVuforia();
-        initTFOD();
+        initTfod();
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -88,6 +96,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 }
                 //There are rings
                 else{
+                    int i = 0;
                     for (Recognition recognition : updatedRecognitions) {
                         telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
@@ -104,6 +113,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                             targetZone = 'C';
                         }
                     }
+                    telemetry.update();
 
 
                 }
@@ -205,20 +215,14 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnRight(500);
             MoveBackward();
             sleep(500);
-
-
             //Arm Servo code goes here
-
         }
-
         //Target Zone B
         if(targetZone == 'B'){
             SenseBlueColor();
             MoveBackward();
             sleep(1000);
-
         }
-
         //Target Zone C
         if(targetZone == 'C'){
             for(int i = 1; i <= 2; i++){
@@ -226,10 +230,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 MoveForward();
                 sleep(1000);
             }
-
             TurnLeft(500);
             SenseBlueColor();
-
             //Go back to Launch Line
             MoveBackward();
             sleep(500);
@@ -239,12 +241,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 MoveForward();
                 sleep(1000);
             }
-
         }
-
 */
     } // end runOpMode()
 
 
 } //end class
-
