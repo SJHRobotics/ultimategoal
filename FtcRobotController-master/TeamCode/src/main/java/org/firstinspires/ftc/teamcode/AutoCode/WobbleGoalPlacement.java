@@ -163,9 +163,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
          */
 
         char targetZone = 'A';
+        DetectRings();
 
-
-
+/*
         //Target Zone A
         if(targetZone == 'A') {
             //Turn left to align with target zone - adjust as needed
@@ -213,7 +213,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         }
 
-
+*/
     } // end runOpMode()
 
 
