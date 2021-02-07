@@ -73,7 +73,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
     //This method will use TFOD and Vuforia to return how many rings there are in stack
-    public int DetectRings(){
+    public void DetectRings(){
 
 
         initVuforia();
