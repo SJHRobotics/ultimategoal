@@ -194,7 +194,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
+        telemetry.addData(">", "Ready to start!");
+        telemetry.update();
         waitForStart();
 
         /*
