@@ -33,16 +33,10 @@ public class TFTest1 extends LinearOpMode {
         
         initVuforia();
         initTfod();
-        /*
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-*/
-        
+
         if (tfod != null) {
             tfod.activate();
+            tfod.setZoom(2.5, 16.0/9.0);
         }
 
         telemetry.addData(">", "Press Play to start op mode");
@@ -54,21 +48,29 @@ public class TFTest1 extends LinearOpMode {
                 if (tfod != null) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
-                      int i = 0;
-                      for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        int i = 0;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
                                 recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 recognition.getRight(), recognition.getBottom());
-                      }
-                      telemetry.update();
+                            if(recognition.getLabel().equals("Quad")){
+                                telemetry.addData(">", "Target Zone C");
+                            }
+                            if(recognition.getLabel().equals("Single")){
+                                telemetry.addData(">", "Target Zone B");
+                            }
+                        }
+                        if(updatedRecognitions.size() == 0){
+                            telemetry.addData(">", "Target Zone A");
+                        }
+                        telemetry.update();
                     }
                 }
             }
         }
-
         if (tfod != null) {
             tfod.shutdown();
         }
