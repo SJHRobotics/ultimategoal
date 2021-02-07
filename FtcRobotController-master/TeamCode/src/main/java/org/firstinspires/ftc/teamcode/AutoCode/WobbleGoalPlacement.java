@@ -19,7 +19,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
-
+    private char targetZone = 'A';
     //Movement methods
     public void MoveForward(){
         frontLeftMotor.setPower(0.2);
@@ -74,8 +74,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
     }
     //This method will use TFOD and Vuforia to return how many rings there are in stack
     public void DetectRings(){
-
-
         initVuforia();
         initTFOD();
         if (tfod != null) {
@@ -86,6 +84,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 //No rings
                 if(updatedRecognitions.size() == 0){
                     telemetry.addData(">", "Target Zone A");
+                    targetZone = 'A';
                 }
                 //There are rings
                 else{
@@ -98,9 +97,11 @@ public class WobbleGoalPlacement extends LinearOpMode{
                         //1 ring
                         if(recognition.getLabel().equals("Single")){
                             telemetry.addData(">", "Target Zone B");
+                            targetZone = 'B';
                         }
                         if(recognition.getLabel().equals("Quad")){
                             telemetry.addData(">", "Target Zone C");
+                            targetZone = 'C';
                         }
                     }
 
@@ -190,7 +191,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         In the future, I will modify it so the robot drives up to the line automatically.
          */
 
-        char targetZone = 'A';
+
         DetectRings();
 
 /*
