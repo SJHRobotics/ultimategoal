@@ -112,8 +112,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                             telemetry.addData(">", "Target Zone C");
                             targetZone = 'C';
                         }
+                        telemetry.update();
                     }
-                    telemetry.update();
+                    
 
 
                 }
