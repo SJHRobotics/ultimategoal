@@ -1,5 +1,3 @@
-
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -16,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 @Autonomous(name = "TF1Test", group = "Concept")
 
 public class TFTest1 extends LinearOpMode {
-    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
+    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
 
@@ -34,13 +32,14 @@ public class TFTest1 extends LinearOpMode {
     public void runOpMode() {
         
         initVuforia();
-
+        initTfod();
+        /*
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
-
+*/
         
         if (tfod != null) {
             tfod.activate();

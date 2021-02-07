@@ -12,6 +12,13 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
+    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Quad";
+    private static final String LABEL_SECOND_ELEMENT = "Single";
+    private static final String VUFORIA_KEY =
+            "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
 
     //Movement methods
     public void MoveForward(){
@@ -45,6 +52,64 @@ public class WobbleGoalPlacement extends LinearOpMode{
         frontRightMotor.setPower(0);
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
+    }
+    //Initiate Vuforia
+    private void initVuforia() {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
+
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+    }
+    //Initiate TFOD
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+    //This method will use TFOD and Vuforia to return how many rings there are in stack
+    public void DetectRings(){
+
+
+        initVuforia();
+        initTFOD();
+        if (tfod != null) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                // This will stay here for testing purposes, but may be removed later
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                //No rings
+                if(updatedRecognitions.size() == 0){
+                    telemetry.addData(">", "Target Zone A");
+                }
+                //There are rings
+                else{
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
+                        //1 ring
+                        if(recognition.getLabel().equals("Single")){
+                            telemetry.addData(">", "Target Zone B");
+                        }
+                        if(recognition.getLabel().equals("Quad")){
+                            telemetry.addData(">", "Target Zone C");
+                        }
+                    }
+
+
+                }
+
+            }
+
+        }
     }
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
@@ -98,9 +163,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
          */
 
         char targetZone = 'A';
+        DetectRings();
 
-
-
+/*
         //Target Zone A
         if(targetZone == 'A') {
             //Turn left to align with target zone - adjust as needed
@@ -148,7 +213,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         }
 
-
+*/
     } // end runOpMode()
 
 
