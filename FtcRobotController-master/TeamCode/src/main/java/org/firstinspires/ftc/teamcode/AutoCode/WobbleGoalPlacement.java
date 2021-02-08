@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -20,6 +21,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
+    private Servo servo;
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
@@ -33,16 +35,16 @@ public class WobbleGoalPlacement extends LinearOpMode{
     
     //Movement methods
    public void MoveForward(){
-       frontLeftMotor.setPower(0.2);
-       frontRightMotor.setPower(0.2);
-       backLeftMotor.setPower(0.2);
-       backRightMotor.setPower(0.2);
+       frontLeftMotor.setPower(0.3);
+       frontRightMotor.setPower(0.3);
+       backLeftMotor.setPower(0.3);
+       backRightMotor.setPower(0.3);
    }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.2);
-        frontRightMotor.setPower(-0.2);
-        backLeftMotor.setPower(-0.2);
-        backRightMotor.setPower(-0.2);
+        frontLeftMotor.setPower(-0.3);
+        frontRightMotor.setPower(-0.3);
+        backLeftMotor.setPower(-0.3);
+        backRightMotor.setPower(-0.3);
     }
     public void TurnRight(long time){
         frontLeftMotor.setPower(1.0);
@@ -107,9 +109,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                     Stop();
-                    telemetry.addData(">", "I am at Target Zone!");
-                    telemetry.update();
-                    sleep(3000);
                     break;
                 }
                 else {
@@ -131,9 +130,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 //According to our tests, CSensor will detect more of green than other colors when it sees white
                 if (CSensor.green() > 5000) {
                     Stop();
-                    telemetry.addData(">", "I am at Target Zone!");
-                    telemetry.update();
-                    sleep(3000);
                     break;
                 }
                 else {
@@ -156,10 +152,22 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        backRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        servo = hardwareMap.get(Servo.class, "Flicker");
+        servo.setPosition(0);
+        
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        initVuforia();
+        initTfod();
+        if (tfod != null) {
+            tfod.activate();
+            tfod.setZoom(2.5, 16.0/9.0);
+        }
+        telemetry.addData(">", "Ready to Start!");
+        telemetry.update();
         waitForStart();
         
+
         
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -173,21 +181,19 @@ public class WobbleGoalPlacement extends LinearOpMode{
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                         recognition.getRight(), recognition.getBottom());
                     if(recognition.getLabel().equals("Quad")){
-                        telemetry.addData(">", "Target Zone C");
                         targetZone = 'C';
                         break;
                     }
                     if(recognition.getLabel().equals("Single")){
-                        telemetry.addData(">", "Target Zone B");
                         targetZone = 'B';
                         break;
                     }
                 }
                 if(updatedRecognitions.size() == 0){
                     telemetry.addData(">", "Target Zone A");
+                    telemetry.update();
                 }
-                telemetry.update();
-                sleep(5000);
+                
             }
         }
         
@@ -205,9 +211,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         SenseColor('W');
         
-        /*
+        
         //Target Zone A
-        if( == 'A') {
+        if(targetZone == 'A') {
             //Turn left to align with target zone - adjust as needed
             TurnLeft(500);
             SenseColor('B');
@@ -217,15 +223,16 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveBackward();
             sleep(500);
             //Arm Servo code goes here
+            servo.setPosition(90);
         }
         //Target Zone B
-        if( == 'B'){
+        if(targetZone == 'B'){
             SenseColor('B');
             MoveBackward();
             sleep(1000);
         }
         //Target Zone C
-        if( == 'C'){
+        if(targetZone == 'C'){
             for(int i = 1; i <= 2; i++){
                 SenseColor('B');
                 MoveForward();
@@ -243,8 +250,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 sleep(1000);
             }
         }
-        */
         
     } // end runOpMode()
+    
     
 } //end class
