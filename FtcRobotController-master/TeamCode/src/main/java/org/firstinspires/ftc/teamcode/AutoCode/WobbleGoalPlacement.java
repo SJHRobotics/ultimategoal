@@ -140,6 +140,13 @@ public class WobbleGoalPlacement extends LinearOpMode{
         
     }
 
+    public void PlaceWobbleGoal(){
+        servo.setPosition(90);
+        MoveBackward();
+        sleep(1000);
+        servo.setPosition(0);
+    }
+
 
 
 
@@ -214,46 +221,47 @@ public class WobbleGoalPlacement extends LinearOpMode{
         
         //Target Zone A
         if(targetZone == 'A') {
-            //Turn left to align with target zone - adjust as needed
+            //Move to target zone and place wobble goal
             TurnLeft(500);
             SenseColor('B');
+            PlaceWobbleGoal();
+
+            //Move back to Launch Line
             MoveBackward();
             sleep(1000);
             TurnRight(500);
             MoveBackward();
             sleep(500);
-            //Arm Servo code goes here
-            servo.setPosition(90);
-            MoveBackward();
-            sleep(1000);
-            servo.setPosition(0);
+
+
 
         }
         //Target Zone B
         if(targetZone == 'B'){
+            //Move to target zone and place wobble goal
             SenseColor('B');
+            PlaceWobbleGoal();
+            //Move back to launch line
             MoveBackward();
             sleep(1000);
-            servo.setPosition(90);
-            MoveBackward();
-            sleep(1000);
-            servo.setPosition(0);
+
+
         }
         //Target Zone C
         if(targetZone == 'C'){
+            //Move through Target Zone B
             for(int i = 1; i <= 2; i++){
                 SenseColor('B');
                 MoveForward();
                 sleep(1000);
 
             }
+            //Move to Target Zone C
             TurnLeft(500);
             SenseColor('B');
+            //Place wobble goal
+            PlaceWobbleGoal();
 
-            servo.setPosition(90);
-            MoveBackward();
-            sleep(1000);
-            servo.setPosition(0);
             //Go back to Launch Line
             MoveBackward();
             sleep(500);
