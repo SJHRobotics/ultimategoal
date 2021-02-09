@@ -270,6 +270,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 SenseColor('B');
                 MoveForward();
                 sleep(1000);
+                //buoy
             }
         }
         
