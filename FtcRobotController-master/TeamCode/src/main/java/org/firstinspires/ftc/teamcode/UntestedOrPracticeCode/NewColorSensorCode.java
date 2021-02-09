@@ -35,7 +35,7 @@ import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -43,41 +43,141 @@ import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-/**
- * This is an example LinearOpMode that shows how to use a color sensor in a generic
- * way, regardless of which particular make or model of color sensor is used. The Op Mode
- * assumes that the color sensor is configured with a name of "sensor_color".
- *
- * There will be some variation in the values measured depending on the specific sensor you are using.
- *
- * You can increase the gain (a multiplier to make the sensor report higher values) by holding down
- * the A button on the gamepad, and decrease the gain by holding down the B button on the gamepad.
- *
- * If the color sensor has a light which is controllable from software, you can use the X button on
- * the gamepad to toggle the light on and off. The REV sensors don't support this, but instead have
- * a physical switch on them to turn the light on and off, beginning with REV Color Sensor V2.
- *
- * If the color sensor also supports short-range distance measurements (usually via an infrared
- * proximity sensor), the reported distance will be written to telemetry. As of September 2020,
- * the only color sensors that support this are the ones from REV Robotics. These infrared proximity
- * sensor measurements are only useful at very small distances, and are sensitive to ambient light
- * and surface reflectivity. You should use a different sensor if you need precise distance measurements.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this Op Mode to the Driver Station OpMode list
- */
-@TeleOp(name = "Sensor: Color", group = "Sensor")
+
+@Autonomous(name = "Sensor: Color", group = "Sensor")
 @Disabled
 public class NewColorSensorCode extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
   NormalizedColorSensor colorSensor;
+  private DcMotor frontLeftMotor;
+  private DcMotor frontRightMotor;
+  private DcMotor backLeftMotor;
+  private DcMotor backRightMotor;
+  private Servo servo;
+  private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+  private static final String LABEL_FIRST_ELEMENT = "Quad";
+  private static final String LABEL_SECOND_ELEMENT = "Single";
+  private char targetZone = 'A';
 
-  /** The relativeLayout field is used to aid in providing interesting visual feedback
-   * in this sample application; you probably *don't* need this when you use a color sensor on your
-   * robot. Note that you won't see anything change on the Driver Station, only on the Robot Controller. */
+  private static final String VUFORIA_KEY =
+          "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+  private VuforiaLocalizer vuforia;
+  private TFObjectDetector tfod;
   View relativeLayout;
+  //Movement methods
+  public void MoveForward(){
+    frontLeftMotor.setPower(0.3);
+    frontRightMotor.setPower(0.3);
+    backLeftMotor.setPower(0.3);
+    backRightMotor.setPower(0.3);
+  }
+  public void MoveBackward(){
+    frontLeftMotor.setPower(-0.3);
+    frontRightMotor.setPower(-0.3);
+    backLeftMotor.setPower(-0.3);
+    backRightMotor.setPower(-0.3);
+  }
+  public void TurnRight(long time){
+    frontLeftMotor.setPower(1.0);
+    frontRightMotor.setPower(-1.0);
+    backLeftMotor.setPower(1.0);
+    backRightMotor.setPower(-1.0);
+    sleep(time);
+  }
+  public void TurnLeft(long time){
+    frontLeftMotor.setPower(-1.0);
+    frontRightMotor.setPower(1.0);
+    backLeftMotor.setPower(-1.0);
+    backRightMotor.setPower(1.0);
+    sleep(time);
+  }
+  public void Stop(){
+    frontLeftMotor.setPower(0);
+    frontRightMotor.setPower(0);
+    backLeftMotor.setPower(0);
+    backRightMotor.setPower(0);
+  }
 
+  private void initVuforia() {
+
+    VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+    parameters.vuforiaLicenseKey = VUFORIA_KEY;
+    parameters.cameraName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
+
+    //  Instantiate the Vuforia engine
+    vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+    // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+  }
+
+
+  private void initTfod() {
+    int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+    tfodParameters.minimumConfidence = 0.8;
+    tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+    tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+  }
+
+
+  //This method will be called whenever robot needs to move forward and stop once it detects blue
+  //Will modify this later for all colors
+  public void SenseColor(char color){
+
+    //Sense blue color(for Target Zones)
+
+    if(color == 'B'){
+      while (true) {
+        //Print rgb values on telemetry(for testing purposes only)
+        telemetry.addData("Blue:", CSensor.blue());
+        telemetry.addData("Red:", CSensor.red());
+        telemetry.addData("Green:", CSensor.green());
+        telemetry.update();
+
+        MoveForward();
+
+        if (colorSensor.blue() > colorSensor.red() && colorSensor.blue() > colorSensor.green()) {
+          Stop();
+          break;
+        }
+        else {
+          continue;
+        }
+      }
+    }
+    //Sense white color(for Launch Line)
+
+    if(color == 'W'){
+      while (true) {
+        //Print rgb values on telemetry(for testing purposes only)
+        telemetry.addData("Blue:", CSensor.blue());
+        telemetry.addData("Red:", CSensor.red());
+        telemetry.addData("Green:", CSensor.green());
+        telemetry.update();
+
+        MoveForward();
+        //According to our tests, CSensor will detect more of green than other colors when it sees white
+        if (colorSensor.green() > 5000) {
+          Stop();
+          break;
+        }
+        else {
+          continue;
+        }
+      }
+    }
+
+  }
+
+  public void PlaceWobbleGoal(){
+    servo.setPosition(90);
+    MoveBackward();
+    sleep(1000);
+    servo.setPosition(0);
+  }
   /**
    * The runOpMode() method is the root of this Op Mode, as it is in all LinearOpModes.
    * Our implementation here, though is a bit unusual: we've decided to put all the actual work
@@ -136,6 +236,12 @@ public class NewColorSensorCode extends LinearOpMode {
     // ColorSensor, because NormalizedColorSensor consistently gives values between 0 and 1, while
     // the values you get from ColorSensor are dependent on the specific sensor you're using.
     colorSensor = hardwareMap.get(NormalizedColorSensor.class, "CS1");
+    backRightMotor = hardwareMap.get(DcMotor.class, "br");
+    backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+    frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+    frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+    servo = hardwareMap.get(Servo.class, "Flicker");
+    servo.setPosition(0)
 
     // If possible, turn the light on in the beginning (it might already be on anyway,
     // we just make sure it is if we can).
@@ -218,6 +324,115 @@ public class NewColorSensorCode extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
         }
       });
+      backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+      frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+      initVuforia();
+      initTfod();
+      if (tfod != null) {
+        tfod.activate();
+        tfod.setZoom(2.5, 16.0/9.0);
+      }
+      telemetry.addData(">", "Ready to Start!");
+      telemetry.update();
+      waitForStart();
+
+
+
+      if (tfod != null) {
+        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+        if (updatedRecognitions != null) {
+          telemetry.addData("# Object Detected", updatedRecognitions.size());
+          int i = 0;
+          for (Recognition recognition : updatedRecognitions) {
+            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                    recognition.getLeft(), recognition.getTop());
+            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                    recognition.getRight(), recognition.getBottom());
+            if(recognition.getLabel().equals("Quad")){
+              targetZone = 'C';
+            }
+            if(recognition.getLabel().equals("Single")){
+              targetZone = 'B';
+            }
+          }
+          if(updatedRecognitions.size() == 0){
+            telemetry.addData(">", "Target Zone A");
+            telemetry.update();
+          }
+
+        }
+      }
+
+
+      if (tfod != null) {
+        tfod.shutdown();
+      }
+
+
+
+
+
+
+
+
+      SenseColor('W');
+
+
+      //Target Zone A
+      if(targetZone == 'A') {
+        //Move to target zone and place wobble goal
+        TurnLeft(500);
+        SenseColor('B');
+        PlaceWobbleGoal();
+
+        //Move back to Launch Line
+        MoveBackward();
+        sleep(1000);
+        TurnRight(500);
+        MoveBackward();
+        sleep(500);
+
+
+
+      }
+      //Target Zone B
+      if(targetZone == 'B'){
+        //Move to target zone and place wobble goal
+        SenseColor('B');
+        PlaceWobbleGoal();
+        //Move back to launch line
+        MoveBackward();
+        sleep(1000);
+
+
+      }
+      //Target Zone C
+      if(targetZone == 'C'){
+        //Move through Target Zone B
+        for(int i = 1; i <= 2; i++){
+          SenseColor('B');
+          MoveForward();
+          sleep(1000);
+
+        }
+        //Move to Target Zone C
+        TurnLeft(500);
+        SenseColor('B');
+        //Place wobble goal
+        PlaceWobbleGoal();
+
+        //Go back to Launch Line
+        MoveBackward();
+        sleep(500);
+        TurnLeft(500);
+        for(int j = 1; j <= 2; j++){
+          SenseColor('B');
+          MoveForward();
+          sleep(1000);
+          //buoy
+        }
+      }
     }
   }
 }
