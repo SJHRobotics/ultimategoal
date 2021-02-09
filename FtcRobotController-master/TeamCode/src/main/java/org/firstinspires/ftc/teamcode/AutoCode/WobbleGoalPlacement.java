@@ -189,11 +189,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                         recognition.getRight(), recognition.getBottom());
                     if(recognition.getLabel().equals("Quad")){
                         targetZone = 'C';
-                        break;
                     }
                     if(recognition.getLabel().equals("Single")){
                         targetZone = 'B';
-                        break;
                     }
                 }
                 if(updatedRecognitions.size() == 0){
