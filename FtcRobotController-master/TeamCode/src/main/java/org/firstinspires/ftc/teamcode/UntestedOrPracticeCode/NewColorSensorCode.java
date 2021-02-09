@@ -132,9 +132,9 @@ public class NewColorSensorCode extends LinearOpMode {
     if(color == 'B'){
       while (true) {
         //Print rgb values on telemetry(for testing purposes only)
-        telemetry.addData("Blue:", CSensor.blue());
-        telemetry.addData("Red:", CSensor.red());
-        telemetry.addData("Green:", CSensor.green());
+        telemetry.addData("Blue:", colorSensor.blue());
+        telemetry.addData("Red:", colorSensor.red());
+        telemetry.addData("Green:", colorSensor.green());
         telemetry.update();
 
         MoveForward();
@@ -153,13 +153,13 @@ public class NewColorSensorCode extends LinearOpMode {
     if(color == 'W'){
       while (true) {
         //Print rgb values on telemetry(for testing purposes only)
-        telemetry.addData("Blue:", CSensor.blue());
-        telemetry.addData("Red:", CSensor.red());
-        telemetry.addData("Green:", CSensor.green());
+        telemetry.addData("Blue:", colorSensor.blue());
+        telemetry.addData("Red:", colorSensor.red());
+        telemetry.addData("Green:", colorSensor.green());
         telemetry.update();
 
         MoveForward();
-        //According to our tests, CSensor will detect more of green than other colors when it sees white
+        //According to our tests, colorSensor will detect more of green than other colors when it sees white
         if (colorSensor.green() > 5000) {
           Stop();
           break;
