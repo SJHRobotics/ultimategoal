@@ -224,7 +224,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             sleep(500);
             //Arm Servo code goes here
             servo.setPosition(90);
-            sleep(2000);
+            MoveBackward();
+            sleep(1000);
             servo.setPosition(0);
 
         }
@@ -234,7 +235,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveBackward();
             sleep(1000);
             servo.setPosition(90);
-            sleep;(2000);
+            MoveBackward();
+            sleep(1000);
             servo.setPosition(0);
         }
         //Target Zone C
@@ -244,7 +246,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 MoveForward();
                 sleep(1000);
                 servo.setPosition(90);
-                sleep;(2000);
+                MoveBackward();
+                sleep(1000);
                 servo.setPosition(0);
             }
             TurnLeft(500);
