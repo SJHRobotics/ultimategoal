@@ -224,12 +224,18 @@ public class WobbleGoalPlacement extends LinearOpMode{
             sleep(500);
             //Arm Servo code goes here
             servo.setPosition(90);
+            sleep(2000);
+            servo.setPosition(0);
+
         }
         //Target Zone B
         if(targetZone == 'B'){
             SenseColor('B');
             MoveBackward();
             sleep(1000);
+            servo.setPosition(90);
+            sleep;(2000);
+            servo.setPosition(0);
         }
         //Target Zone C
         if(targetZone == 'C'){
@@ -237,6 +243,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 SenseColor('B');
                 MoveForward();
                 sleep(1000);
+                servo.setPosition(90);
+                sleep;(2000);
+                servo.setPosition(0);
             }
             TurnLeft(500);
             SenseColor('B');
