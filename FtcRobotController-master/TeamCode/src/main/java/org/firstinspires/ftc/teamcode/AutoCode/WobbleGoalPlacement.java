@@ -144,7 +144,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         servo.setPosition(90);
         MoveForward();
         sleep(1000);
-        servo.setPosition(0);
+        //servo.setPosition(0);
     }
 
 
@@ -234,7 +234,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('B');
             PlaceWobbleGoal();
             //Move back to launch line
-            TurnLeft(1250);
+            TurnRight(1250);
             SenseColor('W');
 
 
