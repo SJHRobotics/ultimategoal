@@ -232,10 +232,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             // Drive till 2nd blue line
             SenseColor('B');
             // Release wobble Goal
-            PlaceWobbleGoal(1000);
-            // Move forward 1 sec
-            MoveForward();
-            sleep(1000);
+            PlaceWobbleGoal(2000);
             //Turn Right to ready to go to white line
             TurnRight(1000);
             // Move to white line
