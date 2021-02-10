@@ -175,7 +175,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         waitForStart();
 
 
-
+        // Invoke TF API
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -202,18 +202,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
             }
         }
 
-
+        // Close TF API
         if (tfod != null) {
             tfod.shutdown();
         }
 
-
-
-
-
-
-
-
+        // Drive Till White Line
         SenseColor('W');
 
 
@@ -228,13 +222,20 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
         //Target Zone B
         if(targetZone == 'B'){
-            //Move to target zone and place wobble goal
-            SenseColor('B');
+            //Turn right 45 d
             TurnRight(250);
+            // Drive till 1st blue line
             SenseColor('B');
+            // Move forward for 1 sec
+            MoveForward();
+            sleep(1000);
+            // Drive till 2nd blue line
+            SenseColor('B');
+            // Release wobble Goal
             PlaceWobbleGoal();
             //Move back to launch line
-            TurnRight(625);
+            TurnRight(1000);
+            // Move to white line
             SenseColor('W');
 
 
