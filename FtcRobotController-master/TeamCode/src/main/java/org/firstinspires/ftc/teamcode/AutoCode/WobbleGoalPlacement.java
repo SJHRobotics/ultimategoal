@@ -140,10 +140,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     }
 
-    public void PlaceWobbleGoal(){
+    public void PlaceWobbleGoal(long time){
         servo.setPosition(90);
         MoveForward();
-        sleep(2500);
+        sleep(time);
         servo.setPosition(0);
     }
 
@@ -215,7 +215,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
             TurnRight(500);
-            PlaceWobbleGoal();
+            PlaceWobbleGoal(1000);
 
 
 
@@ -232,7 +232,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             // Drive till 2nd blue line
             SenseColor('B');
             // Release wobble Goal
-            PlaceWobbleGoal();
+            PlaceWobbleGoal(500);
             //Move back to launch line
             TurnRight(1000);
             // Move to white line
@@ -254,7 +254,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('B');
             TurnRight(1000);
             //Place wobble goal
-            PlaceWobbleGoal();
+            PlaceWobbleGoal(1000);
 
             //Go back to Launch Line
             MoveForward();
