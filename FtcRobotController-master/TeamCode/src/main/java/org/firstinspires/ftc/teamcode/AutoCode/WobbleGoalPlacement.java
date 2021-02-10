@@ -26,20 +26,20 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
     private char targetZone = 'A';
-    
+
     private static final String VUFORIA_KEY =
-        "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+            "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    
+
     //Movement methods
-   public void MoveForward(){
-       frontLeftMotor.setPower(0.3);
-       frontRightMotor.setPower(0.3);
-       backLeftMotor.setPower(0.3);
-       backRightMotor.setPower(0.3);
-   }
+    public void MoveForward(){
+        frontLeftMotor.setPower(0.3);
+        frontRightMotor.setPower(0.3);
+        backLeftMotor.setPower(0.3);
+        backRightMotor.setPower(0.3);
+    }
     public void MoveBackward(){
         frontLeftMotor.setPower(-0.3);
         frontRightMotor.setPower(-0.3);
@@ -66,9 +66,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor.setPower(0);
         backRightMotor.setPower(0);
     }
-    
+
     private void initVuforia() {
-    
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -80,23 +80,23 @@ public class WobbleGoalPlacement extends LinearOpMode{
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
-    
+
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-       tfodParameters.minimumConfidence = 0.8;
-       tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-       tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
-    
+
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
     public void SenseColor(char color){
-        
+
         //Sense blue color(for Target Zones)
-        
+
         if(color == 'B'){
             while (true) {
                 //Print rgb values on telemetry(for testing purposes only)
@@ -117,7 +117,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             }
         }
         //Sense white color(for Launch Line)
-        
+
         if(color == 'W'){
             while (true) {
                 //Print rgb values on telemetry(for testing purposes only)
@@ -137,14 +137,14 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 }
             }
         }
-        
+
     }
 
     public void PlaceWobbleGoal(){
         servo.setPosition(90);
-        MoveBackward();
+        MoveForward();
         sleep(1000);
-        servo.setPosition(0);
+
     }
 
 
@@ -159,9 +159,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        servo = hardwareMap.get(Servo.class, "Flicker");
+        servo = hardwareMap.get(Servo.class, "Hook");
         servo.setPosition(0);
-        
+
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         initVuforia();
@@ -173,9 +173,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         telemetry.addData(">", "Ready to Start!");
         telemetry.update();
         waitForStart();
-        
 
-        
+
+
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -184,9 +184,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 for (Recognition recognition : updatedRecognitions) {
                     telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                     telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                        recognition.getLeft(), recognition.getTop());
+                            recognition.getLeft(), recognition.getTop());
                     telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                        recognition.getRight(), recognition.getBottom());
+                            recognition.getRight(), recognition.getBottom());
                     if(recognition.getLabel().equals("Quad")){
                         targetZone = 'C';
                     }
@@ -198,38 +198,30 @@ public class WobbleGoalPlacement extends LinearOpMode{
                     telemetry.addData(">", "Target Zone A");
                     telemetry.update();
                 }
-                
+
             }
         }
-        
-        
+
+
         if (tfod != null) {
             tfod.shutdown();
         }
-    
-        
-        
 
 
-        
-        
+
+
+
+
+
 
         SenseColor('W');
-        
-        
+
+
         //Target Zone A
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
-            TurnLeft(500);
-            SenseColor('B');
-            PlaceWobbleGoal();
-
-            //Move back to Launch Line
-            MoveBackward();
-            sleep(1000);
             TurnRight(500);
-            MoveBackward();
-            sleep(500);
+            PlaceWobbleGoal();
 
 
 
@@ -238,10 +230,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
         if(targetZone == 'B'){
             //Move to target zone and place wobble goal
             SenseColor('B');
+            TurnRight(250);
+            SenseColor('B');
             PlaceWobbleGoal();
             //Move back to launch line
-            MoveBackward();
-            sleep(1000);
+            TurnLeft(1250);
+            SenseColor('W');
 
 
         }
@@ -257,22 +251,18 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to Target Zone C
             TurnLeft(500);
             SenseColor('B');
+            TurnRight(1000);
             //Place wobble goal
             PlaceWobbleGoal();
 
             //Go back to Launch Line
-            MoveBackward();
-            sleep(500);
-            TurnLeft(500);
-            for(int j = 1; j <= 2; j++){
-                SenseColor('B');
-                MoveForward();
-                sleep(1000);
-                //buoy
-            }
+            MoveForward();
+            sleep(1000);
+            TurnRight(500);
+            SenseColor('W');
         }
-        
+
     } // end runOpMode()
-    
-    
+
+
 } //end class

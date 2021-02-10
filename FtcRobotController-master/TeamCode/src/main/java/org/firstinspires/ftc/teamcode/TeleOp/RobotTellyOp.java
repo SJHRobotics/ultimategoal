@@ -18,8 +18,10 @@ public class  RobotTellyOp extends LinearOpMode {
     private DcMotor shooterRightMotor;
     private Servo Flicker;
     private Servo Conveyor;
+    private Servo Hook;
     public boolean moveBack = false;
     public boolean conveyorCanMoveBack = true;
+    public boolean hookToNienty = true;
 
     public void runOpMode() {
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
@@ -30,6 +32,7 @@ public class  RobotTellyOp extends LinearOpMode {
         shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
         Flicker = hardwareMap.get(Servo.class, "Flicker");
         Conveyor = hardwareMap.get(Servo.class, "Conveyor");
+        Hook = hardwareMap.get(Servo.class, "Hook");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -41,7 +44,6 @@ public class  RobotTellyOp extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Conveyor.setPosition(120);
         waitForStart();
         while (opModeIsActive()) {
 
@@ -83,27 +85,37 @@ public class  RobotTellyOp extends LinearOpMode {
             }
             //shooting program stops
 
-            // Wobble goal arm code starts
-            if(gamepad1.y && !moveBack) {
-                Flicker.setPosition(90);
+            // Flicker Servo code starts
+            if(gamepad1.dpad_up && !moveBack) {
+                Flicker.setPosition(130);
                 moveBack = true;
-            } 
-            else if(gamepad1.y && moveBack) {
+            }
+            else if(gamepad1.dpad_down && moveBack) {
                 Flicker.setPosition(0);
                 moveBack = false;
             }
-            // Wobble goal arm code stops
+            // Flicker Servo code stops
 
             //Storage movement code starts
-            if(gamepad1.x && conveyorCanMoveBack) {
+            if(gamepad1.left_bumper && conveyorCanMoveBack) {
                 Conveyor.setPosition(0);
-                conveyorCanMoveBack = !conveyorCanMoveBack;
+                conveyorCanMoveBack = false;
             }
-            else if(gamepad1.x && !conveyorCanMoveBack) {
+            else if(gamepad1.right_bumper && !conveyorCanMoveBack) {
                 Conveyor.setPosition(120);
-                !conveyorCanMoveBack = conveyorCanMoveBack;
+                conveyorCanMoveBack = true;
             }
             //Storage movement code stops
+
+            //Hook code starts
+            if(gamepad1.dpad_left && hookToNienty) {
+                Hook.setPosition(90);
+                hookToNienty = false;
+            }
+            else if(gamepad1.dpad_right && !hookToNienty){
+                Hook.setPosition(0);
+                hookToNienty = true;
+            }
         }
         backLeftMotor.setPower(0.0);//Stoping the motors: Start.
         frontLeftMotor.setPower(0.0);
