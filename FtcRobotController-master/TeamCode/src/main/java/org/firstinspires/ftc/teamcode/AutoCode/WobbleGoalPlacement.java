@@ -228,8 +228,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveBackward();
             sleep(1000);
             TurnRight(500);
-            MoveBackward();
-            sleep(500);
 
 
 
@@ -240,8 +238,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('B');
             PlaceWobbleGoal();
             //Move back to launch line
-            MoveBackward();
-            sleep(1000);
+            SenseColor('W');
 
 
         }
