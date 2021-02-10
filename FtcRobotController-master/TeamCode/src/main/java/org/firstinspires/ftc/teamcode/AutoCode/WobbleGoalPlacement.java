@@ -144,7 +144,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         servo.setPosition(90);
         MoveForward();
         sleep(1000);
-
+        servo.setPosition(0);
     }
 
 
