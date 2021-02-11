@@ -92,7 +92,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
-    public void SenseColor(char color){
+    public void SenseColor(char color, char direction){
 
         //Sense blue color(for Target Zones)
 
@@ -103,8 +103,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 telemetry.addData("Red:", CSensor.red());
                 telemetry.addData("Green:", CSensor.green());
                 telemetry.update();
-
-                MoveForward();
+                if(direction == 'F'){
+                    MoveForward();
+                }
+                if(direction == 'B'){
+                    MoveBackward();
+                }
 
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                     Stop();
@@ -125,8 +129,13 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 telemetry.addData("Red:", CSensor.red());
                 telemetry.addData("Green:", CSensor.green());
                 telemetry.update();
+                if(direction == 'F'){
+                    MoveForward();
+                }
+                if(direction == 'B') {
+                    MoveBackward();
+                }
 
-                MoveForward();
                 //According to our tests, CSensor will detect more of green than other colors when it sees white
                 if (CSensor.green() > 5000) {
                     Stop();
