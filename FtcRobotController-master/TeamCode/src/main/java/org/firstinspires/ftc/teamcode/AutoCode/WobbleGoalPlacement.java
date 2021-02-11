@@ -213,7 +213,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
 
         // Drive Till White Line
-        SenseColor('W');
+        SenseColor('W', 'F');
 
 
         //Target Zone A
@@ -221,10 +221,11 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to target zone and place wobble goal
             TurnRight(400);
             servo.setPosition(90);
-            SenseColor('B');
+            SenseColor('B', 'B');
             TurnLeft(250);
-            SenseColor('W');
+            SenseColor('W', 'F');
         }
+
         //Target Zone B
         if(targetZone == 'B'){
             TurnRight(500);
@@ -232,7 +233,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             sleep(500);
             TurnLeft(500);
             //Drive forward until blue line
-            SenseColor('B');
+            SenseColor('B', 'F');
             //Turn right 225 d
             TurnRight(1000);
             // Release wobble Goal
@@ -240,7 +241,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             sleep(500);
             //Turn Right to ready to go to white line
             // Move to white line
-            SenseColor('W');
+            SenseColor('W', 'F');
 
 
         }
@@ -248,7 +249,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         if(targetZone == 'C'){
             //Skip 2 Blue Lines
             for(int i = 1; i <= 2; i++){
-                SenseColor('B');
+                SenseColor('B', 'F');
                 MoveForward();
                 sleep(500);
 
@@ -266,10 +267,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnRight(500);
 
             //Go back to Launch Line
-            SenseColor('W');
+            SenseColor('W', 'F');
         }
 
     } // end runOpMode()
-
 
 } //end class
