@@ -108,6 +108,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                     Stop();
+                    sleep(1000);
                     break;
                 }
                 else {
@@ -129,6 +130,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 //According to our tests, CSensor will detect more of green than other colors when it sees white
                 if (CSensor.green() > 5000) {
                     Stop();
+                    sleep(1000);
                     break;
                 }
                 else {
@@ -208,11 +210,11 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone A
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
-            TurnRight(500);
-            //PlaceWobbleGoal(1000);
-
-
-
+            TurnRight(400);
+            servo.setPosition(90);
+            SenseColor('B');
+            TurnLeft(250);
+            SenseColor('W');
         }
         //Target Zone B
         if(targetZone == 'B'){
@@ -235,24 +237,26 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
         //Target Zone C
         if(targetZone == 'C'){
-            //Move through Target Zone B
+            //Skip 2 Blue Lines
             for(int i = 1; i <= 2; i++){
                 SenseColor('B');
                 MoveForward();
-                sleep(1000);
+                sleep(500);
 
             }
             //Move to Target Zone C
-            TurnLeft(500);
-            SenseColor('B');
-            TurnRight(1000);
+            TurnRight(500);
             //Place wobble goal
-            //PlaceWobbleGoal(1000);
+            servo.setPosition(90);
+
+            // Clear Area
+            MoveForward();
+            sleep(500);
+
+            // Move towards white line
+            TurnRight(500);
 
             //Go back to Launch Line
-            MoveForward();
-            sleep(1000);
-            TurnRight(500);
             SenseColor('W');
         }
 
