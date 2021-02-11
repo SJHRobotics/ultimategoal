@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
- * This is the final robot
+ * This is the final Telly-Op Code
  */
 @TeleOp(name ="RobotTellyOp", group = "Telly-Op")
 public class  RobotTellyOp extends LinearOpMode {
@@ -22,6 +22,7 @@ public class  RobotTellyOp extends LinearOpMode {
     public boolean moveBack = false;
     public boolean conveyorCanMoveBack = true;
     public boolean hookToNienty = true;
+    public boolean stopShooter = false;
 
     public void runOpMode() {
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
@@ -63,33 +64,49 @@ public class  RobotTellyOp extends LinearOpMode {
             p2 /= max;
             p3 /= max;
             p4 /= max;
+
             //sets the speed of the motors
+
             backLeftMotor.setPower(p1);
             frontLeftMotor.setPower(p2);
             frontRightMotor.setPower(p3);
             backRightMotor.setPower(p4);
+
             // Display the current value of the motor speed
+
             telemetry.addData("backLeftMotor_speed:", "%5.2f", p1);
             telemetry.addData("frontLeftMotor_speed:", "%5.2f", p2);
             telemetry.addData("frontRightMotor_speed:", "%5.2f", p3);
             telemetry.addData("backRightMotor_speed:", "%5.2f", p4);
             telemetry.update();
+
             //shooting program starts
-            if(gamepad1.b) {
+
+            // turning the shooting motors on
+
+            if(gamepad1.b && !stopShooter) {
                 shooterRightMotor.setPower(1.0);
                 shooterLeftMotor.setPower(1.0);
-            }// turning the shooting motors on
-            else{
-                shooterRightMotor.setPower(0.0);
-                shooterLeftMotor.setPower(0.0);
+                stopShooter = true;
             }
+
             //shooting program stops
 
+            else if(gamepad1.b && stopShooter){
+                shooterRightMotor.setPower(0.0);
+                shooterLeftMotor.setPower(0.0);
+                stopShooter = false;
+            }
+
+
             // Flicker Servo code starts
+
+            //FLickes the servo to shoot
             if(gamepad1.dpad_up && !moveBack) {
                 Flicker.setPosition(130);
                 moveBack = true;
             }
+            //Servo goes back
             else if(gamepad1.dpad_down && moveBack) {
                 Flicker.setPosition(0);
                 moveBack = false;
@@ -97,10 +114,13 @@ public class  RobotTellyOp extends LinearOpMode {
             // Flicker Servo code stops
 
             //Storage movement code starts
+
+            //The conveyor goes down
             if(gamepad1.left_bumper && conveyorCanMoveBack) {
                 Conveyor.setPosition(0);
                 conveyorCanMoveBack = false;
             }
+            //The conveyor goes up
             else if(gamepad1.right_bumper && !conveyorCanMoveBack) {
                 Conveyor.setPosition(120);
                 conveyorCanMoveBack = true;
@@ -108,14 +128,19 @@ public class  RobotTellyOp extends LinearOpMode {
             //Storage movement code stops
 
             //Hook code starts
+
+            //Opens the hook
             if(gamepad1.dpad_left && hookToNienty) {
                 Hook.setPosition(90);
                 hookToNienty = false;
             }
+            //Closes the hook
             else if(gamepad1.dpad_right && !hookToNienty){
                 Hook.setPosition(0);
                 hookToNienty = true;
             }
+
+            //Hook code stops
         }
         backLeftMotor.setPower(0.0);//Stoping the motors: Start.
         frontLeftMotor.setPower(0.0);
@@ -124,4 +149,3 @@ public class  RobotTellyOp extends LinearOpMode {
 
     }
 }
-
