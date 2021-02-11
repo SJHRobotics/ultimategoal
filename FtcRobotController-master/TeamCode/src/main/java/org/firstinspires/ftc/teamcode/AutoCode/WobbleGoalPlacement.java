@@ -216,14 +216,18 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
         //Target Zone B
         if(targetZone == 'B'){
+            TurnRight(500);
+            MoveForward();
+            sleep(500);
+            TurnLeft(500);
             //Drive forward until blue line
             SenseColor('B');
             //Turn right 225 d
-            TurnRight(1250);
+            TurnRight(1000);
             // Release wobble Goal
             servo.setPosition(90);
+            sleep(500);
             //Turn Right to ready to go to white line
-            TurnLeft(250);
             // Move to white line
             SenseColor('W');
 
