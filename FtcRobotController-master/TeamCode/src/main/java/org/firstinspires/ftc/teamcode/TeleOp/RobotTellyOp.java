@@ -25,6 +25,8 @@ public class  RobotTellyOp extends LinearOpMode {
     public boolean stopShooter = false;
 
     public void runOpMode() {
+
+        //initializes all the motors and servos
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
