@@ -110,7 +110,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                     Stop();
                     break;
-                }
+                    }
                 else {
                     continue;
                 }
