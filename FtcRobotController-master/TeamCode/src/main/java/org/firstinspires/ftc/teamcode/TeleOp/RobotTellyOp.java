@@ -65,14 +65,14 @@ public class  RobotTellyOp extends LinearOpMode {
             p3 /= max;
             p4 /= max;
 
-            //sets the speed of the motors
+            //sets the speed of the drive motors
 
             backLeftMotor.setPower(p1);
             frontLeftMotor.setPower(p2);
             frontRightMotor.setPower(p3);
             backRightMotor.setPower(p4);
 
-            // Display the current value of the motor speed
+            // Display the current value of the drive motor's speed
 
             telemetry.addData("backLeftMotor_speed:", "%5.2f", p1);
             telemetry.addData("frontLeftMotor_speed:", "%5.2f", p2);
@@ -90,7 +90,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 stopShooter = true;
             }
 
-            //shooting program stops
+            // turning off the shooting motors
 
             else if(gamepad1.b && stopShooter){
                 shooterRightMotor.setPower(0.0);
@@ -98,54 +98,69 @@ public class  RobotTellyOp extends LinearOpMode {
                 stopShooter = false;
             }
 
+            // Shooter program ends
 
             // Flicker Servo code starts
 
             //FLickes the servo to shoot
+
             if(gamepad1.dpad_up && !moveBack) {
                 Flicker.setPosition(130);
                 moveBack = true;
             }
+
             //Servo goes back
+
             else if(gamepad1.dpad_down && moveBack) {
                 Flicker.setPosition(0);
                 moveBack = false;
             }
+
             // Flicker Servo code stops
 
             //Storage movement code starts
 
             //The conveyor goes down
+
             if(gamepad1.left_bumper && conveyorCanMoveBack) {
                 Conveyor.setPosition(0);
                 conveyorCanMoveBack = false;
             }
+
             //The conveyor goes up
+
             else if(gamepad1.right_bumper && !conveyorCanMoveBack) {
                 Conveyor.setPosition(120);
                 conveyorCanMoveBack = true;
             }
+
             //Storage movement code stops
 
             //Hook code starts
 
             //Opens the hook
+
             if(gamepad1.dpad_left && hookToNienty) {
                 Hook.setPosition(90);
                 hookToNienty = false;
             }
+
             //Closes the hook
+
             else if(gamepad1.dpad_right && !hookToNienty){
                 Hook.setPosition(0);
                 hookToNienty = true;
             }
 
             //Hook code stops
+
         }
-        backLeftMotor.setPower(0.0);//Stoping the motors: Start.
+
+        //Stoping the drive motors
+
+        backLeftMotor.setPower(0.0);
         frontLeftMotor.setPower(0.0);
         frontRightMotor.setPower(0.0);
-        backRightMotor.setPower(0.0);//Stopping the motors: End.
-
+        backRightMotor.setPower(0.0);
     }
 }
