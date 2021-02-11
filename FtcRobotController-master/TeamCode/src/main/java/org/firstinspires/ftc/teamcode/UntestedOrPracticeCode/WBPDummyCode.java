@@ -1,11 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+//import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-@Autonomous(name = "WBPDummyCode", group = "WobbleGoal")
+import java.util.List;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+@Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
 
 public class WobbleGoalPlacement extends LinearOpMode{
     private ColorSensor CSensor;
@@ -13,15 +21,30 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private Servo bottomServo;
-    private Servo pickingServo;
+    private Servo servo;
+    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Quad";
+    private static final String LABEL_SECOND_ELEMENT = "Single";
+    private char targetZone = 'A';
+
+    private static final String VUFORIA_KEY =
+            "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
 
 
+    //Movement methods
     public void MoveForward(){
-        frontLeftMotor.setPower(0.2);
-        frontRightMotor.setPower(0.2);
-        backLeftMotor.setPower(0.2);
-        backRightMotor.setPower(0.2);
+        frontLeftMotor.setPower(0.3);
+        frontRightMotor.setPower(0.3);
+        backLeftMotor.setPower(0.3);
+        backRightMotor.setPower(0.3);
+    }
+    public void MoveBackward(){
+        frontLeftMotor.setPower(-0.3);
+        frontRightMotor.setPower(-0.3);
+        backLeftMotor.setPower(-0.3);
+        backRightMotor.setPower(-0.3);
     }
     public void TurnRight(long time){
         frontLeftMotor.setPower(1.0);
@@ -44,44 +67,88 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backRightMotor.setPower(0);
     }
 
+    private void initVuforia() {
+
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+    }
+
+
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+
     //This method will be called whenever robot needs to move forward and stop once it detects blue
     //Will modify this later for all colors
-    public void SenseBlueColor(){
-        while (true) {
+    public void SenseColor(char color){
 
+        //Sense blue color(for Target Zones)
 
-            MoveForward();
-            if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
-                Stop();
-                telemetry.addData(">", "I am at Target Zone!");
+        if(color == 'B'){
+            while (true) {
+                //Print rgb values on telemetry(for testing purposes only)
+                telemetry.addData("Blue:", CSensor.blue());
+                telemetry.addData("Red:", CSensor.red());
+                telemetry.addData("Green:", CSensor.green());
                 telemetry.update();
-                sleep(3000);
-                break;
-            }
-
-            else {
-                continue;
-            }
-        }
-    }
-    public void SenseWhiteColor(){
-        while (true) {
-
 
                 MoveForward();
-            if(CSensor.blue() = 255 && CSensor.red() = 255 && CSensor.green() = 255){
-                Stop();
-                telemetry.addData(">", "I am at the launch line!");
-                telemetry.update();
-                sleep(3000);
-                break;
-            }
 
-            else {
-                continue;
+                if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
+                    Stop();
+                    break;
+                }
+                else {
+                    continue;
+                }
             }
         }
+        //Sense white color(for Launch Line)
+
+        if(color == 'W'){
+            while (true) {
+                //Print rgb values on telemetry(for testing purposes only)
+                telemetry.addData("Blue:", CSensor.blue());
+                telemetry.addData("Red:", CSensor.red());
+                telemetry.addData("Green:", CSensor.green());
+                telemetry.update();
+
+                MoveForward();
+                //According to our tests, CSensor will detect more of green than other colors when it sees white
+                if (CSensor.green() > 5000) {
+                    Stop();
+                    break;
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+
     }
+
+    public void PlaceWobbleGoal(long time){
+        servo.setPosition(90);
+        MoveForward();
+        sleep(time);
+        servo.setPosition(0);
+    }
+
+
+
 
 
 
@@ -92,74 +159,111 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        servo = hardwareMap.get(Servo.class, "Hook");
+        servo.setPosition(0);
+
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
+        initVuforia();
+        initTfod();
+        if (tfod != null) {
+            tfod.activate();
+            tfod.setZoom(2.5, 16.0/9.0);
+        }
+        telemetry.addData(">", "Ready to Start!");
+        telemetry.update();
         waitForStart();
 
-        /*
-        NOTE: Before running this program, robot must be positioned at Launch Line
-        In the future, I will modify it so the robot drives up to the line automatically.
-         */
-        SenseWhiteColor();
-        char targetZone = 'C';
 
+        // Invoke TF API
+        if (tfod != null) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                    if(recognition.getLabel().equals("Quad")){
+                        targetZone = 'C';
+                    }
+                    if(recognition.getLabel().equals("Single")){
+                        targetZone = 'B';
+                    }
+                }
+                if(updatedRecognitions.size() == 0){
+                    telemetry.addData(">", "Target Zone A");
+                    telemetry.update();
+                }
+
+            }
+        }
+
+        // Close TF API
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+
+        // Drive Till White Line
+        SenseColor('W');
 
 
         //Target Zone A
         if(targetZone == 'A') {
-            //Print rgb values on telemetry(for testing purposes only)
-            telemetry.addData("Blue:", CSensor.blue());
-            telemetry.addData("Red:", CSensor.red());
-            telemetry.addData("Green:", CSensor.green());
-            telemetry.update();
-            //Turn left to align with target zone - adjust as needed
-            TurnLeft(500);
-            SenseBlueColor();
+            //Move to target zone and place wobble goal
+            TurnRight(500);
+            PlaceWobbleGoal(1000);
 
 
-            //Arm Servo code goes here
 
         }
-
         //Target Zone B
         if(targetZone == 'B'){
-            //Print rgb values on telemetry(for testing purposes only)
-            telemetry.addData("Blue:", CSensor.blue());
-            telemetry.addData("Red:", CSensor.red());
-            telemetry.addData("Green:", CSensor.green());
-            telemetry.update();
-            SenseBlueColor();
-        }
-
-        //Target Zone C
-        if(targetZone == 'C'){
-            for(int i = 1; i <= 2; i++){
-                //Print rgb values on telemetry(for testing purposes only)
-                telemetry.addData("Blue:", CSensor.blue());
-                telemetry.addData("Red:", CSensor.red());
-                telemetry.addData("Green:", CSensor.green());
-                telemetry.update();
-                SenseBlueColor();
-                MoveForward();
-                sleep(1000);
-            }
-
-            TurnLeft(500);
-            SenseBlueColor();
-
-/*
+            //Turn right 45 d
+            TurnRight(250);
+            // Drive till 1st blue line
+            SenseColor('B');
+            // Move forward for 1 sec
             MoveForward();
             sleep(1000);
-            TurnLeft(500);
-            SenseBlueColor();
-*/
-        }   
+            // Drive till 2nd blue line
+            SenseColor('B');
+            // Release wobble Goal
+            PlaceWobbleGoal(2500);
+            //Turn Right to ready to go to white line
+            TurnRight(1000);
+            // Move to white line
+            SenseColor('W');
 
-        TurnLeft(1);
+
+        }
+        //Target Zone C
+        if(targetZone == 'C'){
+            //Move through Target Zone B
+            for(int i = 1; i <= 2; i++){
+                SenseColor('B');
+                MoveForward();
+                sleep(1000);
+
+            }
+            //Move to Target Zone C
+            TurnLeft(500);
+            SenseColor('B');
+            TurnRight(1000);
+            //Place wobble goal
+            PlaceWobbleGoal(1000);
+
+            //Go back to Launch Line
+            MoveForward();
+            sleep(1000);
+            TurnRight(500);
+            SenseColor('W');
+        }
 
     } // end runOpMode()
 
 
 } //end class
-
