@@ -24,7 +24,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    private char targetZone = 'A';
+    private char targetZone;
 
     private static final String VUFORIA_KEY =
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
@@ -200,8 +200,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
                     }
                 }
                 if(updatedRecognitions.size() == 0){
-                    telemetry.addData(">", "Target Zone A");
-                    telemetry.update();
+                    targetZone = 'A';
                 }
 
             }
@@ -219,11 +218,14 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone A
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
-            TurnRight(400);
+            TurnRight(500);
+            MoveBackward();
+            sleep(500);
+
             servo.setPosition(90);
-            SenseColor('B', 'B');
-            TurnLeft(250);
-            SenseColor('W', 'F');
+            sleep(1000);
+            MoveForward();
+            sleep(1000);
         }
 
         //Target Zone B
