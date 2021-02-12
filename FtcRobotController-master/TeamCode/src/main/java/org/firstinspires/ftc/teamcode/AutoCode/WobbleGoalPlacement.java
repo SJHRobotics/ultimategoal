@@ -34,13 +34,13 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //Movement methods
     public void MoveForward(){
-        frontLeftMotor.setPower(0.3);
+        frontLeftMotor.setPower(0.32);
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
         backRightMotor.setPower(0.3);
     }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.3);
+        frontLeftMotor.setPower(-0.32);
         frontRightMotor.setPower(-0.3);
         backLeftMotor.setPower(-0.3);
         backRightMotor.setPower(-0.3);
@@ -256,8 +256,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
             }
             //Move to Target Zone C
             TurnRight(500);
+            //Move backward 500 sec
+            MoveBackward();
+            sleep(500);
             //Place wobble goal
             servo.setPosition(90);
+            sleep(1000);
 
             // Clear Area
             MoveForward();
