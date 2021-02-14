@@ -15,25 +15,32 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 @Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
 
 public class WobbleGoalPlacement extends LinearOpMode{
+    //Hardware objects
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
     private Servo servo;
+
+    //TFOD Variables
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
     private char targetZone;
-
-    private static final String VUFORIA_KEY =
-            "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
 
+    //VUFORIA KEY
+    private static final String VUFORIA_KEY =
+            "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+
+
     //Movement methods
     public void MoveForward(){
+        //Set frontLeft motor power level slightly higher than others
+        //This is to offset drift in our robot's movement
         frontLeftMotor.setPower(0.32);
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
@@ -66,6 +73,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backRightMotor.setPower(0);
     }
 
+    //For initializing Vuforia
     private void initVuforia() {
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
@@ -79,7 +87,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
-
+    //For initalizing TFOD
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -90,8 +98,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
     }
 
 
-    //This method will be called whenever robot needs to move forward and stop once it detects blue
-    //Will modify this later for all colors
+    //This method programs the robot to drive forward or backward until CSensor has detected white or blue
+    //color parameter is for the color robot needs to stop at, direction parameter is the direction robot should drive
+    // FOR COLOR PARAMETER: 'W' = white, 'B' = blue
+    // FOR DIRECTION PARAMETER: 'F' = forward, 'B' = backward
     public void SenseColor(char color, char direction){
 
         //Sense blue color(for Target Zones)
@@ -109,10 +119,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 if(direction == 'B'){
                     MoveBackward();
                 }
-
+                //If CSensor detects blue line(more blue than other colors)
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
                     Stop();
-                    sleep(1000);
                     break;
                 }
                 else {
@@ -120,8 +129,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
                 }
             }
         }
-        //Sense white color(for Launch Line)
 
+        //Sense white color(for Launch Line)
         if(color == 'W'){
             while (true) {
                 //Print rgb values on telemetry(for testing purposes only)
@@ -136,10 +145,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
                     MoveBackward();
                 }
 
-                //According to our tests, CSensor will detect more of green than other colors when it sees white
+                //If CSensor detects white(green value is always higher than 5000 when it detects white)
                 if (CSensor.green() > 5000) {
                     Stop();
-                    sleep(1000);
                     break;
                 }
                 else {
@@ -220,10 +228,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to target zone and place wobble goal
             TurnRight(500);
             MoveBackward();
-            sleep(500);
-
+            sleep(350);
             servo.setPosition(90);
-            sleep(1000);
+
+            //Clear area
             MoveForward();
             sleep(1000);
         }
@@ -251,21 +259,20 @@ public class WobbleGoalPlacement extends LinearOpMode{
             }
             //Move to Target Zone C
             TurnRight(500);
-            //Move backward 500 sec
+
+            //Move backward 1/2 sec
             MoveBackward();
-            sleep(500);
+            sleep(350);
             //Place wobble goal
             servo.setPosition(90);
             sleep(1000);
 
             // Clear Area
             MoveForward();
-            sleep(500);
-
-            // Move towards white line
-            TurnRight(500);
+            sleep(350);
 
             //Go back to Launch Line
+            TurnRight(500);
             SenseColor('W', 'F');
         }
 
