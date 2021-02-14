@@ -233,7 +233,29 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Clear area
             MoveForward();
-            sleep(1000);
+            sleep(350);
+
+            //Move back to Start Line for second Wobble Goal
+            TurnLeft(500);
+            SenseColor('B', 'B');
+
+            //Pick up second Wobble Goal
+            TurnLeft(500);
+            servo.setPosition(0);
+
+            //Move back to White Line
+            TurnRight(500);
+            SenseColor('W', 'F');
+
+            //Move to target zone and place wobble goal
+            TurnRight(500);
+            MoveBackward();
+            sleep(350);
+            servo.setPosition(90);
+
+            //Clear area
+            MoveForward();
+            sleep(350);
         }
 
         //Target Zone B
