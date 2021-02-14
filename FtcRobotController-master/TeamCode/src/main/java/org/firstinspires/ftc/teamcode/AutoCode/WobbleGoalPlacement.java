@@ -270,8 +270,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             // Release wobble Goal
             servo.setPosition(90);
-            sleep(500);
-            //Turn Right to ready to go to white line
+
             // Move to white line
             SenseColor('W', 'F');
         }
