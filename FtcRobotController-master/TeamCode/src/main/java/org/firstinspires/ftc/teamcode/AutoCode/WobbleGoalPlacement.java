@@ -158,6 +158,24 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     }
 
+    public void MoveToZoneA(){
+        TurnRight(500);
+        MoveBackward();
+        sleep(350);
+    }
+
+    public void MoveToZoneB(){
+        TurnRight(500);
+        MoveForward();
+        sleep(500);
+        TurnLeft(500);
+        SenseColor('B', 'F');
+        TurnRight(1000);
+    }
+
+    public void MoveToZoneC(){
+
+    }
 
 
 
@@ -226,9 +244,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone A
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
-            TurnRight(500);
-            MoveBackward();
-            sleep(350);
+            MoveToZoneA();
             servo.setPosition(90);
 
             //Clear area
@@ -248,9 +264,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('W', 'F');
 
             //Move to target zone and place wobble goal
-            TurnRight(500);
-            MoveBackward();
-            sleep(350);
+            MoveToZoneA();
             servo.setPosition(90);
 
             //Clear area
@@ -261,12 +275,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
-            TurnRight(500);
-            MoveForward();
-            sleep(500);
-            TurnLeft(500);
-            SenseColor('B', 'F');
-            TurnRight(1000);
+            MoveToZoneB();e
 
             // Release wobble Goal
             servo.setPosition(90);
@@ -286,12 +295,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to Target Zone B
             TurnRight(500);
             SenseColor('W', 'F');
-            TurnRight(500);
-            MoveForward();
-            sleep(500);
-            TurnLeft(500);
-            SenseColor('B', 'F');
-            TurnRight(1000);
+            MoveToZoneB();
 
             //Release Wobble Goal
             servo.setPosition(90);
