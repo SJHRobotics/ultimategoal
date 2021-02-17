@@ -158,6 +158,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     }
 
+    /*These three methods contain code that allows the robot to move to all three
+      Target Zones
+     */
     public void MoveToZoneA(){
         TurnRight(500);
         MoveBackward();
@@ -174,7 +177,17 @@ public class WobbleGoalPlacement extends LinearOpMode{
     }
 
     public void MoveToZoneC(){
+        //Skip 2 Blue Lines
+        for(int i = 1; i <= 2; i++){
+            SenseColor('B', 'F');
+            MoveForward();
+            sleep(500);
 
+        }
+        //Move to Target Zone C
+        TurnRight(500);
+        MoveBackward();
+        sleep(350);
     }
 
 
@@ -305,19 +318,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
         //Target Zone C
         if(targetZone == 'C'){
-            //Skip 2 Blue Lines
-            for(int i = 1; i <= 2; i++){
-                SenseColor('B', 'F');
-                MoveForward();
-                sleep(500);
-
-            }
             //Move to Target Zone C
-            TurnRight(500);
+            MoveToZoneC();
 
-            //Move backward 1/2 sec
-            MoveBackward();
-            sleep(350);
             //Place wobble goal
             servo.setPosition(90);
             sleep(1000);
@@ -329,6 +332,37 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Go back to Launch Line
             TurnRight(500);
             SenseColor('W', 'F');
+
+            //Move to Start Line
+            TurnRight(500);
+            MoveForward();
+            sleep(350);
+            TurnLeft(500);
+            SenseColor('B', 'F');
+
+            //Pick up 2nd Wobble Goal
+            TurnRight(500);
+            servo.setPosition(0);
+
+            //Go back to Launch Line
+            TurnRight(500);
+            SenseColor('W', 'F');
+
+            //Move to Target Zone C
+            MoveToZoneC();
+
+            //Place wobble goal
+            servo.setPosition(90);
+            sleep(1000);
+
+            // Clear Area
+            MoveForward();
+            sleep(350);
+
+            //Go back to Launch Line
+            TurnRight(500);
+            SenseColor('W', 'F');
+
         }
 
     } // end runOpMode()
