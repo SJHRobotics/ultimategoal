@@ -18,15 +18,14 @@ public class  RobotTellyOp extends LinearOpMode {
     private DcMotor shooterRightMotor;
     private Servo Flicker;
     private Servo Conveyor;
-    private Servo Hook;
-    public boolean moveBack = false;
-    public boolean conveyorCanMoveBack = true;
-    public boolean hookToNienty = true;
+    private Servo HookOpen;
+    private Servo HookTurn;
     public boolean stopShooter = false;
 
     public void runOpMode() {
 
         //initializes all the motors and servos
+        elapsedTime time = new elapsedTime();
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
@@ -35,7 +34,8 @@ public class  RobotTellyOp extends LinearOpMode {
         shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
         Flicker = hardwareMap.get(Servo.class, "Flicker");
         Conveyor = hardwareMap.get(Servo.class, "Conveyor");
-        Hook = hardwareMap.get(Servo.class, "Hook");
+        HookOpen = hardwareMap.get(Servo.class, "HookOpen");
+        HookTurn = hardwareMap.get(Servo.class, "HookTurn");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -86,54 +86,38 @@ public class  RobotTellyOp extends LinearOpMode {
 
             // turning the shooting motors on
 
-            if(gamepad1.b && !stopShooter) {
+            if(gamepad1.b) {
                 shooterRightMotor.setPower(1.0);
                 shooterLeftMotor.setPower(1.0);
-                stopShooter = true;
+                Flicker.setPosition(130);
+                sleep(500);
+                Flicker.setPosition(0);
             }
 
             // turning off the shooting motors
 
-            else if(gamepad1.b && stopShooter){
+            /* else if(gamepad1.b && stopShooter){
                 shooterRightMotor.setPower(0.0);
                 shooterLeftMotor.setPower(0.0);
+                Flicker.setPosition(0);
                 stopShooter = false;
-            }
+            }*/
 
             // Shooter program ends
 
-            // Flicker Servo code starts
-
-            //FLickes the servo to shoot
-
-            if(gamepad1.dpad_up && !moveBack) {
-                Flicker.setPosition(130);
-                moveBack = true;
-            }
-
-            //Servo goes back
-
-            else if(gamepad1.dpad_down && moveBack) {
-                Flicker.setPosition(0);
-                moveBack = false;
-            }
-
-            // Flicker Servo code stops
 
             //Storage movement code starts
 
             //The conveyor goes down
 
-            if(gamepad1.left_bumper && conveyorCanMoveBack) {
+            if(gamepad1.dpad_down) {
                 Conveyor.setPosition(0);
-                conveyorCanMoveBack = false;
             }
 
             //The conveyor goes up
 
-            else if(gamepad1.right_bumper && !conveyorCanMoveBack) {
+            else if(gamepad1.dpad_up) {
                 Conveyor.setPosition(120);
-                conveyorCanMoveBack = true;
             }
 
             //Storage movement code stops
@@ -142,19 +126,25 @@ public class  RobotTellyOp extends LinearOpMode {
 
             //Opens the hook
 
-            if(gamepad1.dpad_left && hookToNienty) {
-                Hook.setPosition(90);
-                hookToNienty = false;
+            if(gamepad1.dpad_left ) {
+                HookOpen.setPosition(90);
             }
 
             //Closes the hook
 
-            else if(gamepad1.dpad_right && !hookToNienty){
-                Hook.setPosition(0);
-                hookToNienty = true;
+            else if(gamepad1.dpad_right ){
+                HookOpen.setPosition(0);
             }
 
+            if(gamepad1.right_bumper) {
+                HookTurn(90);
+            }
+            else if(gamepad1.left_bumper) {
+                HookTurn(0);
+            }
             //Hook code stops
+
+
 
         }
 
