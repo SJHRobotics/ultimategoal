@@ -288,7 +288,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
-            MoveToZoneB();e
+            MoveToZoneB();
 
             // Release wobble Goal
             servo.setPosition(90);
