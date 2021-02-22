@@ -298,7 +298,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Move to Start Line for 2nd Wobble Goal
             TurnRight(500);
-            MoveForward(500);
+            MoveForward();
+            sleep(500);
             TurnLeft(500);
             SenseColor('B');
             SenseColor('B');
