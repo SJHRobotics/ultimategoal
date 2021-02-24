@@ -296,13 +296,11 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('W', 'F');
 
             //Move to Start Line for 2nd Wobble Goal
-            TurnRight(500);
             MoveForward();
-            sleep(500);
-            TurnLeft(500);
-            SenseColor('B', 'F');
-            SenseColor('B', 'F');
+            sleep(5500);
             TurnRight(500);
+            MoveBackward();
+            sleep(700);
             //servo.setPosition(0);
 
             //Move to Target Zone B
