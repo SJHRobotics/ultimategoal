@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -170,9 +171,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         TurnRight(500);
         MoveForward();
         sleep(500);
-        TurnLeft(500);
+        TurnLeft(450);
         SenseColor('B', 'F');
-        TurnRight(1000);
+        TurnRight(950);
     }
 
     public void MoveToZoneC(){
