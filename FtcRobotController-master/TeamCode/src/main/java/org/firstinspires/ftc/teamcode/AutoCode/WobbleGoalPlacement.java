@@ -263,12 +263,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move back to Start Line for second Wobble Goal
             TurnLeft(450);
             MoveBackward();
-            sleep(5000);
+            sleep(5500);
 
             //Pick up second Wobble Goal
             TurnLeft(500);
             MoveBackward();
-            sleep(1000);
+            sleep(700);
             //servo.setPosition(0);
 
             //Move back to White Line
