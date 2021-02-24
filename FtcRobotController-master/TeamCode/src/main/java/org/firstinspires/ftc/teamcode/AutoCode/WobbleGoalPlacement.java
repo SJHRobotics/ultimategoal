@@ -21,7 +21,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private Servo servo;
+    //private Servo servo;
 
     //TFOD Variables
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
@@ -203,8 +203,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        servo = hardwareMap.get(Servo.class, "Hook");
-        servo.setPosition(0);
+        //servo = hardwareMap.get(Servo.class, "Hook");
+        //servo.setPosition(0);
 
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -258,7 +258,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         if(targetZone == 'A') {
             //Move to target zone and place wobble goal
             MoveToZoneA();
-            servo.setPosition(90);
+            //servo.setPosition(90);
 
             //Clear area
             MoveForward();
@@ -270,7 +270,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Pick up second Wobble Goal
             TurnLeft(500);
-            servo.setPosition(0);
+            //servo.setPosition(0);
 
             //Move back to White Line
             TurnRight(500);
@@ -278,7 +278,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Move to target zone and place wobble goal
             MoveToZoneA();
-            servo.setPosition(90);
+            //servo.setPosition(90);
 
             //Clear area
             MoveForward();
@@ -291,7 +291,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveToZoneB();
 
             // Release wobble Goal
-            servo.setPosition(90);
+            //servo.setPosition(90);
 
             // Move to white line
             SenseColor('W', 'F');
@@ -304,7 +304,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             SenseColor('B', 'F');
             SenseColor('B', 'F');
             TurnRight(500);
-            servo.setPosition(0);
+            //servo.setPosition(0);
 
             //Move to Target Zone B
             TurnRight(500);
@@ -312,7 +312,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveToZoneB();
 
             //Release Wobble Goal
-            servo.setPosition(90);
+            //servo.setPosition(90);
 
             //Move back to white line
             SenseColor('W', 'F');
@@ -323,7 +323,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveToZoneC();
 
             //Place wobble goal
-            servo.setPosition(90);
+            //servo.setPosition(90);
             sleep(1000);
 
             // Clear Area
@@ -343,7 +343,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Pick up 2nd Wobble Goal
             TurnRight(500);
-            servo.setPosition(0);
+            //servo.setPosition(0);
 
             //Go back to Launch Line
             TurnRight(500);
@@ -353,7 +353,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             MoveToZoneC();
 
             //Place wobble goal
-            servo.setPosition(90);
+            //servo.setPosition(90);
             sleep(1000);
 
             // Clear Area
