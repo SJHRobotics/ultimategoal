@@ -99,21 +99,16 @@ public class WobbleGoalPlacement extends LinearOpMode{
     }
 
 
-    //This method programs the robot to drive forward or backward until CSensor has detected white or blue
+    //This method programs the robot to drive forward or backward until the Color Sensor(referred to as CSensor) has detected white or blue
     //color parameter is for the color robot needs to stop at, direction parameter is the direction robot should drive
     // FOR COLOR PARAMETER: 'W' = white, 'B' = blue
     // FOR DIRECTION PARAMETER: 'F' = forward, 'B' = backward
     public void SenseColor(char color, char direction){
 
         //Sense blue color(for Target Zones)
-
         if(color == 'B'){
             while (true) {
-                //Print rgb values on telemetry(for testing purposes only)
-                telemetry.addData("Blue:", CSensor.blue());
-                telemetry.addData("Red:", CSensor.red());
-                telemetry.addData("Green:", CSensor.green());
-                telemetry.update();
+
                 if(direction == 'F'){
                     MoveForward();
                 }
@@ -134,11 +129,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         //Sense white color(for Launch Line)
         if(color == 'W'){
             while (true) {
-                //Print rgb values on telemetry(for testing purposes only)
-                telemetry.addData("Blue:", CSensor.blue());
-                telemetry.addData("Red:", CSensor.red());
-                telemetry.addData("Green:", CSensor.green());
-                telemetry.update();
+
                 if(direction == 'F'){
                     MoveForward();
                 }
