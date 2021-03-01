@@ -164,7 +164,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         sleep(500);
         TurnLeft(450);
         SenseColor('B', 'F');
-        TurnRight(950);
+        TurnRight(1000);
     }
 
     public void MoveToZoneC(){
