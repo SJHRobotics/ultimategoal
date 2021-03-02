@@ -31,7 +31,19 @@ public class StateMachineWGP extends LinearOpMode{
     private TFObjectDetector tfod;
     private static final String VUFORIA_KEY =
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
+    //Variable for holding current state
+    private String currentState;
 
+
+    enum States{
+        DETECTRINGS,
+        MOVETOLAUNCHLINE,
+        MOVETOZONEA,
+        MOVETOZONEB,
+        MOVETOZONEC,
+        PICKUP2NDWG,
+        END
+    }
 
     //Movement methods
     public void MoveForward(){
@@ -93,11 +105,6 @@ public class StateMachineWGP extends LinearOpMode{
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 
-
-    //This method programs the robot to drive forward or backward until the Color Sensor(referred to as CSensor) has detected white or blue
-    //color parameter is for the color robot needs to stop at, direction parameter is the direction robot should drive
-    // FOR COLOR PARAMETER: 'W' = white, 'B' = blue
-    // FOR DIRECTION PARAMETER: 'F' = forward, 'B' = backward
     public void SenseColor(char color, char direction){
 
         //Sense blue color(for Target Zones)
@@ -144,9 +151,95 @@ public class StateMachineWGP extends LinearOpMode{
         }
 
     }
-
     @Override
     public void runOpMode(){
+        CSensor = hardwareMap.get(ColorSensor.class, "CS1");
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
 
+
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        initVuforia();
+        initTfod();
+        waitForStart();
+
+        while(currentState != States.END){
+            switch(currentState) {
+                case DETECTRINGS:
+                    // Invoke TF API
+                    if (tfod != null) {
+                        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                        if (updatedRecognitions != null) {
+                            telemetry.addData("# Object Detected", updatedRecognitions.size());
+                            int i = 0;
+                            for (Recognition recognition : updatedRecognitions) {
+                                telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                                telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                        recognition.getLeft(), recognition.getTop());
+                                telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                        recognition.getRight(), recognition.getBottom());
+                                if(recognition.getLabel().equals("Quad")){
+                                    targetZone = 'C';
+                                }
+                                if(recognition.getLabel().equals("Single")){
+                                    targetZone = 'B';
+                                }
+                            }
+                            if(updatedRecognitions.size() == 0){
+                                targetZone = 'A';
+                            }
+
+                        }
+                    }
+                    // Close TF API
+                    if (tfod != null) {
+                        tfod.shutdown();
+                    }
+                case MOVETOLAUNCHLINE:
+                    SenseColor('W', 'F');
+                    if (targetZone == 'A') {
+                        currentState = States.MOVETOZONEA;
+                    }
+                    if (targetZone == 'B') {
+                        currentState = States.MOVETOZONEB;
+                    }
+                    if (targetZone == 'C') {
+                        currentState = States.MOVETOZONEC;
+                    }
+                case MOVETOZONEA:
+                    TurnRight(500);
+                    SenseColor('B', 'B');
+                    currentState = States.PICKUP2NDWG;
+                case MOVETOZONEB:
+
+                case MOVETOZONEC:
+
+                case PICKUP2NDWG:
+                    switch(targetZone){
+                        case 'A':
+                            //Move back to Start Line for second Wobble Goal
+                            TurnLeft(450);
+                            MoveBackward();
+                            sleep(5500);
+
+                            //Pick up second Wobble Goal
+                            TurnLeft(500);
+                            MoveBackward();
+                            sleep(700);
+                            TurnRight(500);
+                            currentState = States.MOVETOZONEA;
+                        case 'B':
+
+                        case 'C':
+
+                    }
+
+
+            }
+
+        }
     }
 } // end class
