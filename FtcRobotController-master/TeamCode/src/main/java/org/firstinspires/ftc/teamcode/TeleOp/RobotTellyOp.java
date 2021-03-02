@@ -20,12 +20,12 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo Conveyor;
     private Servo HookOpen;
     private Servo HookTurn;
+    private Servo HookBottomTurn;
     public boolean stopShooter = false;
 
     public void runOpMode() {
 
         //initializes all the motors and servos
-        elapsedTime time = new elapsedTime();
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
@@ -36,6 +36,7 @@ public class  RobotTellyOp extends LinearOpMode {
         Conveyor = hardwareMap.get(Servo.class, "Conveyor");
         HookOpen = hardwareMap.get(Servo.class, "HookOpen");
         HookTurn = hardwareMap.get(Servo.class, "HookTurn");
+        HookBottomTurn = hardwareMap.get(Servo.class, "HookBottomTurn");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -47,6 +48,8 @@ public class  RobotTellyOp extends LinearOpMode {
         frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        HookBottomTurn.setPosition(75);
+
         waitForStart();
         while (opModeIsActive()) {
 
@@ -87,8 +90,8 @@ public class  RobotTellyOp extends LinearOpMode {
             // turning the shooting motors on
 
             if(gamepad1.b) {
-                shooterRightMotor.setPower(1.0);
-                shooterLeftMotor.setPower(1.0);
+                shooterRightMotor.setPower(0.5);
+                shooterLeftMotor.setPower(0.5);
                 Flicker.setPosition(130);
                 sleep(500);
                 Flicker.setPosition(0);
@@ -137,10 +140,11 @@ public class  RobotTellyOp extends LinearOpMode {
             }
 
             if(gamepad1.right_bumper) {
-                HookTurn(90);
+                HookTurn.setPosition(20);
             }
             else if(gamepad1.left_bumper) {
-                HookTurn(0);
+                HookTurn.setPosition(0);
+
             }
             //Hook code stops
 
