@@ -24,7 +24,7 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo HookBottomTurn;
     private Servo IntakeServo;
     public boolean stopShooter = false;
-    private boolean IntakeClose = false
+    private boolean IntakeClose = false;
 
     public void runOpMode() {
 
