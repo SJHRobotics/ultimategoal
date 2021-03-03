@@ -22,8 +22,10 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo HookOpen;
     private Servo HookTurn;
     private Servo HookBottomTurn;
+    private Servo IntakeServo;
     public boolean stopShooter = false;
-    
+    private boolean IntakeClose = false
+
     public void runOpMode() {
 
         //initializes all the motors and servos
@@ -39,6 +41,7 @@ public class  RobotTellyOp extends LinearOpMode {
         HookOpen = hardwareMap.get(Servo.class, "HookOpen");
         HookTurn = hardwareMap.get(Servo.class, "HookTurn");
         HookBottomTurn = hardwareMap.get(Servo.class, "HookBottomTurn");
+        IntakeServo = hardwareMap.get(Servo.class, "IntakeServo");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -107,6 +110,12 @@ public class  RobotTellyOp extends LinearOpMode {
                 Intake.setPower(-1);
                 sleep(200);
             }
+            if (gampad1.y && !IntakeClose) {
+                IntakeServo.setPosition(90);
+            }
+            else if(gamepad1.y && IntakeClose) {
+                IntakeServo.setPosition(45);
+            }
 
             // Shooter program ends
 
@@ -130,7 +139,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             //Opens the hook
 
-            if(gamepad1.dpad_left ) {
+            if(gamepad1.dpad_left) {
                 HookOpen.setPosition(90);
             }
 
