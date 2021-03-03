@@ -26,6 +26,7 @@ public class  RobotTellyOp extends LinearOpMode {
     public boolean stopShooter = false;
     private boolean IntakeClose = false;
 
+    @Override
     public void runOpMode() {
 
         //initializes all the motors and servos
@@ -102,19 +103,19 @@ public class  RobotTellyOp extends LinearOpMode {
                 Flicker.setPosition(0);
             }
 
-            if (gamepad1.x) {
-                Intake.setPower(1);
-                sleep(200);
+            if (gamepad1.dpad_down) {
+                Intake.setPower(-0.3);
+                sleep(2000);
             }
-            else if(gamepad1.y) {
-                Intake.setPower(-1);
-                sleep(200);
+            else if(gamepad1.dpad_up) {
+                Intake.setPower(0.2);
+                sleep(2000);
             }
-            if (gampad1.y && !IntakeClose) {
+            if (gamepad1.y) {
                 IntakeServo.setPosition(90);
             }
-            else if(gamepad1.y && IntakeClose) {
-                IntakeServo.setPosition(45);
+            else if(gamepad1.a) {
+                IntakeServo.setPosition(0);
             }
 
             // Shooter program ends
@@ -123,7 +124,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             //The conveyor goes down
 
-            if(gamepad1.dpad_down) {
+            /*if(gamepad1.dpad_down) {
                 Conveyor.setPosition(0);
             }
 
@@ -131,7 +132,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             else if(gamepad1.dpad_up) {
                 Conveyor.setPosition(120);
-            }
+            }*/
 
             //Storage movement code stops
 
