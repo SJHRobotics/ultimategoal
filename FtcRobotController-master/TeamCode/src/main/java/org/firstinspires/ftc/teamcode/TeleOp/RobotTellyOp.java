@@ -16,13 +16,14 @@ public class  RobotTellyOp extends LinearOpMode {
     private DcMotor backRightMotor;
     private DcMotor shooterLeftMotor;
     private DcMotor shooterRightMotor;
+    private DcMotor Intake;
     private Servo Flicker;
     private Servo Conveyor;
     private Servo HookOpen;
     private Servo HookTurn;
     private Servo HookBottomTurn;
     public boolean stopShooter = false;
-
+    
     public void runOpMode() {
 
         //initializes all the motors and servos
@@ -32,6 +33,7 @@ public class  RobotTellyOp extends LinearOpMode {
         backRightMotor = hardwareMap.get(DcMotor.class, "br");
         shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
         shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
+        Intake = hardwareMap.get(DcMotor.class, "Intake");
         Flicker = hardwareMap.get(Servo.class, "Flicker");
         Conveyor = hardwareMap.get(Servo.class, "Conveyor");
         HookOpen = hardwareMap.get(Servo.class, "HookOpen");
@@ -97,17 +99,16 @@ public class  RobotTellyOp extends LinearOpMode {
                 Flicker.setPosition(0);
             }
 
-            // turning off the shooting motors
-
-            /* else if(gamepad1.b && stopShooter){
-                shooterRightMotor.setPower(0.0);
-                shooterLeftMotor.setPower(0.0);
-                Flicker.setPosition(0);
-                stopShooter = false;
-            }*/
+            if (gamepad1.x) {
+                Intake.setPower(1);
+                sleep(200);
+            }
+            else if(gamepad1.y) {
+                Intake.setPower(-1);
+                sleep(200);
+            }
 
             // Shooter program ends
-
 
             //Storage movement code starts
 
@@ -145,6 +146,9 @@ public class  RobotTellyOp extends LinearOpMode {
             else if(gamepad1.left_bumper) {
                 HookTurn.setPosition(0);
 
+            }
+            if(gamepad1.dpad_up) {
+                HookBottomTurn.setPosition(90);
             }
             //Hook code stops
 
