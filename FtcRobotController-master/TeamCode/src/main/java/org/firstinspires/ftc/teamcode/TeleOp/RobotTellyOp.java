@@ -46,14 +46,6 @@ public class  RobotTellyOp extends LinearOpMode {
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         HookBottomTurn.setPosition(75);
 
         waitForStart();
@@ -102,12 +94,33 @@ public class  RobotTellyOp extends LinearOpMode {
                 sleep(500);
                 Flicker.setPosition(0);
             }
+            else{
+                shooterRightMotor.setPower(0.0);
+                shooterLeftMotor.setPower(0.0);
+            }
+            if(gamepad1.x) {
+                Conveyor.setPosition(0);
+                Intake.setPower(-0.3);
+                sleep(500);
+                IntakeServo.setPosition(90);
+                sleep(250);
+                IntakeServo.setPosition(0);
+                sleep(250);
+                Intake.setPower(0.3);
+                sleep(500);
+                IntakeServo.setPosition(90);
+                sleep(250);
+                IntakeServo.setPosition(0);
+                sleep(250);
+                Conveyor.setPosition(120);
 
-            if (gamepad1.dpad_down) {
+
+            }
+            /*if (gamepad1.dpad_up) {
                 Intake.setPower(-0.3);
                 sleep(2000);
             }
-            else if(gamepad1.dpad_up) {
+            else if(gamepad1.dpad_down) {
                 Intake.setPower(0.2);
                 sleep(2000);
             }
@@ -124,7 +137,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             //The conveyor goes down
 
-            /*if(gamepad1.dpad_down) {
+            if(gamepad1.dpad_down) {
                 Conveyor.setPosition(0);
             }
 
@@ -157,9 +170,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 HookTurn.setPosition(0);
 
             }
-            if(gamepad1.dpad_up) {
-                HookBottomTurn.setPosition(90);
-            }
+
             //Hook code stops
 
 
