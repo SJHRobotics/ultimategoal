@@ -92,7 +92,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 Flicker.setPosition(130);
                 sleep(500);
                 Flicker.setPosition(0);
-            }
+            }   
             else{
                 shooterRightMotor.setPower(0.0);
                 shooterLeftMotor.setPower(0.0);
