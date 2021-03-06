@@ -158,12 +158,12 @@ public class WobbleGoalPlacement extends LinearOpMode{
     }
 
     public void MoveToZoneB(){
-        TurnRight(500);
-        MoveForward();
-        sleep(500);
-        TurnLeft(450);
-        SenseColor('B', 'F');
-        TurnRight(1000);
+        TurnRight(1600);
+        MoveBackward();
+        sleep(1000);
+        TurnLeft(500);
+        SenseColor('B', 'B');
+        //TurnRight(1000);
     }
 
     public void MoveToZoneC(){
@@ -193,7 +193,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        
+
 
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -248,8 +248,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to target zone and place wobble goal
             MoveToZoneA();
             //servo.setPosition(90);
-            
-            
+
+
             //Move back to Start Line for second Wobble Goal
             TurnLeft(450);
             MoveBackward();
@@ -291,7 +291,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             TurnRight(500);
             SenseColor('B', 'F');
             TurnLeft(500);
-            SenseColor('B', 'F');
+            MoveForward();
+            sleep(4000);
             TurnRight(500);
             MoveBackward();
             sleep(700);
@@ -306,8 +307,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //servo.setPosition(0);
 
             //Move to Target Zone B
-            SenseColor('B', 'B');
-            TurnRight(500);
+            SenseColor('B', 'F');
+            TurnRight(650);
             SenseColor('W', 'F');
             MoveToZoneB();
 
