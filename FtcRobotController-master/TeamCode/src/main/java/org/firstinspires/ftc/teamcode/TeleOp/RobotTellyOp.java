@@ -23,8 +23,7 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo HookTurn;
     private Servo HookBottomTurn;
     private Servo IntakeServo;
-    public boolean stopShooter = false;
-    private boolean IntakeClose = false;
+    public boolean startIntakeProcess = false;
 
     @Override
     public void runOpMode() {
@@ -99,6 +98,14 @@ public class  RobotTellyOp extends LinearOpMode {
                 shooterLeftMotor.setPower(0.0);
             }
             if(gamepad1.x) {
+                startIntakeProcess = true;
+                sleep(1000);
+            }
+            else if(gamepad1.x) {
+                startIntakeProcess = false;
+                sleep(1000);
+            }
+            if(startIntakeProcess) {
                 Conveyor.setPosition(0);
                 Intake.setPower(-0.3);
                 sleep(500);
