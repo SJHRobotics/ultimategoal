@@ -25,6 +25,25 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo IntakeServo;
     public boolean startIntakeProcess = false;
 
+    public void startIntakeProcess(){
+        Conveyor.setPosition(0);
+        Intake.setPower(-0.3);
+        sleep(500);
+        IntakeServo.setPosition(90);
+        sleep(250);
+        IntakeServo.setPosition(0);
+        sleep(250);
+        Intake.setPower(0.3);
+        sleep(500);
+        IntakeServo.setPosition(90);
+        sleep(250);
+        IntakeServo.setPosition(0);
+        sleep(250);
+        Conveyor.setPosition(120);
+    }
+    public void empty(){
+        Intake.setPower(0);
+    }
     @Override
     public void runOpMode() {
 
@@ -83,46 +102,25 @@ public class  RobotTellyOp extends LinearOpMode {
             telemetry.update();
 
             //shooting program starts
-
-            // turning the shooting motors on
-
             if(gamepad1.b) {
+                // turning the shooting motors on
                 shooterRightMotor.setPower(0.5);
                 shooterLeftMotor.setPower(0.5);
                 Flicker.setPosition(130);
-                sleep(500);
+                sleep(150);
                 Flicker.setPosition(0);
-            }   
+            }
             else{
                 shooterRightMotor.setPower(0.0);
                 shooterLeftMotor.setPower(0.0);
             }
             if(gamepad1.x) {
-                startIntakeProcess = true;
-                sleep(1000);
+                startIntakeProcess();
             }
-            else if(gamepad1.x) {
-                startIntakeProcess = false;
-                sleep(1000);
+            else{
+                empty();
             }
-            if(startIntakeProcess) {
-                Conveyor.setPosition(0);
-                Intake.setPower(-0.3);
-                sleep(500);
-                IntakeServo.setPosition(90);
-                sleep(250);
-                IntakeServo.setPosition(0);
-                sleep(250);
-                Intake.setPower(0.3);
-                sleep(500);
-                IntakeServo.setPosition(90);
-                sleep(250);
-                IntakeServo.setPosition(0);
-                sleep(250);
-                Conveyor.setPosition(120);
 
-
-            }
             /*if (gamepad1.dpad_up) {
                 Intake.setPower(-0.3);
                 sleep(2000);
