@@ -32,11 +32,11 @@ public class StateMachineWGP extends LinearOpMode{
     private static final String VUFORIA_KEY =
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
     //Variable for holding current state
-    private String currentState;
+    private String currentState = TFODPROCESS;
 
 
     enum States{
-        DETECTRINGS,
+        TFODPROCESS,
         MOVETOLAUNCHLINE,
         MOVETOZONEA,
         MOVETOZONEB,
@@ -168,7 +168,7 @@ public class StateMachineWGP extends LinearOpMode{
 
         while(currentState != States.END){
             switch(currentState) {
-                case DETECTRINGS:
+                case TFODPROCESS:
                     // Invoke TF API
                     if (tfod != null) {
                         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -200,21 +200,25 @@ public class StateMachineWGP extends LinearOpMode{
                     }
                 case MOVETOLAUNCHLINE:
                     SenseColor('W', 'F');
-                    if (targetZone == 'A') {
-                        currentState = States.MOVETOZONEA;
-                    }
-                    if (targetZone == 'B') {
-                        currentState = States.MOVETOZONEB;
-                    }
-                    if (targetZone == 'C') {
-                        currentState = States.MOVETOZONEC;
+                    switch(targetZone){
+                        case 'A':
+                            currentState = States.MOVETOZONEA;
+                        case 'B':
+                            currentState = States.MOVETOZONEB;
+                        case 'C':
+                            currentState = States.MOVETOZONEC;
                     }
                 case MOVETOZONEA:
                     TurnRight(500);
                     SenseColor('B', 'B');
                     currentState = States.PICKUP2NDWG;
                 case MOVETOZONEB:
-
+                    TurnRight(1600);
+                    MoveBackward();
+                    sleep(1000);
+                    TurnLeft(500);
+                    SenseColor('B', 'B');
+                    currentState = States.PICKUP2NDWG;
                 case MOVETOZONEC:
 
                 case PICKUP2NDWG:
@@ -232,7 +236,26 @@ public class StateMachineWGP extends LinearOpMode{
                             TurnRight(500);
                             currentState = States.MOVETOZONEA;
                         case 'B':
+                            // Move to white line
+                            SenseColor('W', 'F');
 
+                            //Move to Start Line for 2nd Wobble Goal
+                            MoveForward();
+                            sleep(1000);
+                            TurnRight(500);
+                            SenseColor('B', 'F');
+                            TurnLeft(500);
+                            MoveForward();
+                            sleep(4000);
+                            TurnRight(500);
+                            MoveBackward();
+                            sleep(700);
+
+                            //Move to Target Zone B
+                            SenseColor('B', 'F');
+                            TurnRight(650);
+                            SenseColor('W', 'F');
+                            currentStates = States.MOVETOZONEB;
                         case 'C':
 
                     }
