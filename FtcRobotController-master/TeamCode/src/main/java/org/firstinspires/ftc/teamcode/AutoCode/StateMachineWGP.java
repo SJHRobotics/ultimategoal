@@ -220,6 +220,17 @@ public class StateMachineWGP extends LinearOpMode{
                     SenseColor('B', 'B');
                     currentState = States.PICKUP2NDWG;
                 case MOVETOZONEC:
+                    //Skip 2 Blue Lines
+                    for(int i = 1; i <= 2; i++){
+                        SenseColor('B', 'F');
+                        MoveForward();
+                        sleep(500);
+
+                    }
+                    //Move to Target Zone C
+                    TurnRight(500);
+                    SenseColor('B', 'B');
+                    currentState = States.PICKUP2NDWG;
 
                 case PICKUP2NDWG:
                     switch(targetZone){
@@ -257,7 +268,32 @@ public class StateMachineWGP extends LinearOpMode{
                             SenseColor('W', 'F');
                             currentStates = States.MOVETOZONEB;
                         case 'C':
+                            //Clear area
+                            MoveForward();
+                            sleep(350);
 
+                            //Go back to Launch Line
+                            TurnLeft(500);
+                            SenseColor('W', 'F');
+
+                            //Move to Start Line
+                            MoveBackward();
+                            sleep(1000);
+                            TurnRight(500);
+                            SenseColor('B', 'B');
+                            TurnLeft(500);
+                            MoveBackward();
+                            sleep(4000);
+                            TurnLeft(500);
+                            MoveBackward();
+                            sleep(700);
+
+                            //Go back to Launch Line
+                            SenseColor('B', 'F');
+                            TurnRight(500);
+                            SenseColor('W', 'F');
+
+                            currentState = States.MOVETOZONEC;
                     }
 
 
