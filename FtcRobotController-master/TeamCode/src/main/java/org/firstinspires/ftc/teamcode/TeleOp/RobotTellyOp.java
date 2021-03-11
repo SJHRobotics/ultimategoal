@@ -107,13 +107,16 @@ public class  RobotTellyOp extends LinearOpMode {
                 // turning the shooting motors on
                 shooterRightMotor.setPower(0.5);
                 shooterLeftMotor.setPower(0.5);
-                Flicker.setPosition(130);
-                sleep(150);
-                Flicker.setPosition(0);
             }
             else{
                 shooterRightMotor.setPower(0.0);
                 shooterLeftMotor.setPower(0.0);
+            }
+            if(gamepad1.b){
+                sleep(100);
+                Flicker.setPosition(130);
+                sleep(150);
+                Flicker.setPosition(0);
             }
             if(gamepad1.x) {
                 startIntakeProcess();
