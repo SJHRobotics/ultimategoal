@@ -168,7 +168,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     public void MoveToZoneC(){
         //Skip 2 Blue Lines
-        for(int i = 1; i <= 2; i++){
+        for(int i = 0; i <= 2; i++){
             SenseColor('B', 'F');
             MoveForward();
             sleep(500);
