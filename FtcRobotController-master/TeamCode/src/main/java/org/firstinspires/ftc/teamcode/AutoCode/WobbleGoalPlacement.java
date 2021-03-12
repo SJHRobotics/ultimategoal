@@ -21,8 +21,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private Servo ClampServo;
-    private Servo ArmServo;
+    private DcMotor Arm;
     //private Servo servo;
 
     //TFOD Variables
@@ -159,10 +158,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        ClampServo = hardwareMap.get(Servo.class, "HookOpen");
-        ArmServo = hardwareMap.get(Servo.class, "HookTurn");
-
-        ClampServo.setPosition(90);
+        Arm = hardwareMap.get(DcMotor.class, "Intake");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
@@ -217,14 +213,10 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
-            //Place Wobble Goal
-            ArmServo.setPosition(20);
-            sleep(300);
-            ClampServo.setPosition(0);
-            sleep(100);
-            ClampServo.setPosition(90);
-            sleep(100);
-            ArmServo.setPosition(0);
+            TurnRight(500);
+            Arm.setPower(0.2);
+            sleep(1000);
+
             
         }
 
@@ -235,22 +227,18 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             TurnRight(500);
             MoveForward();
             sleep(500);
+            TurnRight();
+            sleep(500);
 
             //Pause for 1 second
             Stop();
             sleep(1000);
             
             //Place Wobble Goal
-            ArmServo.setPosition(20);
-            sleep(300);
-            ClampServo.setPosition(0);
-            sleep(100);
-            ClampServo.setPosition(90);
-            sleep(100);
-            ArmServo.setPosition(0);
+            Arm.setPower(0.2);
+            sleep(1000);
             
             // Move to Launch line
-            TurnRight(500);
             SenseColor('W', 'F');
         }
         
@@ -275,13 +263,8 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             SenseColor('B', 'B');
 
             //Place Wobble Goal
-            ArmServo.setPosition(20);
-            sleep(300);
-            ClampServo.setPosition(0);
-            sleep(100);
-            ClampServo.setPosition(90);
-            sleep(100);
-            ArmServo.setPosition(0);
+            Arm.setPower(0.2);
+            sleep(1000);
 
 
             // Clear Area
