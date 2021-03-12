@@ -12,15 +12,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
-@Autonomous(name = "WobbleGoalPlacement", group = "WobbleGoal")
+@Autonomous(name = "WobbleGoalPlacement2", group = "WobbleGoal")
 
-public class WobbleGoalPlacement extends LinearOpMode{
+public class WobbleGoalPlacement2 extends LinearOpMode{
     //Hardware objects
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
+    private Servo ClampServo;
+    private Servo ArmServo;
     //private Servo servo;
 
     //TFOD Variables
@@ -149,42 +151,6 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     }
 
-    /*These three methods contain code that allows the robot to move to all three
-      Target Zones
-     */
-    public void MoveToZoneA(){
-        TurnRight(500);
-        SenseColor('B', 'B');
-    }
-
-    public void MoveToZoneB(){
-        TurnRight(1600);
-        MoveBackward();
-        sleep(1000);
-        TurnLeft(500);
-        SenseColor('B', 'B');
-        //TurnRight(1000);
-    }
-
-    public void MoveToZoneC(){
-        //Skip 2 Blue Lines
-        for(int i = 1; i <= 2; i++){
-            SenseColor('B', 'F');
-            MoveForward();
-            sleep(500);
-
-        }
-        //Move to Target Zone C
-        TurnRight(500);
-        SenseColor('B', 'B');
-    }
-
-
-
-
-
-
-
     @Override
     public void runOpMode(){
         CSensor = hardwareMap.get(ColorSensor.class, "CS1");
@@ -192,8 +158,9 @@ public class WobbleGoalPlacement extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-
-
+        ClampServo = hardwareMap.get(Servo.class, "HookOpen");
+        ArmServo = hardwareMap.get(Servo.class, "HookTurn");
+        ClampServo.setPosition(90);
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         initVuforia();
@@ -244,123 +211,65 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
-            //Move to target zone and place wobble goal
-            MoveToZoneA();
-            //servo.setPosition(90);
-
-
-            //Move back to Start Line for second Wobble Goal
-            TurnLeft(450);
-            MoveBackward();
-            sleep(5500);
-
-            //Pick up second Wobble Goal
-            TurnLeft(500);
-            MoveBackward();
-            sleep(700);
-            //servo.setPosition(0);
-
-            //Move back to White Line
-            TurnRight(500);
-            SenseColor('W', 'F');
-
-            //Move to target zone and place wobble goal
-            MoveToZoneA();
-            //servo.setPosition(90);
-
-            //Clear area
-            MoveForward();
-            sleep(350);
+            //Place Wobble Goal
+            ArmServo.setPosition(20);
+            sleep(300);
+            ClampServo.setPosition(0);
+            sleep(100);
+            ClampServo.setPosition(90);
+            sleep(100);
+            ArmServo.setPosition(0);
+            
         }
 
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
-            MoveToZoneB();
-
-            // Release wobble Goal
-            //servo.setPosition(90);
-
-            // Move to white line
-            SenseColor('W', 'F');
-
-            //Move to Start Line for 2nd Wobble Goal
             MoveForward();
             sleep(1000);
             TurnRight(500);
-            SenseColor('B', 'F');
-            TurnLeft(500);
             MoveForward();
-            sleep(4000);
+            sleep(1000);
+            
+            Stop();
+            sleep(1000);
+            
+            //Place Wobble Goal
+            ArmServo.setPosition(20);
+            sleep(300);
+            ClampServo.setPosition(0);
+            sleep(100);
+            ClampServo.setPosition(90);
+            sleep(100);
+            ArmServo.setPosition(0);
+            
+            // Move to white line
             TurnRight(500);
-            MoveBackward();
-            sleep(700);
-            /*
-            MoveForward();
-            sleep(5500);
-            TurnRight(500);
-            MoveBackward();
-            sleep(700);
-             */
-
-            //servo.setPosition(0);
-
-            //Move to Target Zone B
-            SenseColor('B', 'F');
-            TurnRight(650);
-            SenseColor('W', 'F');
-            MoveToZoneB();
-
-            //Release Wobble Goal
-            //servo.setPosition(90);
-
-            //Move back to white line
             SenseColor('W', 'F');
         }
+        
         //Target Zone C
         if(targetZone == 'C'){
             //Move to Target Zone C
-            MoveToZoneC();
-
-            //Place wobble goal
-            //servo.setPosition(90);
-            //sleep(1000);
-
-            // Clear Area
-            MoveForward();
-            sleep(350);
-
-            //Go back to Launch Line
-            TurnLeft(500);
-            SenseColor('W', 'F');
-
-            //Move to Start Line
+            TurnRight(1650);
             MoveBackward();
             sleep(1000);
-            TurnRight(500);
+            TurnLeft(500);
+        
+            //Skip 2 Blue Lines
+            for(int i = 0; i <= 2; i++){
+                SenseColor('B', 'B');
+                MoveBackward();
+                sleep(100);
+
+            }
+            TurnLeft(500);
             SenseColor('B', 'B');
-            TurnLeft(500);
-            MoveBackward();
-            sleep(4000);
-            TurnLeft(500);
-            MoveBackward();
-            sleep(700);
-
-            //Go back to Launch Line
-            SenseColor('B', 'F');
-            TurnRight(500);
-            SenseColor('W', 'F');
-
-            //Move to Target Zone C
-            MoveToZoneC();
-
-            //Place wobble goal
-            //servo.setPosition(90);
-            //sleep(1000);
-
+            /*
             // Clear Area
             MoveForward();
             sleep(350);
+            */
 
             //Go back to Launch Line
             TurnRight(500);
