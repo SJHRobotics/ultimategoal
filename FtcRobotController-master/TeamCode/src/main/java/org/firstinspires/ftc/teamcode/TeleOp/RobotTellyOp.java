@@ -70,7 +70,7 @@ public class  RobotTellyOp extends LinearOpMode {
 
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double pa = (gamepad1.left_trigger - gamepad1.right_trigger);
+            double pa = (gamepad1.left_bumper - gamepad1.right_bumper);
             if (Math.abs(pa) < 0.05) pa = 0;
             double p1 = -px + py - pa;
             double p2 = px + py + -pa;
@@ -101,7 +101,7 @@ public class  RobotTellyOp extends LinearOpMode {
             telemetry.update();
 
             //shooting program starts
-            if(gamepad1.b) {
+            if(gamepad1.right_trigger) {
                 // turning the shooting motors on
                 shooterRightMotor.setPower(0.65);
                 shooterLeftMotor.setPower(0.65);
@@ -110,7 +110,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 shooterRightMotor.setPower(0.0);
                 shooterLeftMotor.setPower(0.0);
             }
-            if(gamepad1.right_stick_button) {
+            if(gamepad1.left_trigger) {
                 Flicker.setPosition(170);
                 sleep(500);
                 Flicker.setPosition(0);
@@ -130,13 +130,13 @@ public class  RobotTellyOp extends LinearOpMode {
                 Intake.setPower(0.2);
                 sleep(2000);
             }       
-            if(gamepad1.y){
+            if(gamepad1.start){
                 IntakeServo.setPosition(270);
                 sleep(200);
 
             }
 
-            if(gamepad1.a) {
+            if(gamepad1.back) {
                 IntakeServo.setPosition(0);
                 sleep(50);
             }
