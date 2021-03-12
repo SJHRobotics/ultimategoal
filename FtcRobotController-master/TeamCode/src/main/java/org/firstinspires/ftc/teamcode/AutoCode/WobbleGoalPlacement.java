@@ -42,29 +42,29 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     public void MoveForward(){
         //Set frontLeft motor power level slightly higher than others
         //This is to offset drift in our robot's movement
-        frontLeftMotor.setPower(0.35);
+        frontLeftMotor.setPower(0.32);
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
         backRightMotor.setPower(0.3);
     }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.35);
+        frontLeftMotor.setPower(-0.32);
         frontRightMotor.setPower(-0.3);
         backLeftMotor.setPower(-0.3);
         backRightMotor.setPower(-0.3);
     }
     public void TurnRight(long time){
-        frontLeftMotor.setPower(0.5);
-        frontRightMotor.setPower(-0.5);
-        backLeftMotor.setPower(0.5);
-        backRightMotor.setPower(-0.5);
+        frontLeftMotor.setPower(1.0);
+        frontRightMotor.setPower(-1.0);
+        backLeftMotor.setPower(1.0);
+        backRightMotor.setPower(-1.0);
         sleep(time);
     }
     public void TurnLeft(long time){
-        frontLeftMotor.setPower(-0.5);
-        frontRightMotor.setPower(0.5);
-        backLeftMotor.setPower(-0.5);
-        backRightMotor.setPower(0.5);
+        frontLeftMotor.setPower(-1.0);
+        frontRightMotor.setPower(1.0);
+        backLeftMotor.setPower(-1.0);
+        backRightMotor.setPower(1.0);
         sleep(time);
     }
     public void Stop(){
@@ -213,26 +213,22 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
-            TurnRight(1000);
-
-            Stop();
+            TurnRight(500);
+            Arm.setPower(0.2);
             sleep(1000);
 
-            Arm.setPower(0.5);
-            sleep(1000);
 
-            Arm.setPower(-0.5);
-            sleep(1000);
         }
 
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
             SenseColor('B', 'F');
-            TurnRight(1000);
+            TurnRight(500);
             MoveForward();
             sleep(500);
-            TurnRight(1000);
+            TurnRight();
+            sleep(500);
 
             //Pause for 1 second
             Stop();
@@ -245,7 +241,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             // Move to Launch line
             SenseColor('W', 'F');
         }
-/*
+
         //Target Zone C
         if(targetZone == 'C'){
             //Move to Target Zone B
@@ -281,7 +277,6 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             SenseColor('W', 'F');
 
         }
-        */
 
     } // end runOpMode()
 
