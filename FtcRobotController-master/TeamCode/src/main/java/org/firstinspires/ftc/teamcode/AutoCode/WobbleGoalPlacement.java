@@ -21,8 +21,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private Servo ClampServo;
-    private Servo ArmServo;
+    private DcMotor Arm;
     //private Servo servo;
 
     //TFOD Variables
@@ -153,28 +152,31 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
     @Override
     public void runOpMode(){
+        //Initalize Hardware
         CSensor = hardwareMap.get(ColorSensor.class, "CS1");
         backRightMotor = hardwareMap.get(DcMotor.class, "br");
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        ClampServo = hardwareMap.get(Servo.class, "HookOpen");
-        ArmServo = hardwareMap.get(Servo.class, "HookTurn");
-        ClampServo.setPosition(90);
+        Arm = hardwareMap.get(DcMotor.class, "Intake");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        //Initialize Vuforia and TFOD
         initVuforia();
         initTfod();
         if (tfod != null) {
             tfod.activate();
             tfod.setZoom(2.5, 16.0/9.0);
         }
+
         telemetry.addData(">", "Ready to Start!");
         telemetry.update();
+
         waitForStart();
 
 
-        // Invoke TF API
+        // Detect rings using TFOD
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -205,71 +207,70 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             tfod.shutdown();
         }
 
-        // Drive Till White Line
+        // Drive Till Launch Line
         SenseColor('W', 'F');
 
 
         //Target Zone A
         if(targetZone == 'A') {
-            //Place Wobble Goal
-            ArmServo.setPosition(20);
-            sleep(300);
-            ClampServo.setPosition(0);
-            sleep(100);
-            ClampServo.setPosition(90);
-            sleep(100);
-            ArmServo.setPosition(0);
+            TurnRight(500);
+            Arm.setPower(0.2);
+            sleep(1000);
+
             
         }
 
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
-            MoveForward();
-            sleep(1000);
+            SenseColor('B', 'F');
             TurnRight(500);
             MoveForward();
-            sleep(1000);
-            
+            sleep(500);
+            TurnRight();
+            sleep(500);
+
+            //Pause for 1 second
             Stop();
             sleep(1000);
             
             //Place Wobble Goal
-            ArmServo.setPosition(20);
-            sleep(300);
-            ClampServo.setPosition(0);
-            sleep(100);
-            ClampServo.setPosition(90);
-            sleep(100);
-            ArmServo.setPosition(0);
+            Arm.setPower(0.2);
+            sleep(1000);
             
-            // Move to white line
-            TurnRight(500);
+            // Move to Launch line
             SenseColor('W', 'F');
         }
         
         //Target Zone C
         if(targetZone == 'C'){
-            //Move to Target Zone C
-            TurnRight(1650);
-            MoveBackward();
+            //Move to Target Zone B
+            TurnRight(500);
+            MoveForward();
             sleep(1000);
             TurnLeft(500);
         
-            //Skip 2 Blue Lines
+            //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
                 SenseColor('B', 'B');
-                MoveBackward();
+                MoveForward();
                 sleep(100);
 
             }
-            TurnLeft(500);
+
+            //Move to Target Zone C
+            TurnRight(500);
             SenseColor('B', 'B');
-            /*
+
+            //Place Wobble Goal
+            Arm.setPower(0.2);
+            sleep(1000);
+
+
             // Clear Area
             MoveForward();
             sleep(350);
-            */
+
 
             //Go back to Launch Line
             TurnRight(500);
