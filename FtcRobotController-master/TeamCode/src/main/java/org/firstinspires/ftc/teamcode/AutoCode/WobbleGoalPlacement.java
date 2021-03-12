@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name = "WobbleGoalPlacement2", group = "WobbleGoal")
 
@@ -42,29 +43,29 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     public void MoveForward(){
         //Set frontLeft motor power level slightly higher than others
         //This is to offset drift in our robot's movement
-        frontLeftMotor.setPower(0.32);
+        frontLeftMotor.setPower(0.35);
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
         backRightMotor.setPower(0.3);
     }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.32);
+        frontLeftMotor.setPower(-0.35);
         frontRightMotor.setPower(-0.3);
         backLeftMotor.setPower(-0.3);
         backRightMotor.setPower(-0.3);
     }
     public void TurnRight(long time){
-        frontLeftMotor.setPower(1.0);
-        frontRightMotor.setPower(-1.0);
-        backLeftMotor.setPower(1.0);
-        backRightMotor.setPower(-1.0);
+        frontLeftMotor.setPower(0.5);
+        frontRightMotor.setPower(-0.5);
+        backLeftMotor.setPower(0.5);
+        backRightMotor.setPower(-0.5);
         sleep(time);
     }
     public void TurnLeft(long time){
-        frontLeftMotor.setPower(-1.0);
-        frontRightMotor.setPower(1.0);
-        backLeftMotor.setPower(-1.0);
-        backRightMotor.setPower(1.0);
+        frontLeftMotor.setPower(-0.5);
+        frontRightMotor.setPower(0.5);
+        backLeftMotor.setPower(-0.5);
+        backRightMotor.setPower(0.5);
         sleep(time);
     }
     public void Stop(){
@@ -213,42 +214,66 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
-            TurnRight(500);
-            Arm.setPower(0.2);
+            telemetry.addData(">", "Zone A");
+            telemetry.update();
             sleep(1000);
-
+            TurnRight(1000);
             
+            Stop();
+            sleep(1000);
+            
+            Arm.setPower(0.5);
+            sleep(1000);
+            
+            Arm.setPower(-0.5);
+            sleep(1000);
         }
 
         //Target Zone B
         if(targetZone == 'B'){
+            telemetry.addData(">", "Zone B");
+            telemetry.update();
+            sleep(1000);
+            
             //Move to target zone B
+            /*
+            MoveForward();
+            sleep(350);
+            */
             SenseColor('B', 'F');
-            TurnRight(500);
+            /*
+            TurnRight(1000);
             MoveForward();
             sleep(500);
-            TurnRight();
-            sleep(500);
+            */
+            TurnRight(2000);
 
             //Pause for 1 second
             Stop();
             sleep(1000);
             
             //Place Wobble Goal
-            Arm.setPower(0.2);
+            Arm.setPower(0.5);
+            sleep(1000);
+            
+            Arm.setPower(-0.5);
             sleep(1000);
             
             // Move to Launch line
             SenseColor('W', 'F');
         }
-        
+
         //Target Zone C
         if(targetZone == 'C'){
+            telemetry.addData(">", "Zone C");
+            telemetry.update();
+            sleep(1000);
+            
             //Move to Target Zone B
-            TurnRight(500);
+            TurnRight(1000);
             MoveForward();
             sleep(1000);
-            TurnLeft(500);
+            TurnLeft(1000);
         
             //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
@@ -259,7 +284,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             }
 
             //Move to Target Zone C
-            TurnRight(500);
+            TurnRight(1000);
             SenseColor('B', 'B');
 
             //Place Wobble Goal
@@ -273,7 +298,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
 
             //Go back to Launch Line
-            TurnRight(500);
+            TurnRight(1000);
             SenseColor('W', 'F');
 
         }
