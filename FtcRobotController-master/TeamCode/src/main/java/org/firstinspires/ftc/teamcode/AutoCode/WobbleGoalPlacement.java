@@ -275,13 +275,14 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
                 MoveForward();
                 sleep(150);
             }
+
             MoveForward();
-            sleep(150);
+            sleep(250);
 
             //Move to Target Zone C
-            TurnRight(1000);
+            TurnRight(1250);
 
-            // Move Backword
+            // Move Backward
             SenseColor('B', 'B');
             Stop();
             sleep(1000);

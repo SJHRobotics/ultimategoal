@@ -145,26 +145,26 @@ public class  RobotTellyOp extends LinearOpMode {
 
             if(gamepad1.y) {
                 if(CanHookTurn){
-                HookTurn.setPosition(20);
+                    HookTurn.setPosition(20);
                     CanHookTurn = false;
-            }
-            else if(!CanHookTurn) {
-                HookTurn.setPosition(0);
-                sleep(2000);
+                }
+                else if(!CanHookTurn) {
+                    HookTurn.setPosition(0);
+                    sleep(2000);
                     CanHookTurn = true;
+                }
+
+                //Hook code stops
+
+
+
             }
 
-            //Hook code stops
+            //Stoping the drive motors
 
-
-
+            backLeftMotor.setPower(0.0);
+            frontLeftMotor.setPower(0.0);
+            frontRightMotor.setPower(0.0);
+            backRightMotor.setPower(0.0);
         }
-
-        //Stoping the drive motors
-
-        backLeftMotor.setPower(0.0);
-        frontLeftMotor.setPower(0.0);
-        frontRightMotor.setPower(0.0);
-        backRightMotor.setPower(0.0);
     }
-}
