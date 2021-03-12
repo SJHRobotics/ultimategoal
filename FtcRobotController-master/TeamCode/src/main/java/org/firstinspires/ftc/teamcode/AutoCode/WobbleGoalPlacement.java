@@ -43,13 +43,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     public void MoveForward(){
         //Set frontLeft motor power level slightly higher than others
         //This is to offset drift in our robot's movement
-        frontLeftMotor.setPower(0.35);
+        frontLeftMotor.setPower(0.33);
         frontRightMotor.setPower(0.3);
         backLeftMotor.setPower(0.3);
         backRightMotor.setPower(0.3);
     }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.35);
+        frontLeftMotor.setPower(-0.33);
         frontRightMotor.setPower(-0.3);
         backLeftMotor.setPower(-0.3);
         backRightMotor.setPower(-0.3);
@@ -218,13 +218,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.update();
             sleep(1000);
             TurnRight(1000);
-            
+
             Stop();
             sleep(1000);
-            
+
             Arm.setPower(0.5);
             sleep(1000);
-            
+
             Arm.setPower(-0.5);
             sleep(1000);
         }
@@ -234,7 +234,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone B");
             telemetry.update();
             sleep(1000);
-            
+
             //Move to target zone B
             /*
             MoveForward();
@@ -251,14 +251,14 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             //Pause for 1 second
             Stop();
             sleep(1000);
-            
+
             //Place Wobble Goal
             Arm.setPower(0.5);
             sleep(1000);
-            
+
             Arm.setPower(-0.5);
             sleep(1000);
-            
+
             // Move to Launch line
             SenseColor('W', 'F');
         }
@@ -268,37 +268,35 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone C");
             telemetry.update();
             sleep(1000);
-            
-            //Move to Target Zone B
-            TurnRight(1000);
-            MoveForward();
-            sleep(1000);
-            TurnLeft(1000);
-        
+
             //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
-                SenseColor('B', 'B');
+                SenseColor('B', 'F');
                 MoveForward();
-                sleep(100);
-
+                sleep(150);
             }
+            MoveForward();
+            sleep(150);
 
             //Move to Target Zone C
             TurnRight(1000);
-            SenseColor('B', 'B');
 
-            //Place Wobble Goal
-            Arm.setPower(0.2);
+            // Move Backword
+            SenseColor('B', 'B');
+            Stop();
             sleep(1000);
 
+            //Place Wobble Goal
+            Arm.setPower(0.5);
+            sleep(1000);
 
-            // Clear Area
-            MoveForward();
-            sleep(350);
+            Arm.setPower(-0.5);
+            sleep(1000);
 
-
-            //Go back to Launch Line
+            //Face to Launch Line
             TurnRight(1000);
+
+            // Move to Launch line
             SenseColor('W', 'F');
 
         }
