@@ -225,11 +225,10 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         //Target Zone B
         if(targetZone == 'B'){
             //Move to target zone B
-            MoveForward();
-            sleep(1000);
+            SenseColor('B', 'F');
             TurnRight(500);
             MoveForward();
-            sleep(1000);
+            sleep(500);
             
             Stop();
             sleep(1000);
