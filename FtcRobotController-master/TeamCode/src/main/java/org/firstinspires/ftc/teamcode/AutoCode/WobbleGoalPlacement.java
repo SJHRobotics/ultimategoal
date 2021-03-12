@@ -268,18 +268,12 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone C");
             telemetry.update();
             sleep(1000);
-            
-            //Move to Target Zone B
-            TurnRight(1000);
-            MoveForward();
-            sleep(1000);
-            TurnLeft(1000);
         
             //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
                 SenseColor('B', 'B');
                 MoveForward();
-                sleep(100);
+                sleep(500);
 
             }
 
@@ -288,7 +282,10 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             SenseColor('B', 'B');
 
             //Place Wobble Goal
-            Arm.setPower(0.2);
+            Arm.setPower(0.5);
+            sleep(1000);
+            
+            Arm.setPower(-0.5);
             sleep(1000);
 
 
