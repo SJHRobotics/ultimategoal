@@ -137,11 +137,10 @@ public class  RobotTellyOp extends LinearOpMode {
                 Intake.setPower(0.5);
                 sleep(2000);
             }
-            if(gamepad1.b){
-                IntakeServo.setPosition(320);
-                if(gamepad1.b == false){
-                    IntakeServo.setPosition(0);
-
+            if(gamepad1.b == true){
+                IntakeServo.setPosition(340);
+            if(gamepad1.b == false){
+                IntakeServo.setPosition(0);
                 }
 
 
