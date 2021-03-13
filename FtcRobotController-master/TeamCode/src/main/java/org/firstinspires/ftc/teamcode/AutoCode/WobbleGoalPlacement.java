@@ -218,13 +218,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.update();
             sleep(1000);
             TurnRight(1000);
-
+            
             Stop();
             sleep(1000);
-
+            
             Arm.setPower(0.5);
             sleep(1000);
-
+            
             Arm.setPower(-0.5);
             sleep(1000);
         }
@@ -234,7 +234,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone B");
             telemetry.update();
             sleep(1000);
-
+            
             //Move to target zone B
             /*
             MoveForward();
@@ -246,19 +246,19 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             MoveForward();
             sleep(500);
             */
-            TurnRight(2000);
+            TurnRight(2500);
 
             //Pause for 1 second
             Stop();
             sleep(1000);
-
+            
             //Place Wobble Goal
             Arm.setPower(0.5);
             sleep(1000);
-
+            
             Arm.setPower(-0.5);
             sleep(1000);
-
+            
             // Move to Launch line
             SenseColor('W', 'F');
         }
@@ -268,16 +268,16 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone C");
             telemetry.update();
             sleep(1000);
-
+            
             //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
                 SenseColor('B', 'F');
                 MoveForward();
                 sleep(150);
             }
-
+            
             MoveForward();
-            sleep(250);
+            sleep(300);
 
             //Move to Target Zone C
             TurnRight(1250);
@@ -290,13 +290,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             //Place Wobble Goal
             Arm.setPower(0.5);
             sleep(1000);
-
+            
             Arm.setPower(-0.5);
             sleep(1000);
 
             //Face to Launch Line
             TurnRight(1000);
-
+            
             // Move to Launch line
             SenseColor('W', 'F');
 
