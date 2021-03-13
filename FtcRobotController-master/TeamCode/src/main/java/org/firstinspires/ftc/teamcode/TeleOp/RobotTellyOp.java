@@ -68,6 +68,11 @@ public class  RobotTellyOp extends LinearOpMode {
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
+        Conveyor.setPosition(120);
+
+
+
+
         while (opModeIsActive()) {
 
             double px = gamepad1.left_stick_x;
@@ -105,8 +110,8 @@ public class  RobotTellyOp extends LinearOpMode {
             //shooting program starts
             if(gamepad1.right_bumper) {
                 // turning the shooting motors on
-                shooterRightMotor.setPower(0.65);
-                shooterLeftMotor.setPower(0.65);
+                shooterRightMotor.setPower(0.7);
+                shooterLeftMotor.setPower(0.7);
             }
             else{
                 shooterRightMotor.setPower(0.0);
@@ -132,46 +137,28 @@ public class  RobotTellyOp extends LinearOpMode {
                 Intake.setPower(0.5);
                 sleep(2000);
             }
-            if(gamepad1.y){
-                if(CanIntakeOpen) {
-                    IntakeServo.setPosition(270);
-                    sleep(2000);
-                    CanIntakeOpen = false;
-                } else if(!CanIntakeOpen){
+            if(gamepad1.b){
+                IntakeServo.setPosition(320);
+                if(gamepad1.b == false){
                     IntakeServo.setPosition(0);
-                    sleep(2000);
-                    CanIntakeOpen = true;
+
                 }
 
 
             }
 
-            if(gamepad1.back) {
-                IntakeServo.setPosition(0);
-                sleep(50);
-            }
 
-            if(gamepad1.a) {
-                if(CanOpenHook){
-                    HookOpen.setPosition(90);
-                    sleep(2000);
-                    CanOpenHook = false;
 
+        /*if(gamepad1.y) {
+            HookOpen.setPosition(90);
                 }
-                else if(!CanOpenHook){
-                    HookOpen.setPosition(90);
-                    sleep(2000);
-                    CanOpenHook = true;
-                }
+        else if(gamepad1.a){
+            HookOpen.setPosition(0);
+        }*/
 
-
-            }
 
             //Closes the hook
 
-            else if(gamepad1.y){
-                HookOpen.setPosition(0);
-            }
 
             if(gamepad1.dpad_left) {
                 HookTurn.setPosition(20);
