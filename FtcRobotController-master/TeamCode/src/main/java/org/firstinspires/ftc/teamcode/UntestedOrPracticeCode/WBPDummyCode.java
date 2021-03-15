@@ -98,6 +98,15 @@ public class WBPDummyCode extends LinearOpMode{
         sleep(100);
         Flicker.setPosition(0);
     }
+    public void ShootAndMove() {
+        Shoot();
+        StrafeRight(100);
+        Shoot();
+        StrafeRight(100);
+        Shoot();
+        sleep(100);
+        MoveForward(100);
+    }
     public void Stop(){
         frontLeftMotor.setPower(0);
         frontRightMotor.setPower(0);
@@ -258,27 +267,21 @@ public class WBPDummyCode extends LinearOpMode{
             Stop();
             sleep(200);
 
-            Arm.setPosition(90);
+            Arm.setPower(-0.5);
             sleep(750);
-            Arm.setPosition(0);
+            Arm.setPower(0.5);
             TurnLeft(1000);
             StrafeRight(1000);
-            MoveBackward(0.3);
+            MoveBackward(0.6);
             sleep(200);
-            Shoot();
-            StrafeRight(100);
-            Shoot();
-            StrafeRight(100);
-            Shoot();
-            sleep(100);
-            MoveForward(100);
+            ShootAndMove();
         }
 
         //Target Zone B
         if(targetZone == 'B'){
             telemetry.addData(">", "Zone B");
             telemetry.update();
-            sleep(1000);
+            sleep(100);
 
             //Move to target zone B
             /*
@@ -306,27 +309,32 @@ public class WBPDummyCode extends LinearOpMode{
 
             // Move to Launch line
             SenseColor('W', 'F');
+            TurnLeft(1000);
+            StrafeRight(500);
+            MoveBackward(0.6);
+            sleep(200);
+            ShootAndMove();
+
         }
 
         //Target Zone C
         if(targetZone == 'C'){
             telemetry.addData(">", "Zone C");
             telemetry.update();
-            sleep(1000);
+            sleep(100);
 
             //Skip Target Zone B
             for(int i = 0; i <= 2; i++){
                 SenseColor('B', 'F');
-                MoveForward();
+                MoveForward(.3);
                 sleep(150);
             }
 
-            MoveForward();
-            sleep(300);
+            MoveForward(.5);
+            sleep(100);
 
             //Move to Target Zone C
             TurnRight(1250);
-
             // Move Backward
             SenseColor('B', 'B');
             Stop();
@@ -339,12 +347,18 @@ public class WBPDummyCode extends LinearOpMode{
             Arm.setPower(-0.5);
             sleep(1000);
 
+
             //Face to Launch Line
+            StrafeRight(500);
             TurnRight(1000);
 
             // Move to Launch line
             SenseColor('W', 'F');
-
+            TurnLeft(1000);
+            StrafeRight(500);
+            MoveBackward(0.6);
+            sleep(200);
+            ShootAndMove();
         }
 
     } // end runOpMode()
