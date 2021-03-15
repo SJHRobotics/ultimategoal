@@ -150,10 +150,11 @@ f
                     IntakeServo.setPosition(j);
                 }
             }
-            if(gamepad1.b == true){
+            if(gamepad1.b){
                 IntakeServo.setPosition(x);
-                if(SetPosition<40) {
+                if(SetPosition < 40) {
                     SetPosition++;
+                    sleep(10);
                 }
 
             }
