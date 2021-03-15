@@ -22,8 +22,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
+    private DcMotor shooterLeftMotor;
+    private DcMotor shooterRightMotor;
+    private DcMotor Arm;
+    private Servo Flicker;
     private Servo ArmTurn;
     private Servo ArmOpen;
+
     //private Servo servo;
 
     //TFOD Variables
@@ -84,6 +89,14 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         m3.setPower(-0.5);
         m4.setPower(0.5);
         sleep(time);
+    }
+    public void Shoot() {
+        shooterLeftMotor.setPower(0.75);
+        shooterRightMotor.setPower(0.75);
+        sleep(1500);
+        Flicker.setPosition(170);
+        sleep(100);
+        Flicker.setPosition(0);
     }
     public void Stop(){
         frontLeftMotor.setPower(0);
@@ -176,11 +189,14 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
+        shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
         ArmTurn= hardwareMap.get(DcMotor.class, "HookTurn");
         ArmOpen= hardwareMap.get(DcMotor.class, "HookOpen");
+        Arm = hardwareMap.get(DcMotor.class, "Intake");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-
+        shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         //Initialize Vuforia and TFOD
         initVuforia();
         initTfod();
@@ -237,20 +253,25 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             telemetry.addData(">", "Zone A");
             telemetry.update();
             sleep(100);
-            StrafeLeft(100);
+            TurnRight(1000);
 
             Stop();
             sleep(200);
 
-            ArmTurn.setPosition(20);
-            sleep(500);
-
-            ArmOpen.setPosition(0);
-            sleep(1000);
-            ArmOpen.setPosition(90);
+            Arm.setPosition(90);
+            sleep(750);
+            Arm.setPosition(0);
+            TurnLeft(1000);
             StrafeRight(1000);
             MoveBackward(0.3);
             sleep(200);
+            Shoot();
+            StrafeRight(100);
+            Shoot();
+            StrafeRight(100);
+            Shoot();
+            sleep(100);
+            MoveForward(100);
         }
 
         //Target Zone B
