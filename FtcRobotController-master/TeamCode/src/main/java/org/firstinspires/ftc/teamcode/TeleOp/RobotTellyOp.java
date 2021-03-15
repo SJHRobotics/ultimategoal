@@ -5,8 +5,23 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-/**
- * This is the final Telly-Op Code
+/** This is the final Telly-Op Code
+* Buttons in use
+* Left Bumper
+* Right Bumper
+* D-Pad up
+* D-Pad down
+ * D-Pad right
+ * D-Pad left
+* start
+ * back
+ * b
+ * y
+ * a
+ * x
+ * left stick
+ * right stick
+ * right trigger
  */
 @TeleOp(name ="RobotTellyOp", group = "Telly-Op")
 public class  RobotTellyOp extends LinearOpMode {
@@ -79,12 +94,12 @@ f
 
             double px = gamepad1.left_stick_x;
             double py = -gamepad1.left_stick_y;
-            double pa = (gamepad1.left_trigger - gamepad1.right_trigger);
+            double pa = (gamepad1.right_stick_x - gamepad1.right_stick_y);
             if (Math.abs(pa) < 0.05) pa = 0;
-            double p1 = -px + py - pa;
-            double p2 = px + py + -pa;
-            double p3 = -px + py + pa;
-            double p4 = px + py + pa;
+            double p1 = -px + py + pa;
+            double p2 = px + py + pa;
+            double p3 = -px + py - pa;
+            double p4 = px + py - pa;
             double max = Math.max(1.0, Math.abs(p1));
             max = Math.max(max, Math.abs(p2));
             max = Math.max(max, Math.abs(p3));
@@ -184,7 +199,12 @@ f
             }
 
             //Hook code stops
-
+                if(gamepad1.right_trigger > .01) {
+                    Conveyor.setPosition(120);
+                }
+                else{
+                    Conveyor.setPosition(0);
+                }
 
 
         }
