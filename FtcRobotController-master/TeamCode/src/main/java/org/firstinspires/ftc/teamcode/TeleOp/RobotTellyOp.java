@@ -92,22 +92,22 @@ f
 
         while (opModeIsActive()) {
 
-            double px = gamepad1.left_stick_x;
-            double py = -gamepad1.left_stick_y;
-            double pa = (gamepad1.right_stick_x - gamepad1.right_stick_y);
-            if (Math.abs(pa) < 0.05) pa = 0;
-            double p1 = -px + py + pa;
-            double p2 = px + py + pa;
-            double p3 = -px + py - pa;
-            double p4 = px + py - pa;
-            double max = Math.max(1.0, Math.abs(p1));
-            max = Math.max(max, Math.abs(p2));
-            max = Math.max(max, Math.abs(p3));
-            max = Math.max(max, Math.abs(p4));
-            p1 /= max;
-            p2 /= max;
-            p3 /= max;
-            p4 /= max;
+                double px = gamepad1.left_stick_x;
+                double py = -gamepad1.left_stick_y;
+                double pa = (gamepad1.right_stick_x - gamepad1.right_stick_y);
+                if (Math.abs(pa) < 0.05) pa = 0;
+                double p1 = -px + py + pa;
+                double p2 = px + py + pa;
+                double p3 = -px + py - pa;
+                double p4 = px + py - pa;
+                double max = Math.max(1.0, Math.abs(p1));
+                max = Math.max(max, Math.abs(p2));
+                max = Math.max(max, Math.abs(p3));
+                max = Math.max(max, Math.abs(p4));
+                p1 /= max;
+                p2 /= max;
+                p3 /= max;
+                p4 /= max;
 
             //sets the speed of the drive motors
 

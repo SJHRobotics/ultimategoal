@@ -77,17 +77,17 @@ public class WBPDummyCode extends LinearOpMode{
         sleep(time);
     }
     public void StrafeLeft(long time) {
-        m1.setPower(0.5);
-        m2.setPower(-0.5);
-        m3.setPower(0.5);
-        m4.setPower(-0.5);
+        frontLeftMotor.setPower(0.5);
+        frontRightMotor.setPower(-0.5);
+        backLeftMotor.setPower(0.5);
+        backRightMotor.setPower(-0.5);
         sleep(time);
     }
     public void StrafeRight(long time) {
-        m1.setPower(-0.5);
-        m2.setPower(0.5);
-        m3.setPower(-0.5);
-        m4.setPower(0.5);
+        frontLeftMotor.setPower(-0.5);
+        frontRightMotor.setPower(0.5);
+        backLeftMotor.setPower(-0.5);
+        backRightMotor.setPower(0.5);
         sleep(time);
     }
     public void Shoot() {
