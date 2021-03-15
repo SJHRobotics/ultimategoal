@@ -13,9 +13,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-@Autonomous(name = "WobbleGoalPlacement2", group = "WobbleGoal")
+@Autonomous(name = "WGP with shooting", group = "WobbleGoal")
 
-public class WobbleGoalPlacement2 extends LinearOpMode{
+public class WBPDummyCode extends LinearOpMode{
     //Hardware objects
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
