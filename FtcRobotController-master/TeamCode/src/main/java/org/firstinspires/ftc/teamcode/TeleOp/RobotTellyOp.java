@@ -23,10 +23,11 @@ public class  RobotTellyOp extends LinearOpMode {
     private Servo HookTurn;
     private Servo HookBottomTurn;
     private Servo IntakeServo;
-    public boolean startIntakeProcess = false;
-    public boolean CanOpenHook = true;
-    public boolean CanIntakeOpen = true;
-    public int ServoPosition = 0;
+    private boolean startIntakeProcess = false;
+    private boolean CanOpenHook = true;
+    private boolean CanIntakeOpen = true;
+    private int ServoPosition = 0;
+    private int SetPosition = 0;
 
     public void startIntakeProcess(){
         Conveyor.setPosition(0);
@@ -72,7 +73,7 @@ public class  RobotTellyOp extends LinearOpMode {
         Conveyor.setPosition(120);
 
 
-
+f
 
         while (opModeIsActive()) {
 
@@ -139,7 +140,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 sleep(2000);
             }
             if(gamepad1.start) {
-                for(i = 40; i < 40; i++) {
+                for(i = ServoPosition; i < 40; i++) {
                     IntakeServo.setPosition(i);
                     ServoPosition = i;
                 }
@@ -150,8 +151,10 @@ public class  RobotTellyOp extends LinearOpMode {
                 }
             }
             if(gamepad1.b == true){
-                IntakeServo.setPosition(359);
-
+                IntakeServo.setPosition(x);
+                if(SetPosition<40) {
+                    SetPosition++;
+                }
 
             }
             if(gamepad1.b == false){
