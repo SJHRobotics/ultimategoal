@@ -275,7 +275,7 @@ public class PowerShotShooting extends LinearOpMode{
             TurnLeft(1250);
             StrafeRight(1000);
             MoveBackward(0.6);
-            sleep(200);
+            sleep(50);
             ShootAndMove();
         }
 
