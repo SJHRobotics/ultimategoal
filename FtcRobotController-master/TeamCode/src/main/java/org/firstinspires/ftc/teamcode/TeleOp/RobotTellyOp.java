@@ -16,14 +16,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * D-Pad left
  * b
  * y
- * a
  * x
  * left stick
  * right stick
  * right trigger
  */
-@TeleOp(name ="Test", group = "Telly-Op")
-public class  LinearServo extends LinearOpMode {
+@TeleOp(name ="RobotTellyOp", group = "Telly-Op")
+public class  RobotTellyOp extends LinearOpMode {
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
@@ -123,12 +122,79 @@ public class  LinearServo extends LinearOpMode {
             telemetry.update();
 
             //shooting program starts
-            if(gamepad1.b) {
-                Conveyor.setPosition(80);
+            if(gamepad1.right_bumper) {
+                // turning the shooting motors on
+                shooterRightMotor.setPower(0.7);
+                shooterLeftMotor.setPower(0.7);
+            }
+            else{
+                shooterRightMotor.setPower(0.0);
+                shooterLeftMotor.setPower(0.0);
+            }
+            if(gamepad1.left_bumper) {
+                Flicker.setPosition(170);
+                sleep(500);
+                Flicker.setPosition(0);
+            }
+            if(gamepad1.x) {
+                startIntakeProcess();
+            }
+            else{
+                empty();
+            }
 
-            }else if(gamepad1.a) {
+            if (gamepad1.dpad_up) {
+                Intake.setPower(-0.5);
+                sleep(2000);
+            }
+            else if(gamepad1.dpad_down) {
+                Intake.setPower(0.5);
+                sleep(2000);
+            }
+            if(gamepad1.b){
+
+                if(SetPosition < 10) {
+                    IntakeServo.setPosition(SetPosition);
+                    SetPosition++;
+                }
+                else if(SetPosition > 10) {
+                    SetPosition = 0;
+                    IntakeServo.setPosition(SetPosition);
+                }
+
+            }
+            if(gamepad1.b == false){
+                SetPosition = 0;
+                IntakeServo.setPosition(SetPosition);
+            }
+
+
+
+
+            if(gamepad1.y) {
+                HookOpen.setPosition(90);
+            }
+            else{
+                HookOpen.setPosition(0);
+            }
+
+
+            //Closes the hook
+
+
+            if(gamepad1.dpad_left) {
+                HookTurn.setPosition(20);
+            }
+            else if(gamepad1.dpad_right) {
+                HookTurn.setPosition(0);
+            }
+
+            //Hook code stops
+            if(gamepad1.right_trigger > .01) {
+                Conveyor.setPosition(0);
+            }
+            else if(gamepad1.left_trigger > .01){
                 Conveyor.setPosition(180);
-
             }
 
 
