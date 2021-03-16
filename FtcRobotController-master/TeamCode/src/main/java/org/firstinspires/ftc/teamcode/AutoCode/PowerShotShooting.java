@@ -77,15 +77,15 @@ public class PowerShotShooting extends LinearOpMode{
         sleep(time);
     }
     public void StrafeLeft(long time) {
-        frontLeftMotor.setPower(0.5);
-        frontRightMotor.setPower(-0.5);
+        frontLeftMotor.setPower(-0.5);
+        frontRightMotor.setPower(0.5);
         backLeftMotor.setPower(0.5);
         backRightMotor.setPower(-0.5);
         sleep(time);
     }
     public void StrafeRight(long time) {
-        frontLeftMotor.setPower(-0.5);
-        frontRightMotor.setPower(0.5);
+        frontLeftMotor.setPower(0.5);
+        frontRightMotor.setPower(-0.5);
         backLeftMotor.setPower(-0.5);
         backRightMotor.setPower(0.5);
         sleep(time);
@@ -95,7 +95,7 @@ public class PowerShotShooting extends LinearOpMode{
         shooterRightMotor.setPower(0.75);
         sleep(1500);
         Flicker.setPosition(170);
-        sleep(100);
+        sleep(500);
         Flicker.setPosition(0);
     }
     public void ShootAndMove() {
@@ -150,10 +150,10 @@ public class PowerShotShooting extends LinearOpMode{
             while (true) {
 
                 if(direction == 'F'){
-                    MoveForward();
+                    MoveForward(0.3);
                 }
                 if(direction == 'B'){
-                    MoveBackward();
+                    MoveBackward(0.3);
                 }
                 //If CSensor detects blue line(more blue than other colors)
                 if (CSensor.blue() > CSensor.red() && CSensor.blue() > CSensor.green()) {
@@ -200,9 +200,10 @@ public class PowerShotShooting extends LinearOpMode{
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
         shooterLeftMotor = hardwareMap.get(DcMotor.class, "sl");
         shooterRightMotor = hardwareMap.get(DcMotor.class, "sr");
-        ArmTurn= hardwareMap.get(DcMotor.class, "HookTurn");
-        ArmOpen= hardwareMap.get(DcMotor.class, "HookOpen");
+        //ArmTurn= hardwareMap.get(DcMotor.class, "HookTurn");
+        //ArmOpen= hardwareMap.get(DcMotor.class, "HookOpen");
         Arm = hardwareMap.get(DcMotor.class, "Intake");
+        Flicker = hardwareMap.get(Servo.class, "Flicker");
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -252,8 +253,9 @@ public class PowerShotShooting extends LinearOpMode{
         }
 
         // Drive Till Launch Line
-        MoveForward(1.0);
-        sleep(200);
+        Arm.setPower(-0.3);
+        MoveForward(0.6);
+        sleep(600);
         SenseColor('W', 'F');
 
 
@@ -262,7 +264,7 @@ public class PowerShotShooting extends LinearOpMode{
             telemetry.addData(">", "Zone A");
             telemetry.update();
             sleep(100);
-            TurnRight(1000);
+            TurnRight(1250);
 
             Stop();
             sleep(200);
@@ -270,7 +272,7 @@ public class PowerShotShooting extends LinearOpMode{
             Arm.setPower(-0.5);
             sleep(750);
             Arm.setPower(0.5);
-            TurnLeft(1000);
+            TurnLeft(1250);
             StrafeRight(1000);
             MoveBackward(0.6);
             sleep(200);
