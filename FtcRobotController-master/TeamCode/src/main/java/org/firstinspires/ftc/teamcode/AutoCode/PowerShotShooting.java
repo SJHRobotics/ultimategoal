@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name = "WGP with shooting", group = "WobbleGoal")
 
-public class WBPDummyCode extends LinearOpMode{
+public class PowerShotShooting extends LinearOpMode{
     //Hardware objects
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
