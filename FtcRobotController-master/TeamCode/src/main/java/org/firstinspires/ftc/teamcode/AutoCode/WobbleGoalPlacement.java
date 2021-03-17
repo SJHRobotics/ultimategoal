@@ -262,6 +262,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Place WG 1
             PlaceWG1();
 
+            //Prepare robot for WG 2 Placement
+
         }
 
         //Target Zone B
@@ -286,6 +288,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             
             // Move to Launch line
             SenseColor('W', 'F');
+
+            //Prepare robot for WG 2 Placement
         }
 
         //Target Zone C
@@ -324,6 +328,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
             
             //Move to Launch line
             SenseColor('W', 'F');
+
+            //Prepare robot for WG 2 Placement
 
         }
 
