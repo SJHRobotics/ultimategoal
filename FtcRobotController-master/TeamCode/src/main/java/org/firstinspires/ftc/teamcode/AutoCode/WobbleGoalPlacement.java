@@ -15,15 +15,20 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous(name = "WobbleGoalPlacement2", group = "WobbleGoal")
 
-public class WobbleGoalPlacement2 extends LinearOpMode{
-    //Hardware objects
+public class WobbleGoalPlacement extends LinearOpMode{
+    //Common hardware objects
     private ColorSensor CSensor;
     private DcMotor frontLeftMotor;
     private DcMotor frontRightMotor;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
-    private DcMotor Arm;
-    //private Servo servo;
+
+    //WG 1 Hardware Objects
+    private DcMotor Arm; // Intake Arm
+
+    //WG 2 Hardware Objects
+    private Servo Clamps;
+    private Servo Elbow;
 
     //TFOD Variables
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
@@ -38,34 +43,38 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     private static final String VUFORIA_KEY =
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
 
+    //Motor Speed Variables
+    private static final double slowSpeed = 0.3;
+    private static final double regularSpeed = 0.5;
+    private static final double driftOffset = 0.03;
 
     //Movement methods
     public void MoveForward(){
         //Set frontLeft motor power level slightly higher than others
         //This is to offset drift in our robot's movement
-        frontLeftMotor.setPower(0.33);
-        frontRightMotor.setPower(0.3);
-        backLeftMotor.setPower(0.3);
-        backRightMotor.setPower(0.3);
+        frontLeftMotor.setPower(slowSpeed + driftOffset);
+        frontRightMotor.setPower(slowSpeed);
+        backLeftMotor.setPower(slowSpeed);
+        backRightMotor.setPower(slowSpeed);
     }
     public void MoveBackward(){
-        frontLeftMotor.setPower(-0.33);
-        frontRightMotor.setPower(-0.3);
-        backLeftMotor.setPower(-0.3);
-        backRightMotor.setPower(-0.3);
+        frontLeftMotor.setPower(-(slowSpeed + driftOffset));
+        frontRightMotor.setPower(-slowSpeed);
+        backLeftMotor.setPower(-slowSpeed);
+        backRightMotor.setPower(-slowSpeed);
     }
     public void TurnRight(long time){
-        frontLeftMotor.setPower(0.5);
-        frontRightMotor.setPower(-0.5);
-        backLeftMotor.setPower(0.5);
-        backRightMotor.setPower(-0.5);
+        frontLeftMotor.setPower(regularSpeed);
+        frontRightMotor.setPower(-regularSpeed);
+        backLeftMotor.setPower(regularSpeed);
+        backRightMotor.setPower(-regularSpeed);
         sleep(time);
     }
     public void TurnLeft(long time){
-        frontLeftMotor.setPower(-0.5);
-        frontRightMotor.setPower(0.5);
-        backLeftMotor.setPower(-0.5);
-        backRightMotor.setPower(0.5);
+        frontLeftMotor.setPower(-regularSpeed);
+        frontRightMotor.setPower(regularSpeed);
+        backLeftMotor.setPower(-regularSpeed);
+        backRightMotor.setPower(regularSpeed);
         sleep(time);
     }
     public void Stop(){
@@ -151,17 +160,40 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
     }
 
+    public void PlaceWG1(){
+        Arm.setPower(0.5);
+        sleep(1000);
+
+        Arm.setPower(-0.5);
+        sleep(1000);
+    }
+
+    @TODO
+    public void PlaceWG2(){
+
+    }
+
     @Override
     public void runOpMode(){
-        //Initalize Hardware
+        //Initalize common hardware
         CSensor = hardwareMap.get(ColorSensor.class, "CS1");
         backRightMotor = hardwareMap.get(DcMotor.class, "br");
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+
+        //Initalize WG 1 hardware
         Arm = hardwareMap.get(DcMotor.class, "Intake");
+
+        //Initalize WG 2 hardware
+        Clamps = hardwareMap.get(Servo.class, "HookOpen");
+        Elbow = hardwareMap.get(Servo.class, "HookTurn");
+
+        //Initalize Drivetrain Motors
         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         //Initialize Vuforia and TFOD
         initVuforia();
@@ -171,6 +203,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
             tfod.setZoom(2.5, 16.0/9.0);
         }
 
+        //Print Start Message on DS
         telemetry.addData(">", "Ready to Start!");
         telemetry.update();
 
@@ -214,50 +247,42 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
+            //Print Zone on DS
             telemetry.addData(">", "Zone A");
             telemetry.update();
             sleep(1000);
+
+            //Turn Right about 90 degrees
             TurnRight(1000);
-            
+
+            //Pause for 1 sec
             Stop();
             sleep(1000);
-            
-            Arm.setPower(0.5);
-            sleep(1000);
-            
-            Arm.setPower(-0.5);
-            sleep(1000);
+
+            //Place WG 1
+            PlaceWG1();
+
         }
 
         //Target Zone B
         if(targetZone == 'B'){
+            //Print Zone on DS
             telemetry.addData(">", "Zone B");
             telemetry.update();
             sleep(1000);
             
-            //Move to target zone B
-            /*
-            MoveForward();
-            sleep(350);
-            */
+            //Move to 1st line of target zone B
             SenseColor('B', 'F');
-            /*
-            TurnRight(1000);
-            MoveForward();
-            sleep(500);
-            */
+
+            //Turn Right about 180 degrees
             TurnRight(2500);
 
             //Pause for 1 second
             Stop();
             sleep(1000);
             
-            //Place Wobble Goal
-            Arm.setPower(0.5);
-            sleep(1000);
-            
-            Arm.setPower(-0.5);
-            sleep(1000);
+            //Place WG 1
+            PlaceWG1();
             
             // Move to Launch line
             SenseColor('W', 'F');
@@ -265,39 +290,39 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Target Zone C
         if(targetZone == 'C'){
+            //Print Zone on DS
             telemetry.addData(">", "Zone C");
             telemetry.update();
             sleep(1000);
             
-            //Skip Target Zone B
+            //Skip 2 blue lines of Target Zone B
             for(int i = 0; i <= 2; i++){
                 SenseColor('B', 'F');
                 MoveForward();
                 sleep(150);
             }
-            
+
+            //Move forward a bit more
             MoveForward();
             sleep(300);
 
-            //Move to Target Zone C
+            //Turn Right about 90 degrees
             TurnRight(1250);
 
-            // Move Backward
+            // Move Backward to Target Zone C
             SenseColor('B', 'B');
+
+            //Pause for 1 sec
             Stop();
             sleep(1000);
 
             //Place Wobble Goal
-            Arm.setPower(0.5);
-            sleep(1000);
-            
-            Arm.setPower(-0.5);
-            sleep(1000);
+            PlaceWG1();
 
-            //Face to Launch Line
-            TurnRight(1000);
+            //Turn right to Launch Line
+            TurnRight(1250);
             
-            // Move to Launch line
+            //Move to Launch line
             SenseColor('W', 'F');
 
         }
