@@ -108,6 +108,19 @@ public class VuforiaSample extends LinearOpMode {
     private float phoneXRotate    = 0;
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
+    
+    public void MoveBackward(){
+        frontLeftMotor.setPower(-0.33);
+        frontRightMotor.setPower(-0.3);
+        backLeftMotor.setPower(-0.3);
+        backRightMotor.setPower(-0.3);
+    }
+    public void Stop(){
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
+        backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+    }
 
     @Override public void runOpMode() {
         webcamName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
@@ -200,7 +213,19 @@ public class VuforiaSample extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-        }
+            
+            MoveBackward();
+            if (targetVisible == false){
+                Stop();
+                break;
+            }
+            else{
+                continue;
+            }
+                
+            
+            
+        } // end tracking loop
 
         // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
