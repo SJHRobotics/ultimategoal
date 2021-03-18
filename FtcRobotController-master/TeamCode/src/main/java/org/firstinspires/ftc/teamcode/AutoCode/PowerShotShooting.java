@@ -397,7 +397,7 @@ public class PowerShotShooting extends LinearOpMode{
             sleep(750);
             Arm.setPower(0.5);
             TurnLeft(2500);
-            if(blueAllianceTarget.position().toUnit(double y) < 1790.7){
+            if(blueAllianceTarget.position(mmPerInch, 0, 1790.7 >= , 0) ){
                 StrafeRight(1000);
             }
             MoveBackward(0.6);
