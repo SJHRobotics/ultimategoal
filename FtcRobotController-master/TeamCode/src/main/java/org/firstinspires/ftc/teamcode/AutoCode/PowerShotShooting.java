@@ -121,6 +121,13 @@ public class PowerShotShooting extends LinearOpMode{
         backRightMotor.setPower(0.5);
         sleep(time);
     }
+    public void STrafeRight() {
+        frontLeftMotor.setPower(0.5);
+        frontRightMotor.setPower(-0.5);
+        backLeftMotor.setPower(-0.5);
+        backRightMotor.setPower(0.5);
+
+    }
     public void Shoot() {
         shooterLeftMotor.setPower(0.75);
         shooterRightMotor.setPower(0.75);
@@ -130,6 +137,11 @@ public class PowerShotShooting extends LinearOpMode{
         Flicker.setPosition(0);
     }
     public void ShootAndMove() {
+        if(blueAllianceTarget.get(1) < 1785){
+            STrafeRight();
+        }
+        MoveBackward(0.6);
+        sleep(50);
         Shoot();
         StrafeRight(100);
         Shoot();
@@ -397,11 +409,7 @@ public class PowerShotShooting extends LinearOpMode{
             sleep(750);
             Arm.setPower(0.5);
             TurnLeft(2500);
-            if(blueAllianceTarget.position(mmPerInch, 0, 1790.7 >= , 0) ){
-                StrafeRight(1000);
-            }
-            MoveBackward(0.6);
-            sleep(50);
+
             ShootAndMove();
         }
 
