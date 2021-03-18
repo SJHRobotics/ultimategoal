@@ -47,6 +47,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private static final double slowSpeed = 0.3;
     private static final double regularSpeed = 0.5;
     private static final double driftOffset = 0.03;
+    
+    private static final int pauseTimer = 1000;
 
     //Movement methods
     public void MoveForward(){
@@ -162,10 +164,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     public void PlaceWG1(){
         Arm.setPower(0.5);
-        sleep(1000);
+        sleep(pauseTimer);
 
         Arm.setPower(-0.5);
-        sleep(1000);
+        sleep(pauseTimer);
     }
 
     @TODO
@@ -250,14 +252,14 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Print Zone on DS
             telemetry.addData(">", "Zone A");
             telemetry.update();
-            sleep(1000);
+            sleep(pauseTimer);
 
             //Turn Right about 90 degrees
-            TurnRight(1000);
+            TurnRight(pauseTimer);
 
             //Pause for 1 sec
             Stop();
-            sleep(1000);
+            sleep(pauseTimer);
 
             //Place WG 1
             PlaceWG1();
@@ -271,7 +273,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Print Zone on DS
             telemetry.addData(">", "Zone B");
             telemetry.update();
-            sleep(1000);
+            sleep(pauseTimer);
             
             //Move to 1st line of target zone B
             SenseColor('B', 'F');
@@ -281,7 +283,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Pause for 1 second
             Stop();
-            sleep(1000);
+            sleep(pauseTimer);
             
             //Place WG 1
             PlaceWG1();
@@ -297,7 +299,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Print Zone on DS
             telemetry.addData(">", "Zone C");
             telemetry.update();
-            sleep(1000);
+            sleep(pauseTimer);
             
             //Skip 2 blue lines of Target Zone B
             for(int i = 0; i <= 2; i++){
@@ -318,7 +320,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
             //Pause for 1 sec
             Stop();
-            sleep(1000);
+            sleep(pauseTimer);
 
             //Place Wobble Goal
             PlaceWG1();
