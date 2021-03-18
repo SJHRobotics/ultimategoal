@@ -68,7 +68,6 @@ public class PowerShotShooting extends LinearOpMode{
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
-    WebcamName webcamName = null;
 
     private boolean targetVisible = false;
     private float phoneXRotate    = 0;
@@ -351,7 +350,7 @@ public class PowerShotShooting extends LinearOpMode{
         telemetry.update();
 
 
-        telemetry.addData(">", "Ready to Start!");
+        telemetry.addData(">", "OpMode Ready to Start!");
         telemetry.update();
 
         waitForStart();
