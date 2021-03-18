@@ -24,8 +24,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * right trigger (It brings the conveyor down)
  * left trigger (It brings the conyeor up)
  */
-@TeleOp(name ="Robot Tele-Op", group = "Tele-Op")
-public class  RobotTellyOp extends LinearOpMode {
+@TeleOp(name ="Tele-Op", group = "Tele-Op")
+public class  FinalTeleOp extends LinearOpMode {
     // Defines all the hardware.
     //Defines drivetrain motors
     private DcMotor frontLeftMotor;
@@ -55,14 +55,20 @@ public class  RobotTellyOp extends LinearOpMode {
     private double IntakeClaw_POSITION = null;
     //Claw Servo position variables
     private double HookOpen_HOME_POSITION = 0.0;
+    private double HookOpen_MIN_RANGE = 0.0;
+    private double HookOpen_MAX_RANGE = 0.11;
     private double HookOpen_SPEED = 0.1;
     private double HookOpen_POSITION = null;
     //Arm Servo position variables
     private double HookTurn_HOME_POSITION = 0.0;
+    private double HookTurn_MIN_RANGE = 0.0;
+    private double HookTurn_MAX_RANGE = 0.5;
     private double HookTurn_SPEED = 0.1;
     private double HookTurn_POSITION = null;
     //Conveyor Servo position variables
     private double Conveyor_HOME_POSITION = 180;
+    private double Conveyor_MIN_RANGE = 0.25;
+    private double Conveyor_MAX_RANGE = 0.1;
     private double Conveyor_SPEED = -0.1;
     private double Conveyor_POSITION = null;
 
@@ -194,7 +200,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 IntakeClaw_POSITION -= IntakeClaw_SPEED;
             }
             // Ensures that intake claw position stays within the range.
-            IntakeClaw_POSITION = scaleRange(0.0, 0.25);
+            IntakeClaw_POSITION = scaleRange(IntakeClaw_MIN_RANGE, IntakeClaw_MAX_RANGE);
             IntakeServo.setPosition(IntakeClaw_POSITION);
             telemetry.addData( "Intake claw position:", IntakeClaw_POSITION);
             telemetry.update();
@@ -206,7 +212,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 HookOpen_POSITION -= HookOpen_SPEED;
             }
             //Ensures that hook claw position stays within the range.
-            HookOpen_POSITION = scaleRange(0.0, 0.111);
+            HookOpen_POSITION = scaleRange(HookOpen_MIN_RANGE, HookOpen_MAX_RANGE);
             HookOpen.setPosition(HookOpen_POSITION);
             telemetry.addData( "Hook claw position:", HookOpen_POSITION);
             telemetry.update();
@@ -220,7 +226,7 @@ public class  RobotTellyOp extends LinearOpMode {
                 HookTurn_POSITION -= HookTurn_SPEED;
             }
             //Ensures that hook arm position stays within the range.
-            HookTurn_POSITION = scaleRange(0.0, 0.5);
+            HookTurn_POSITION = scaleRange(HookTurn_MIN_RANGE, HookTurn_MAX_RANGE);
             HookTurn.setPosition(HookTurn_POSITION);
             telemetry.addData( "Arm position:", HookTurn_POSITION);
             telemetry.update();
@@ -233,7 +239,7 @@ public class  RobotTellyOp extends LinearOpMode {
                Conveyor_POSITION -= Conveyor_SPEED;
             }
             //Ensures that conveyor position stays within the range.
-            Conveyor_POSITION = scaleRange(0.25, 1);
+            Conveyor_POSITION = scaleRange(Conveyor_MIN_RANGE, Conveyor_MAX_RANGE);
             Conveyor.setPosition(Conveyor_POSITION);
             telemetry.addData( "Conveyor position:", Conveyor_POSITION);
             telemetry.update();
