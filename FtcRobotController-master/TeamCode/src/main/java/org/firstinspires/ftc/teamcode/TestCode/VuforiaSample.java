@@ -202,8 +202,11 @@ public class VuforiaSample extends LinearOpMode {
             if (targetVisible) {
                 // express position (translation) of robot in inches.
                 VectorF translation = lastLocation.getTranslation();
+                xInchPos = translation.get(0) / mmPerInch;
+                yInchPos = translation.get(1) / mmPerInch;
+                zInchPos = translation.get(2) / mmPerInch;
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        xInchPos, yInchPos, zInchPos);
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
@@ -218,10 +221,28 @@ public class VuforiaSample extends LinearOpMode {
             if (targetVisible == false){
                 Stop();
                 break;
+                telemetry.addData(">", "Target Not Visible anymore :(");
+                telemetry.addData("Current Y Position: ", yInchPos);
+                telemetry.update();
             }
             else{
                 continue;
             }
+            
+            /*
+            This code will be tested later once the above code is proven to work
+            MoveBackward();
+            if (yInchPos <= 50){
+                Stop();
+                break;
+                telemetry.addData(">", "Stopped!");
+                telemetry.addData("Current Y Position:", yInchPos);
+            }
+            else{
+                continue;
+            }
+            
+            */
                 
             
             
