@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
-import java.util.Set;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -52,46 +51,28 @@ public class  FinalTeleOp extends LinearOpMode {
     private double IntakeClaw_MIN_RANGE = 0.0;
     private double IntakeClaw_MAX_RANGE = 0.25;
     private double IntakeClaw_SPEED = 0.05;
-    private double IntakeClaw_POSITION = null;
+    private double IntakeClaw_POSITION = 0.0;
     //Claw Servo position variables
     private double HookOpen_HOME_POSITION = 0.0;
     private double HookOpen_MIN_RANGE = 0.0;
     private double HookOpen_MAX_RANGE = 0.11;
     private double HookOpen_SPEED = 0.1;
-    private double HookOpen_POSITION = null;
+    private double HookOpen_POSITION = 0.0;
     //Arm Servo position variables
     private double HookTurn_HOME_POSITION = 0.0;
     private double HookTurn_MIN_RANGE = 0.0;
     private double HookTurn_MAX_RANGE = 0.5;
     private double HookTurn_SPEED = 0.1;
-    private double HookTurn_POSITION = null;
+    private double HookTurn_POSITION = 0.0;
     //Conveyor Servo position variables
-    private double Conveyor_HOME_POSITION = 180;
+    private double Conveyor_HOME_POSITION = 0.25;
     private double Conveyor_MIN_RANGE = 0.25;
-    private double Conveyor_MAX_RANGE = 0.1;
+    private double Conveyor_MAX_RANGE = 1.0;
     private double Conveyor_SPEED = -0.1;
-    private double Conveyor_POSITION = null;
+    private double Conveyor_POSITION = 0.0;
 
-    public void startIntakeProcess(){
-        Conveyor.setPosition(250);
-        sleep(500);
-        Intake.setPower(-0.5);
-        sleep(500);
-        IntakeServo.setPosition(215);
-        sleep(1000);
-        IntakeServo.setPosition(0);
-        sleep(500);
-        Intake.setPower(0.3);
-        sleep(1000);
-        IntakeServo.setPosition(215);
-        sleep(500);
-        IntakeServo.setPosition(0);
-        sleep(500);
-        Conveyor.setPosition(50);
-    }
-    public void empty(){
-        Intake.setPower(0);
-    }
+    //Sleep Interval
+    private int pauseTime = 500;
     @Override
     public void runOpMode() {
 
@@ -161,6 +142,10 @@ public class  FinalTeleOp extends LinearOpMode {
             telemetry.addData("frontLeftMotor_speed:", "%5.2f", p2);
             telemetry.addData("frontRightMotor_speed:", "%5.2f", p3);
             telemetry.addData("backRightMotor_speed:", "%5.2f", p4);
+            telemetry.addData( "Intake claw position:", IntakeClaw_POSITION);
+            telemetry.addData( "Hook claw position:", HookOpen_POSITION);
+            telemetry.addData( "Arm position:", HookTurn_POSITION);
+            telemetry.addData( "Conveyor position:", Conveyor_POSITION);
             telemetry.update();
 
             //shooting program starts
@@ -178,12 +163,7 @@ public class  FinalTeleOp extends LinearOpMode {
                 sleep(500);
                 Flicker.setPosition(0);
             }
-            if(gamepad1.x) {
-                startIntakeProcess();
-            }
-            else{
-                empty();
-            }
+
 
             if (gamepad1.dpad_up) {
                 Intake.setPower(-0.5);
@@ -200,10 +180,10 @@ public class  FinalTeleOp extends LinearOpMode {
                 IntakeClaw_POSITION -= IntakeClaw_SPEED;
             }
             // Ensures that intake claw position stays within the range.
-            IntakeClaw_POSITION = scaleRange(IntakeClaw_MIN_RANGE, IntakeClaw_MAX_RANGE);
+            IntakeClaw_POSITION = Range.clip(IntakeClaw_POSITION, IntakeClaw_MIN_RANGE, IntakeClaw_MAX_RANGE);
             IntakeServo.setPosition(IntakeClaw_POSITION);
-            telemetry.addData( "Intake claw position:", IntakeClaw_POSITION);
-            telemetry.update();
+
+
 
 
             if(gamepad1.y) {// Holding 'Y' button will open the hook claw
@@ -212,10 +192,9 @@ public class  FinalTeleOp extends LinearOpMode {
                 HookOpen_POSITION -= HookOpen_SPEED;
             }
             //Ensures that hook claw position stays within the range.
-            HookOpen_POSITION = scaleRange(HookOpen_MIN_RANGE, HookOpen_MAX_RANGE);
+            HookOpen_POSITION = Range.clip(HookOpen_POSITION, HookOpen_MIN_RANGE, HookOpen_MAX_RANGE);
             HookOpen.setPosition(HookOpen_POSITION);
-            telemetry.addData( "Hook claw position:", HookOpen_POSITION);
-            telemetry.update();
+
             //Closes the hook
 
 
@@ -226,23 +205,22 @@ public class  FinalTeleOp extends LinearOpMode {
                 HookTurn_POSITION -= HookTurn_SPEED;
             }
             //Ensures that hook arm position stays within the range.
-            HookTurn_POSITION = scaleRange(HookTurn_MIN_RANGE, HookTurn_MAX_RANGE);
+            HookTurn_POSITION = Range.clip(HookTurn_POSITION, HookTurn_MIN_RANGE, HookTurn_MAX_RANGE);
             HookTurn.setPosition(HookTurn_POSITION);
-            telemetry.addData( "Arm position:", HookTurn_POSITION);
-            telemetry.update();
+
 
             //Hook code stops
             if(gamepad1.right_trigger > .01) {// Holding 'right_trigger' button will put the conveyor up
                 Conveyor_POSITION += Conveyor_SPEED;
             }
             else if(gamepad1.left_trigger > .01){//Holding 'left_trigger' button will put the conveyor down
-               Conveyor_POSITION -= Conveyor_SPEED;
+                Conveyor_POSITION -= Conveyor_SPEED;
             }
             //Ensures that conveyor position stays within the range.
-            Conveyor_POSITION = scaleRange(Conveyor_MIN_RANGE, Conveyor_MAX_RANGE);
+            Conveyor_POSITION = Range.clip(Conveyor_POSITION, Conveyor_MIN_RANGE, Conveyor_MAX_RANGE);
             Conveyor.setPosition(Conveyor_POSITION);
-            telemetry.addData( "Conveyor position:", Conveyor_POSITION);
-            telemetry.update();
+
+
 
         }
 

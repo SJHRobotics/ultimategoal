@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -12,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.navigation.Position
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +67,7 @@ public class PowerShotShooting extends LinearOpMode{
 
     // Class Members
     private OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia = null;
+
 
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
@@ -120,7 +125,7 @@ public class PowerShotShooting extends LinearOpMode{
         backRightMotor.setPower(0.5);
         sleep(time);
     }
-    public void STrafeRight() {
+    public void StrafeRightUntimed() {
         frontLeftMotor.setPower(0.5);
         frontRightMotor.setPower(-0.5);
         backLeftMotor.setPower(-0.5);
@@ -136,9 +141,7 @@ public class PowerShotShooting extends LinearOpMode{
         Flicker.setPosition(0);
     }
     public void ShootAndMove() {
-        if(blueAllianceTarget.get(1) < 1785){
-            STrafeRight();
-        }
+
         MoveBackward(0.6);
         sleep(50);
         Shoot();
@@ -163,7 +166,6 @@ public class PowerShotShooting extends LinearOpMode{
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
-        parameters.cameraName = webcamName;
 
         // Make sure extended tracking is disabled for this example.
         parameters.useExtendedTracking = false;
@@ -260,14 +262,15 @@ public class PowerShotShooting extends LinearOpMode{
 
         // Load the data sets for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-            VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
+        VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
         VuforiaTrackable blueTowerGoalTarget = targetsUltimateGoal.get(0);
         blueTowerGoalTarget.setName("Blue Tower Goal Target");
         VuforiaTrackable blueAllianceTarget = targetsUltimateGoal.get(3);
         blueAllianceTarget.setName("Blue Alliance Target");
         VuforiaTrackable frontWallTarget = targetsUltimateGoal.get(4);
         frontWallTarget.setName("Front Wall Target");
-
+        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+        allTrackables.addAll(targetsUltimateGoal);
 
         blueAllianceTarget.setLocation(OpenGLMatrix
                 .translation(0, halfField, mmTargetHeight)
@@ -308,9 +311,6 @@ public class PowerShotShooting extends LinearOpMode{
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
-        }
 
 
 
@@ -410,7 +410,9 @@ public class PowerShotShooting extends LinearOpMode{
             sleep(750);
             Arm.setPower(0.5);
             TurnLeft(2500);
-
+            if(targetsUltimateGoal.get(3).get(1) < 1785){
+                StrafeRightUntimed();
+            }
             ShootAndMove();
         }
 
@@ -497,9 +499,9 @@ public class PowerShotShooting extends LinearOpMode{
             sleep(200);
             ShootAndMove();
         }
-
+        targetsUltimateGoal.deactivate();
     } // end runOpMode()
 
 // Disable Tracking when we are done;
-        targetsUltimateGoal.deactivate();
+
 } //end class
