@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -64,7 +65,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  *
  * From the Audience perspective, the Red Alliance station is on the right and the
  * Blue Alliance Station is on the left.
-
  * There are a total of five image targets for the ULTIMATE GOAL game.
  * Three of the targets are placed in the center of the Red Alliance, Audience (Front),
  * and Blue Alliance perimeter walls.
@@ -109,6 +109,15 @@ public class VuforiaSample extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
     
+    private DcMotor frontLeftMotor;
+    private DcMotor frontRightMotor;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
+    
+    //X, Y, Z Coordinates
+    private float xInchPos;
+    private float yInchPos;
+    private float zInchPos;
     public void MoveBackward(){
         frontLeftMotor.setPower(-0.33);
         frontRightMotor.setPower(-0.3);
@@ -123,6 +132,18 @@ public class VuforiaSample extends LinearOpMode {
     }
 
     @Override public void runOpMode() {
+        //Initalize Motors
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        
+        //Reverse direction of all motors
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        
         webcamName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -220,10 +241,10 @@ public class VuforiaSample extends LinearOpMode {
             MoveBackward();
             if (targetVisible == false){
                 Stop();
-                break;
                 telemetry.addData(">", "Target Not Visible anymore :(");
                 telemetry.addData("Current Y Position: ", yInchPos);
                 telemetry.update();
+                break;
             }
             else{
                 continue;
