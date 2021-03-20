@@ -239,22 +239,7 @@ public class VuforiaSample extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-            /*
-            MoveBackward();
-            if (targetVisible == false){
-                Stop();
-                telemetry.addData(">", "Target Not Visible anymore :(");
-                telemetry.addData("Current Y Position: ", yInchPos);
-                telemetry.update();
-                break;
-            }
-            else{
-                continue;
-            }
-            */
-            
-            
-            //This code will be tested later once the above code is proven to work
+
             MoveBackward();
             if (yInchPos <= 10){
                 Stop();

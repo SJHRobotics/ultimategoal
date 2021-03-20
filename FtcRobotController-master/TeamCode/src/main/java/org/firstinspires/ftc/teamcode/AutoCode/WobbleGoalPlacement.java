@@ -43,6 +43,29 @@ public class WobbleGoalPlacement extends LinearOpMode{
     private static final String VUFORIA_KEY =
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
 
+    //Vuforia Navigation Variables
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final boolean PHONE_IS_PORTRAIT = false  ;
+
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmTargetHeight   = (6) * mmPerInch; // the height of the center of the target image above the floor
+
+    private static final float halfField = 72 * mmPerInch;
+    private static final float quadField  = 36 * mmPerInch;
+
+    private OpenGLMatrix lastLocation = null;
+    private VuforiaLocalizer vuforia = null;
+    WebcamName webcamName = null;
+
+    private boolean targetVisible = false;
+    private float phoneXRotate    = 0;
+    private float phoneYRotate    = 0;
+    private float phoneZRotate    = 0;
+
+    private float xInchPos;
+    private float yInchPos;
+    private float zInchPos;
+
     //Motor Speed Variables
     private static final double slowSpeed = 0.3;
     private static final double regularSpeed = 0.5;
@@ -88,16 +111,15 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     //For initializing Vuforia
     private void initVuforia() {
-
+        webcamName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
+        parameters.cameraName = webcamName;
+        parameters.useExtendedTracking = false;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
     //For initalizing TFOD
@@ -162,6 +184,7 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
     }
 
+    //Method for placing WG 1
     public void PlaceWG1(){
         Arm.setPower(0.5);
         sleep(pauseTimer);
@@ -169,11 +192,90 @@ public class WobbleGoalPlacement extends LinearOpMode{
         Arm.setPower(-0.5);
         sleep(pauseTimer);
     }
+    //This method will use Vuforia to program the robot to navigate through the field
+    //One Parameter: navImage
+    // F = Front Wall Target, B = Blue Alliance Target
+    public void VuforiaNavigate(char navImage){
+        while (true) {
+            // check all the trackable targets to see which one (if any) is visible.
+            targetVisible = false;
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                    //telemetry.addData("Visible Target", trackable.getName());
+                    targetVisible = true;
 
-    @TODO
-    public void PlaceWG2(){
+                    // getUpdatedRobotLocation() will return null if no new information is available since
+                    // the last time that call was made, or if the trackable is not currently visible.
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
+                    }
+                    break;
+                }
+            }
 
+            // Provide feedback as to where the robot is located (if we know).
+            if (targetVisible) {
+                // express position (translation) of robot in inches.
+                VectorF translation = lastLocation.getTranslation();
+                xInchPos = translation.get(0) / mmPerInch;
+                yInchPos = translation.get(1) / mmPerInch;
+                zInchPos = translation.get(2) / mmPerInch;
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        xInchPos, yInchPos, zInchPos);
+
+                /*
+                // express the rotation of the robot in degrees.
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+
+                //telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+            */
+            }
+
+            else {
+                //telemetry.addData("Visible Target", "none");
+                break;
+            }
+            //telemetry.update();
+
+            //Front Wall Target
+            if(navImage == 'F'){
+                MoveForward();
+                if (xInchPos <= -30){
+                    Stop();
+                    break;
+                }
+                else{
+                    continue;
+                }
+            }
+            //Blue Alliance Target
+            else if(navImage == 'B'){
+                MoveBackward();
+                if (yInchPos <= 10){
+                    Stop();
+                    break;
+                }
+                else{
+                    continue;
+                }
+            }
+            //Invalid Parameter Input
+            else{
+                telemetry.addData(">", "ERROR: Invalid Parameter Input for VuforiaNavigate()");
+                telemetry.update();
+                sleep(6000);
+                break;
+            }
+
+
+
+
+
+
+        } // end tracking loop
     }
+
 
     @Override
     public void runOpMode(){
@@ -204,6 +306,56 @@ public class WobbleGoalPlacement extends LinearOpMode{
             tfod.activate();
             tfod.setZoom(2.5, 16.0/9.0);
         }
+
+        //Load trackables for Vuforia Navigation
+        VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
+        VuforiaTrackable blueTowerGoalTarget = targetsUltimateGoal.get(0);
+        blueTowerGoalTarget.setName("Blue Tower Goal Target");
+        VuforiaTrackable blueAllianceTarget = targetsUltimateGoal.get(3);
+        blueAllianceTarget.setName("Blue Alliance Target");
+        VuforiaTrackable frontWallTarget = targetsUltimateGoal.get(4);
+        frontWallTarget.setName("Front Wall Target");
+
+        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+        allTrackables.addAll(targetsUltimateGoal);
+
+        //Set location of trackables
+        blueAllianceTarget.setLocation(OpenGLMatrix
+                .translation(0, halfField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
+        frontWallTarget.setLocation(OpenGLMatrix
+                .translation(-halfField, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+
+        // The tower goal targets are located a quarter field length from the ends of the back perimeter wall.
+        blueTowerGoalTarget.setLocation(OpenGLMatrix
+                .translation(halfField, quadField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+
+        if (CAMERA_CHOICE == BACK) {
+            phoneYRotate = -90;
+        } else {
+            phoneYRotate = 90;
+        }
+
+        if (PHONE_IS_PORTRAIT) {
+            phoneXRotate = 90 ;
+        }
+
+
+        final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+        }
+
+        targetsUltimateGoal.activate();
 
         //Print Start Message on DS
         telemetry.addData(">", "Ready to Start!");
@@ -264,7 +416,51 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Place WG 1
             PlaceWG1();
 
-            //Prepare robot for WG 2 Placement
+            //Turn Right about 180 degrees
+            TurnRight(2500);
+
+            //Using Blue Alliance Target, align with Front Wall Target
+            VuforiaNavigate('B');
+
+            //Turn Left about 90 degrees to see Front Wall Target
+            TurnLeft(pauseTimer);
+
+            //Using Front Wall Target, align with WG 2
+            VuforiaNavigate('F');
+
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Move Backward to align Arm with WG 2
+            SenseColor('B', 'B');
+            MoveBackward();
+            sleep(350);
+
+            //Pick up WG 2 (TODO)
+
+            //Drive to Start Line
+            SenseColor('B', 'B');
+
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Drive to Launch Line
+            SenseColor('W', 'F');
+            
+            //Print Zone on DS
+            telemetry.addData(">", "Zone A");
+            telemetry.update();
+            sleep(pauseTimer);
+
+            //Turn Right about 90 degrees
+            TurnRight(pauseTimer);
+
+            //Pause for 1 sec
+            Stop();
+            sleep(pauseTimer);
+
+            //Place WG 1
+            PlaceWG1();
 
         }
 
