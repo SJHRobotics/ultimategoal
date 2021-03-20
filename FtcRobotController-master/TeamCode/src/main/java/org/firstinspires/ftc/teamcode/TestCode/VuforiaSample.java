@@ -95,7 +95,7 @@ public class VuforiaSample extends LinearOpMode {
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
 
     private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmTargetHeight   = (6) * mmPerInch; // the height of the center of the target image above the floor
 
     private static final float halfField = 72 * mmPerInch;
     private static final float quadField  = 36 * mmPerInch;
@@ -200,6 +200,8 @@ public class VuforiaSample extends LinearOpMode {
         }
 
         targetsUltimateGoal.activate();
+        
+        waitForStart();
         while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -237,7 +239,7 @@ public class VuforiaSample extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-            
+            /*
             MoveBackward();
             if (targetVisible == false){
                 Stop();
@@ -249,27 +251,30 @@ public class VuforiaSample extends LinearOpMode {
             else{
                 continue;
             }
+            */
             
-            /*
-            This code will be tested later once the above code is proven to work
+            
+            //This code will be tested later once the above code is proven to work
             MoveBackward();
-            if (yInchPos <= 50){
+            if (yInchPos <= 10){
                 Stop();
                 break;
-                telemetry.addData(">", "Stopped!");
-                telemetry.addData("Current Y Position:", yInchPos);
             }
             else{
                 continue;
             }
             
-            */
+            
                 
             
             
         } // end tracking loop
-
+        
+        telemetry.addData(">", "Stopped!");
+        telemetry.addData("Current Y Position:", yInchPos);
+        telemetry.update();
+        sleep(5000);
+        
         // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
     }
-}
