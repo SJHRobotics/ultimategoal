@@ -487,7 +487,56 @@ public class WobbleGoalPlacement extends LinearOpMode{
             // Move to Launch line
             SenseColor('W', 'F');
 
-            //Prepare robot for WG 2 Placement
+            //Turn right about 90 degrees to align with Blue Alliance Target
+            TurnRight(pauseTimer);
+
+            //Using Blue Alliance Target, align with Front Wall Target
+            VuforiaNavigate('B');
+
+            //Turn left about 90 degrees to align with Front Wall Target
+            TurnLeft(pauseTimer);
+
+            //Using Front Wall Target, align with WG 2
+            VuforiaNavigate('F');
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Align Arm with WG 2
+            SenseColor('B', 'B');
+            MoveBackward();
+            sleep(350);
+
+            //Pick up WG 2 (TODO)
+
+            //Drive to Start Line
+            SenseColor('B', 'B');
+
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Drive to Launch Line
+            SenseColor('W', 'F');
+
+            //Print Zone on DS
+            telemetry.addData(">", "Zone B");
+            telemetry.update();
+            sleep(pauseTimer);
+
+            //Move to 1st line of target zone B
+            SenseColor('B', 'F');
+
+            //Turn Right about 180 degrees
+            TurnRight(2500);
+
+            //Pause for 1 second
+            Stop();
+            sleep(pauseTimer);
+
+            //Place WG 1
+            PlaceWG1();
+
+            // Move to Launch line
+            SenseColor('W', 'F');
         }
 
         //Target Zone C
