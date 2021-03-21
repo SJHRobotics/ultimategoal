@@ -183,6 +183,65 @@ public class WobbleGoalPlacement extends LinearOpMode{
         }
 
     }
+    //Methods for moving to Zones A, B, C
+    public void MoveToZoneA(){
+        //Print Zone on DS
+        telemetry.addData(">", "Zone A");
+        telemetry.update();
+        sleep(pauseTimer);
+
+        //Turn Right about 90 degrees
+        TurnRight(pauseTimer);
+
+        //Pause for 1 sec
+        Stop();
+        sleep(pauseTimer);
+    }
+
+    public void MoveToZoneB(){
+        //Print Zone on DS
+        telemetry.addData(">", "Zone B");
+        telemetry.update();
+        sleep(pauseTimer);
+
+        //Move to 1st line of target zone B
+        SenseColor('B', 'F');
+
+        //Turn Right about 180 degrees
+        TurnRight(2500);
+
+        //Pause for 1 second
+        Stop();
+        sleep(pauseTimer);
+    }
+
+    public void MoveToZoneC(){
+        //Print Zone on DS
+        telemetry.addData(">", "Zone C");
+        telemetry.update();
+        sleep(pauseTimer);
+
+        //Skip 2 blue lines of Target Zone B
+        for(int i = 0; i <= 2; i++){
+            SenseColor('B', 'F');
+            MoveForward();
+            sleep(150);
+        }
+
+        //Move forward a bit more
+        MoveForward();
+        sleep(300);
+
+        //Turn Right about 90 degrees
+        TurnRight(1250);
+
+        // Move Backward to Target Zone C
+        SenseColor('B', 'B');
+
+        //Pause for 1 sec
+        Stop();
+        sleep(pauseTimer);
+    }
 
     //Method for placing WG 1
     public void PlaceWG1(){
@@ -401,17 +460,8 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         //Target Zone A
         if(targetZone == 'A') {
-            //Print Zone on DS
-            telemetry.addData(">", "Zone A");
-            telemetry.update();
-            sleep(pauseTimer);
-
-            //Turn Right about 90 degrees
-            TurnRight(pauseTimer);
-
-            //Pause for 1 sec
-            Stop();
-            sleep(pauseTimer);
+            //Move to Zone A
+            MoveToZoneA();
 
             //Place WG 1
             PlaceWG1();
@@ -447,39 +497,17 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Drive to Launch Line
             SenseColor('W', 'F');
             
-            //Print Zone on DS
-            telemetry.addData(">", "Zone A");
-            telemetry.update();
-            sleep(pauseTimer);
+            //Move back to Zone A
+            MoveToZoneA();
 
-            //Turn Right about 90 degrees
-            TurnRight(pauseTimer);
-
-            //Pause for 1 sec
-            Stop();
-            sleep(pauseTimer);
-
-            //Place WG 1
-            PlaceWG1();
+            //Place WG 2 (TODO)
 
         }
 
         //Target Zone B
         if(targetZone == 'B'){
-            //Print Zone on DS
-            telemetry.addData(">", "Zone B");
-            telemetry.update();
-            sleep(pauseTimer);
-            
-            //Move to 1st line of target zone B
-            SenseColor('B', 'F');
-
-            //Turn Right about 180 degrees
-            TurnRight(2500);
-
-            //Pause for 1 second
-            Stop();
-            sleep(pauseTimer);
+            //Move to Zone B
+            MoveToZoneB();
             
             //Place WG 1
             PlaceWG1();
@@ -517,23 +545,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Drive to Launch Line
             SenseColor('W', 'F');
 
-            //Print Zone on DS
-            telemetry.addData(">", "Zone B");
-            telemetry.update();
-            sleep(pauseTimer);
+            //Move back to Zone B
+            MoveToZoneB();
 
-            //Move to 1st line of target zone B
-            SenseColor('B', 'F');
-
-            //Turn Right about 180 degrees
-            TurnRight(2500);
-
-            //Pause for 1 second
-            Stop();
-            sleep(pauseTimer);
-
-            //Place WG 1
-            PlaceWG1();
+            //Place WG 2 (TODO)
 
             // Move to Launch line
             SenseColor('W', 'F');
@@ -541,33 +556,10 @@ public class WobbleGoalPlacement extends LinearOpMode{
 
         //Target Zone C
         if(targetZone == 'C'){
-            //Print Zone on DS
-            telemetry.addData(">", "Zone C");
-            telemetry.update();
-            sleep(pauseTimer);
-            
-            //Skip 2 blue lines of Target Zone B
-            for(int i = 0; i <= 2; i++){
-                SenseColor('B', 'F');
-                MoveForward();
-                sleep(150);
-            }
+            //Move to Zone C
+            MoveToZoneC();
 
-            //Move forward a bit more
-            MoveForward();
-            sleep(300);
-
-            //Turn Right about 90 degrees
-            TurnRight(1250);
-
-            // Move Backward to Target Zone C
-            SenseColor('B', 'B');
-
-            //Pause for 1 sec
-            Stop();
-            sleep(pauseTimer);
-
-            //Place Wobble Goal
+            //Place WG 1
             PlaceWG1();
 
             //Turn right to Launch Line
@@ -576,7 +568,49 @@ public class WobbleGoalPlacement extends LinearOpMode{
             //Move to Launch line
             SenseColor('W', 'F');
 
-            //Prepare robot for WG 2 Placement
+            //Turn right about 90 degrees to align with Blue Alliance Target
+            TurnRight(pauseTimer);
+
+            //Using Blue Alliance Target, align with Front Wall Target
+            VuforiaNavigate('B');
+
+            //Turn Left about 90 degrees to align with Front Wall Target
+            TurnLeft(pauseTimer);
+
+            //Using Front Wall Target, align with WG 2
+            VuforiaNavigate('F');
+
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Align Arm with WG 2
+            SenseColor('B', 'B');
+            MoveBackward();
+            sleep(350);
+
+            //Pick up WG 2 (TODO)
+
+            //Drive to Start Line
+            SenseColor('B', 'B');
+
+            //Turn Left about 90 degrees
+            TurnLeft(pauseTimer);
+
+            //Drive to Launch Line
+            SenseColor('W', 'F');
+
+            //Move to Zone C
+            MoveToZoneC();
+
+            //Place WG 2 (TODO)
+
+            //Turn Right to Launch line
+            TurnRight(1250);
+
+            //Drive to Launch Line
+            SenseColor('W', 'F');
+
+
 
         }
 
