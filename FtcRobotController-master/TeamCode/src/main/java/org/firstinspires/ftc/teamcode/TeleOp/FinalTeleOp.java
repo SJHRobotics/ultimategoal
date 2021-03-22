@@ -50,26 +50,27 @@ public class  FinalTeleOp extends LinearOpMode {
     private double IntakeClaw_HOME_POSITION = 0.0;
     private double IntakeClaw_MIN_RANGE = 0.0;
     private double IntakeClaw_MAX_RANGE = 0.25;
-    private double IntakeClaw_SPEED = 0.05;
+    private double IntakeClaw_SPEED = 0.1;
     private double IntakeClaw_POSITION = 0.0;
     //Claw Servo position variables
-    private double HookOpen_HOME_POSITION = 0.0;
-    private double HookOpen_MIN_RANGE = 0.0;
-    private double HookOpen_MAX_RANGE = 0.11;
+    private double HookOpen_HOME_POSITION = 0.2;
+    private double HookOpen_MIN_RANGE = 0.2;
+    private double HookOpen_MAX_RANGE = 0.5;
     private double HookOpen_SPEED = 0.1;
-    private double HookOpen_POSITION = 0.0;
+    private double HookOpen_POSITION = 0.2;
     //Arm Servo position variables
     private double HookTurn_HOME_POSITION = 0.0;
     private double HookTurn_MIN_RANGE = 0.0;
-    private double HookTurn_MAX_RANGE = 0.5;
+    private double HookTurn_MAX_RANGE = 0.33;
     private double HookTurn_SPEED = 0.1;
     private double HookTurn_POSITION = 0.0;
     //Conveyor Servo position variables
-    private double Conveyor_HOME_POSITION = 0.25;
-    private double Conveyor_MIN_RANGE = 0.25;
-    private double Conveyor_MAX_RANGE = 1.0;
-    private double Conveyor_SPEED = -0.1;
-    private double Conveyor_POSITION = 0.0;
+    private double Conveyor_HOME_POSITION = 0.3;
+    private double Conveyor_MIN_RANGE = 0.3;
+    private double Conveyor_MAX_RANGE = 0.8;
+    private double Conveyor_SPEED = 0.1;
+    private double Conveyor_POSITION = 0.3;
+
 
     //Sleep Interval
     private int pauseTime = 500;
@@ -99,6 +100,7 @@ public class  FinalTeleOp extends LinearOpMode {
         backRightMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+
         // Reset Servo Position
         IntakeServo.setPosition(IntakeClaw_HOME_POSITION);
         HookOpen.setPosition(HookOpen_HOME_POSITION);
@@ -176,6 +178,8 @@ public class  FinalTeleOp extends LinearOpMode {
 
             if(gamepad1.b){ // Holding 'B' button will open the intake claw
                 IntakeClaw_POSITION += IntakeClaw_SPEED;
+                sleep(100);
+
             }else if(gamepad1.x){// Holding 'X' button will close the intake claw
                 IntakeClaw_POSITION -= IntakeClaw_SPEED;
             }
@@ -211,10 +215,10 @@ public class  FinalTeleOp extends LinearOpMode {
 
             //Hook code stops
             if(gamepad1.right_trigger > .01) {// Holding 'right_trigger' button will put the conveyor up
-                Conveyor_POSITION += Conveyor_SPEED;
+                Conveyor_POSITION -= Conveyor_SPEED;
             }
             else if(gamepad1.left_trigger > .01){//Holding 'left_trigger' button will put the conveyor down
-                Conveyor_POSITION -= Conveyor_SPEED;
+                Conveyor_POSITION += Conveyor_SPEED;
             }
             //Ensures that conveyor position stays within the range.
             Conveyor_POSITION = Range.clip(Conveyor_POSITION, Conveyor_MIN_RANGE, Conveyor_MAX_RANGE);
