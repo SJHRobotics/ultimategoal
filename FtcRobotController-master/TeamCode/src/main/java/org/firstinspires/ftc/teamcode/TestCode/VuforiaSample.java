@@ -241,7 +241,7 @@ public class VuforiaSample extends LinearOpMode {
             telemetry.update();
 
             MoveBackward();
-            if (yInchPos <= 10){
+            if (xInchPos <= -30){
                 Stop();
                 break;
             }
