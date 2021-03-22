@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -64,7 +65,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  *
  * From the Audience perspective, the Red Alliance station is on the right and the
  * Blue Alliance Station is on the left.
-
  * There are a total of five image targets for the ULTIMATE GOAL game.
  * Three of the targets are placed in the center of the Red Alliance, Audience (Front),
  * and Blue Alliance perimeter walls.
@@ -95,7 +95,7 @@ public class VuforiaSample extends LinearOpMode {
             "Ae/YeOf/////AAABmR8KMKVXi0gFg1/JtSBMj5WHZwOHCMtdvkRRmVdKQcjYBCk/JBHyLtxgccLh2ZJezNZ2W/ZU6mi38O6dsGABJtKELx/nxVc78up34+6k21SQSPKu8qgK9RuK5deUYb9K9gk8QG9xuGvGD5xQpH+nxeywwwQQXmExoEeLvlp6+H5Qa90lDZZPs2llKVqvdmuA8TSpGEktHgLcH0L4QtnF1JM1e7GY6woBW3aktTjXtqjK9mtvgbTRuBceBeLUuy7nhrT2+qt7aPzSAWsMgvrdduScWpYl14bQESUVEWX6Dz8xcNHOsDVnPB593nqj2KVVBbcHno8NATIGDvERkE2d4SUa5IRECzJ+nWbI9Fcx3zdZ";
 
     private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmTargetHeight   = (6) * mmPerInch; // the height of the center of the target image above the floor
 
     private static final float halfField = 72 * mmPerInch;
     private static final float quadField  = 36 * mmPerInch;
@@ -109,6 +109,15 @@ public class VuforiaSample extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
     
+    private DcMotor frontLeftMotor;
+    private DcMotor frontRightMotor;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
+    
+    //X, Y, Z Coordinates
+    private float xInchPos;
+    private float yInchPos;
+    private float zInchPos;
     public void MoveBackward(){
         frontLeftMotor.setPower(-0.33);
         frontRightMotor.setPower(-0.3);
@@ -123,6 +132,18 @@ public class VuforiaSample extends LinearOpMode {
     }
 
     @Override public void runOpMode() {
+        //Initalize Motors
+        backRightMotor = hardwareMap.get(DcMotor.class, "br");
+        backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
+        frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
+        frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
+        
+        //Reverse direction of all motors
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
+        
         webcamName = hardwareMap.get(WebcamName.class, "TensorflowWebcam");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -179,6 +200,8 @@ public class VuforiaSample extends LinearOpMode {
         }
 
         targetsUltimateGoal.activate();
+        
+        waitForStart();
         while (!isStopRequested()) {
 
             // check all the trackable targets to see which one (if any) is visible.
@@ -216,39 +239,27 @@ public class VuforiaSample extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-            
+
             MoveBackward();
-            if (targetVisible == false){
+            if (yInchPos <= 10){
                 Stop();
                 break;
-                telemetry.addData(">", "Target Not Visible anymore :(");
-                telemetry.addData("Current Y Position: ", yInchPos);
-                telemetry.update();
             }
             else{
                 continue;
             }
             
-            /*
-            This code will be tested later once the above code is proven to work
-            MoveBackward();
-            if (yInchPos <= 50){
-                Stop();
-                break;
-                telemetry.addData(">", "Stopped!");
-                telemetry.addData("Current Y Position:", yInchPos);
-            }
-            else{
-                continue;
-            }
             
-            */
                 
             
             
         } // end tracking loop
-
+        
+        telemetry.addData(">", "Stopped!");
+        telemetry.addData("Current Y Position:", yInchPos);
+        telemetry.update();
+        sleep(5000);
+        
         // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
     }
-}
