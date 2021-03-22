@@ -256,7 +256,7 @@ public class VuforiaSample extends LinearOpMode {
         } // end tracking loop
         
         telemetry.addData(">", "Stopped!");
-        telemetry.addData("Current Y Position:", yInchPos);
+        telemetry.addData("Current X Position:", xInchPos);
         telemetry.update();
         sleep(5000);
         
