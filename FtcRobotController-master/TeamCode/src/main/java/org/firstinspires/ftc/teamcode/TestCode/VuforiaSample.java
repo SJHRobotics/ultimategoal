@@ -263,3 +263,4 @@ public class VuforiaSample extends LinearOpMode {
         // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
     }
+}
