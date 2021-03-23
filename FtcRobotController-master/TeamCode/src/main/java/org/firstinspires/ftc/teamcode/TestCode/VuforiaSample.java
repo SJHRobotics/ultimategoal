@@ -241,7 +241,7 @@ public class VuforiaSample extends LinearOpMode {
             telemetry.update();
 
             MoveBackward();
-            if (yInchPos <= 10){
+            if (xInchPos <= -30){
                 Stop();
                 break;
             }
@@ -256,10 +256,11 @@ public class VuforiaSample extends LinearOpMode {
         } // end tracking loop
         
         telemetry.addData(">", "Stopped!");
-        telemetry.addData("Current Y Position:", yInchPos);
+        telemetry.addData("Current X Position:", xInchPos);
         telemetry.update();
         sleep(5000);
         
         // Disable Tracking when we are done;
         targetsUltimateGoal.deactivate();
     }
+}
