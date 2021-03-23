@@ -47,9 +47,9 @@ public class  FinalTeleOp extends LinearOpMode {
     private boolean CanOpenHook = true;
     private boolean CanIntakeOpen = true;
     // Intake Servo position variables
-    private double IntakeClaw_HOME_POSITION = 0.0;
+    private double IntakeClaw_HOME_POSITION = 0.1;
     private double IntakeClaw_MIN_RANGE = 0.0;
-    private double IntakeClaw_MAX_RANGE = 0.25;
+    private double IntakeClaw_MAX_RANGE = 0.35;
     private double IntakeClaw_SPEED = 0.1;
     private double IntakeClaw_POSITION = 0.0;
     //Claw Servo position variables
@@ -66,8 +66,8 @@ public class  FinalTeleOp extends LinearOpMode {
     private double HookTurn_POSITION = 0.0;
     //Conveyor Servo position variables
     private double Conveyor_HOME_POSITION = 0.3;
-    private double Conveyor_MIN_RANGE = 0.3;
-    private double Conveyor_MAX_RANGE = 0.8;
+    private double Conveyor_MIN_RANGE = 0.0;
+    private double Conveyor_MAX_RANGE = 0.3;
     private double Conveyor_SPEED = 0.1;
     private double Conveyor_POSITION = 0.3;
 
@@ -168,17 +168,16 @@ public class  FinalTeleOp extends LinearOpMode {
 
 
             if (gamepad1.dpad_up) {
-                Intake.setPower(-0.5);
-                sleep(2000);
+                Intake.setPower(-0.3);
+                sleep(1000);
             }
             else if(gamepad1.dpad_down) {
-                Intake.setPower(0.5);
-                sleep(2000);
+                Intake.setPower(0.6);
+                sleep(1000);
             }
 
             if(gamepad1.b){ // Holding 'B' button will open the intake claw
                 IntakeClaw_POSITION += IntakeClaw_SPEED;
-                sleep(100);
 
             }else if(gamepad1.x){// Holding 'X' button will close the intake claw
                 IntakeClaw_POSITION -= IntakeClaw_SPEED;
@@ -192,7 +191,7 @@ public class  FinalTeleOp extends LinearOpMode {
 
             if(gamepad1.y) {// Holding 'Y' button will open the hook claw
                 HookOpen_POSITION += HookOpen_SPEED;
-            }else{ // Relasing 'Y' button will close the hook claw
+            }else if(gamepad1.a){ // Pressing 'A' button will close the hook claw
                 HookOpen_POSITION -= HookOpen_SPEED;
             }
             //Ensures that hook claw position stays within the range.
