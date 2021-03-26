@@ -47,7 +47,7 @@ public class  FinalTeleOp extends LinearOpMode {
     private boolean CanOpenHook = true;
     private boolean CanIntakeOpen = true;
     // Intake Servo position variables
-    private double IntakeClaw_HOME_POSITION = 0.1;
+    private double IntakeClaw_HOME_POSITION = 0.0;//Finalized
     private double IntakeClaw_MIN_RANGE = 0.0;
     private double IntakeClaw_MAX_RANGE = 0.35;
     private double IntakeClaw_SPEED = 0.1;
