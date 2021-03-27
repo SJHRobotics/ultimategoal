@@ -46,12 +46,18 @@ public class  FinalTeleOp extends LinearOpMode {
     private boolean startIntakeProcess = false;
     private boolean CanOpenHook = true;
     private boolean CanIntakeOpen = true;
+    // Fliker position variables
+    private double Flicker_HOME_POSITION = 0.2;
+    private double Flicker_MIN_RANGE = 0.2;
+    private double Flicker_MAX_RANGE = 0.35;
+    private double Flicker_SPEED = 0.1;
+    private double Flicker_POSITION = 0.2;
     // Intake Servo position variables
-    private double IntakeClaw_HOME_POSITION = 0.0;//Finalized
-    private double IntakeClaw_MIN_RANGE = 0.0;
-    private double IntakeClaw_MAX_RANGE = 0.35;
+    private double IntakeClaw_HOME_POSITION = 0.2;
+    private double IntakeClaw_MIN_RANGE = 0.2;
+    private double IntakeClaw_MAX_RANGE = 0.38;
     private double IntakeClaw_SPEED = 0.1;
-    private double IntakeClaw_POSITION = 0.0;
+    private double IntakeClaw_POSITION = 0.18;
     //Claw Servo position variables
     private double HookOpen_HOME_POSITION = 0.2;
     private double HookOpen_MIN_RANGE = 0.2;
@@ -61,19 +67,17 @@ public class  FinalTeleOp extends LinearOpMode {
     //Arm Servo position variables
     private double HookTurn_HOME_POSITION = 0.0;
     private double HookTurn_MIN_RANGE = 0.0;
-    private double HookTurn_MAX_RANGE = 0.33;
+    private double HookTurn_MAX_RANGE = 0.6;
     private double HookTurn_SPEED = 0.1;
     private double HookTurn_POSITION = 0.0;
     //Conveyor Servo position variables
-    private double Conveyor_HOME_POSITION = 0.3;
+    private double Conveyor_HOME_POSITION = 0.0;
     private double Conveyor_MIN_RANGE = 0.0;
     private double Conveyor_MAX_RANGE = 0.3;
     private double Conveyor_SPEED = 0.1;
     private double Conveyor_POSITION = 0.3;
 
 
-    //Sleep Interval
-    private int pauseTime = 500;
     @Override
     public void runOpMode() {
 
@@ -102,6 +106,7 @@ public class  FinalTeleOp extends LinearOpMode {
         shooterLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Reset Servo Position
+        Flicker.setPosition(Flicker_HOME_POSITION);
         IntakeServo.setPosition(IntakeClaw_HOME_POSITION);
         HookOpen.setPosition(HookOpen_HOME_POSITION);
         HookTurn.setPosition(HookTurn_HOME_POSITION);
@@ -161,18 +166,18 @@ public class  FinalTeleOp extends LinearOpMode {
                 shooterLeftMotor.setPower(0.0);
             }
             if(gamepad1.left_bumper) {
-                Flicker.setPosition(170);
+                Flicker.setPosition(Flicker_MAX_RANGE);
                 sleep(500);
-                Flicker.setPosition(0);
+                Flicker.setPosition(Flicker_MIN_RANGE);
             }
 
 
             if (gamepad1.dpad_up) {
-                Intake.setPower(-0.3);
+                Intake.setPower(-0.5);
                 sleep(1000);
             }
             else if(gamepad1.dpad_down) {
-                Intake.setPower(0.6);
+                Intake.setPower(0.4);
                 sleep(1000);
             }
 
