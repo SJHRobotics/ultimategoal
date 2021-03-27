@@ -242,7 +242,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     //Method for placing WG 1
     public void PlaceWG1(){
         //WG Arm goes down to give way for Intake
-        Elbow.setPosition(0.33);
+        Elbow.setPosition(0.6);
         sleep(pauseTimer);
 
         //Intake places WG 1
@@ -280,7 +280,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         Elbow = hardwareMap.get(Servo.class, "HookTurn");
 
         // Set Servo
-        Elbow.setPosition(0.33);
+        Elbow.setPosition(0.0);
         IntakeServo.setPosition(0.18);
 
         //Initalize Drivetrain Motors
