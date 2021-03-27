@@ -42,7 +42,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
     private static final String LABEL_SECOND_ELEMENT = "Single";
     private char targetZone;
     private TFObjectDetector tfod;
-    
+
     VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
 
@@ -52,13 +52,13 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
     private WebcamName webcamName;
     private VuforiaLocalizer vuforia;
-    
+
 
     //Motor Speed Variables
     private static final double slowSpeed = 0.3;
     private static final double regularSpeed = 0.5;
     private static final double driftOffset = 0.03;
-    
+
     private static final int pauseTimer = 1000;
 
     //Movement methods
@@ -229,6 +229,14 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         //Pause for 1 sec
         Stop();
         sleep(pauseTimer);
+
+        //Move backward 350 millisec
+        MoveBackward();
+        sleep(350);
+
+        //Pause for 1 sec
+        Stop();
+        sleep(pauseTimer);
     }
 
     //Method for placing WG 1
@@ -236,22 +244,22 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         //WG Arm goes down to give way for Intake
         Elbow.setPosition(0.0);
         sleep(pauseTimer);
-        
+
         //Intake places WG 1
         Arm.setPower(0.5);
         sleep(pauseTimer);
-        
+
         //Clamps open
-        IntakeServo.setPosition(0.4);
+        IntakeServo.setPosition(0.3);
         sleep(pauseTimer);
 
         //Intake goes back up
         Arm.setPower(-0.5);
         sleep(pauseTimer);
-        
-        
+
+
     }
-    
+
     @Override
     public void runOpMode(){
         //Initalize common hardware
@@ -260,7 +268,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         backLeftMotor = hardwareMap.get(DcMotor.class, "bl");
         frontRightMotor = hardwareMap.get(DcMotor.class, "fr");
         frontLeftMotor = hardwareMap.get(DcMotor.class, "fl");
-        
+
 
 
         //Initalize WG 1 hardware
@@ -270,7 +278,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
         //Initalize WG 2 hardware
         Elbow = hardwareMap.get(Servo.class, "HookTurn");
-        
+
         // Set Servo
         Elbow.setPosition(0.33);
         IntakeServo.setPosition(0.18);
@@ -280,7 +288,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
         backRightMotor.setDirection(DcMotor.Direction.FORWARD);
         frontRightMotor.setDirection(DcMotor.Direction.FORWARD);
-        
+
         //Initialize Vuforia and TFOD
         initVuforia();
         initTfod();
@@ -345,12 +353,12 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
             //Place WG 1
             PlaceWG1();
-            
+
             //Move to Launch Line
             SenseColor('W', 'F');
-            
+
         }
-        
+
         //Target Zone C
         if(targetZone == 'C'){
             //Move to Zone C
@@ -361,7 +369,7 @@ public class WobbleGoalPlacement2 extends LinearOpMode{
 
             //Turn right to Launch Line
             TurnRight(1250);
-            
+
             //Move to Launch line
             SenseColor('W', 'F');
         }
